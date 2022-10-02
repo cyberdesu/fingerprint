@@ -11,7 +11,7 @@ const addfingerprint = (req, res) => {
         res.send({
             success: 201,
             message: "id telah ditambahkan",
-            data: result.insertId
+            data: {id: result.insertId}
         })
     })
 }
