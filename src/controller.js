@@ -2,6 +2,12 @@ const router = require('express').Router();
 const { response } = require('express');
 const con = require('./Database/database')
 
+
+const home = (req,res) => {
+    res.status(200)
+    res.send("API aktifk bre")
+}
+
 const addfingerprint = (req, res) => {
     const sql = "INSERT INTO `siswa` (`id`, `nama`, `kelas`, `jenis kelamin`, `no_ortu`) VALUES (NULL, NULL, NULL, NULL, NULL)"
 
@@ -15,4 +21,4 @@ const addfingerprint = (req, res) => {
         })
     })
 }
-module.exports = {addfingerprint}
+module.exports = {addfingerprint,home}
