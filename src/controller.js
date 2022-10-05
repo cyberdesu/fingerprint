@@ -19,6 +19,7 @@ const addfingerprint = (req, res) => {
             message: "id telah ditambahkan",
             data: {id: result.insertId}
         })
+        console.log(result.insertId)
     })
 }
 module.exports = {addfingerprint,home}
