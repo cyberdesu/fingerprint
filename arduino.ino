@@ -1,10 +1,12 @@
-#include <Adafruit_Fingerprint.h>
-SoftwareSerial mySerial(13, 15);
-#define mySerial Serial1
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <Wire.h>  // i2C Conection Library
 #include <LiquidCrystal_I2C.h>  //i2C LCD Library
+#include <WiFiClient.h> 
+#include <ESP8266HTTPClient.h>
+#include <ArduinoJson.h>
+WiFiClient client;
+HTTPClient http; 
 
 // Set the LCD address to 0x27 for a 16 chars and 2 line display
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -14,11 +16,17 @@ ESP8266WebServer server(80); //Menyatakan Webserver pada port 80
 
 
 void setup(){
+  wifi();
   lcd.init();
+  enroll();
 
 }
 
 void loop(){
+  loop_enroll();
+
+
+  delay(1000);
 
 }
 
@@ -38,10 +46,10 @@ void httpserver(){
 }
 //=============================================================================first of WIFI======================================================================
 void wifi(){
-  const char* ssid = "cyberdesu.com";       // Nama SSID AP/Hotspot
-  const char* password = "1234567890";       // Password Wifi
+  const char* ssid = "Cyberdesu";       // Nama SSID AP/Hotspot
+  const char* password = "WibuNolep-21";       // Password Wifi
  
-  Serial.begin(115200);
+  Serial.begin(9600);
   delay(10);
  
 // Connect to WiFi network ------------------------------------------------
@@ -70,6 +78,23 @@ void wifi(){
 
 //=============================================================================end of WIFI======================================================================
 //=============================================================================first of enroll======================================================================
+#include <Adafruit_Fingerprint.h>
+
+
+#if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
+// For UNO and others without hardware serial, we must use software serial...
+// pin #2 is IN from sensor (GREEN wire)
+// pin #3 is OUT from arduino  (WHITE wire)
+// Set up the serial port to use softwareserial..
+SoftwareSerial mySerial(13, 15);
+
+#else
+// On Leonardo/M0/etc, others with hardware serial, use hardware serial!
+// #0 is green wire, #1 is white
+#define mySerial Serial1
+
+#endif
+
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 uint8_t id;
@@ -114,16 +139,67 @@ uint8_t readnumber(void) {
 
 void loop_enroll()                     // run over and over again
 {
+  String payload = "";
+  bool parse_json = false;
+  const char *host = "10.10.10.7";
+  if (!client.connect(host, 80))
+  {
+    Serial.println(F("Connection failed"));
+    return;
+  }
+  yield();
+  http.begin(client,"http://projek.com/addfinger");
+  int httpcode = http.GET();
+  Serial.print("httpcode");
+  Serial.println(httpcode);
+
+  /*if (client.connect(host,3000)){
+    Serial.println("CONNECT HOST");
+    String url = "/addfinger";
+
+    client.print("GET" + url + "HTTP/1.1\r\n" +
+                 "Host:" + host + "\r\n" +
+                 "Content-Type: application/json\r\n" +
+                 "Connection: close\r\n" +
+                 "\r\n" 
+    );
+    while (client.available() && client.peek() != '{'){
+      char c = 0;
+      client.readBytes(&c, 1);
+      Serial.print(c);
+      Serial.println("BAD");
+    }
+    parse_json = true;
+    client.stop();
+  } else {
+    client.stop();
+  }*/
+  client.stop();
   Serial.println("Ready to enroll a fingerprint!");
   Serial.println("Please type in the ID # (from 1 to 127) you want to save this finger as...");
-  //id = readnumber();
-  if (id == 0) {// ID #0 not allowed, try again!
-     return;
-  }
-  Serial.print("Enrolling ID #");
-  Serial.println(id);
 
-  while (!  getFingerprintEnroll() );
+  
+  if(httpcode = 200){
+    //const int capacity = JSON_OBJECT_SIZE(3) + 2*JSON_OBJECT_SIZE(1);
+    //StaticJsonDocument<capacity> doc;
+    DynamicJsonDocument doc(2048);
+    DeserializationError err = deserializeJson(doc,http.getStream());
+    JsonArray repos = doc["data"];
+    if (err) {
+      Serial.print(F("deserializeJson() failed with code "));
+      Serial.println(err.f_str());
+    }
+    long issues = repos["id"];
+    id = issues;
+    Serial.println(doc["id"].as<long>());
+    if (id == 0) {// ID #0 not allowed, try again!
+        return;
+    }
+    Serial.print("Enrolling ID #");
+    Serial.println(id);
+    while (!  getFingerprintEnroll() );
+  }
+  http.end();
 }
 
 uint8_t getFingerprintEnroll() {
