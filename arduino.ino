@@ -145,7 +145,7 @@ void loop_enroll(){
     Serial.print("Enrolling ID #");
     Serial.println(id);
 
-  while (!  getFingerprintEnroll() );
+    while (!  getFingerprintEnroll() );
 
 
   }
