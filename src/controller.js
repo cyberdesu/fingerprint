@@ -22,4 +22,29 @@ const addfingerprint = (req, res) => {
         console.log(result.insertId)
     })
 }
-module.exports = {addfingerprint,home}
+
+
+
+const deletefingerprint = (req, res) => {
+
+    let id =  req.params.id
+    const sql = "DELETE FROM siswa WHERE id = ?"
+    con.query(sql,[id],function(err,result,fields){
+        if (err) throw err;
+        res.status(200)
+        if (result.affectedRows == 0){
+            res.send({
+                success: false,
+                message: "id siswa sudah dihapus atau kosong"
+            })
+        } else{
+            res.send({
+                success: true,
+                message: "id siswa telah dihapus"
+            })
+        }
+    })
+}
+
+
+module.exports = {addfingerprint,home,deletefingerprint}
