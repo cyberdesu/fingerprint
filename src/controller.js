@@ -52,7 +52,7 @@ const getDatasiswa = (req,res) => {
     const sql = "SELECT * FROM siswa"
     con.query(sql,function(err,result){
         if (err) throw err;
-        res.status(200)
+        res.status(200).set('Access-Control-Allow-Origin', '*')
         res.send({
             success: true,
             data: result
@@ -75,7 +75,24 @@ const DeviceMode = (req, res) => {
     } else if (id == 0 && mode == "baru"){
 
     }
+    con.end();
+}
+
+const editMode = (req,res) => {
+    const sql = "UPDATE device SET ? WHERE device_id=?"
+    let data = {
+        nama_device: req.body.nama,
+        Mode: req.body.mode
+    }
+    let id = req.params.id
+    con.query(sql,[data,id],function(err,result){
+        if (err) throw err;
+        res.send({
+            success: true,
+            data: result
+        })
+    })
 }
 
 
-module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode}
+module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode}
