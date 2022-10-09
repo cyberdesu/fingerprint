@@ -64,18 +64,31 @@ const DeviceMode = (req, res) => {
     let id = req.params.id
     let mode = req.params.mode
     const sql = "SELECT * FROM device WHERE device_id=? "
-    if(id = !undefined && mode == "daftar"){
+    if(id = !undefined && mode == "check"){
         con.query(sql,[id],function(err,result){
             if (err) throw err;
-            res.send({
-                success:true,
-                data: result
-            })
+            res.set('Access-Control-Allow-Origin', '*')
+            const data =result[0].Mode
+            if(data == "0"){
+                res.send({
+                    success:true,
+                    data: result[0].Mode,
+                    status: "mode daftar"
+                })
+            }
+            else if(data == "1"){
+                res.send({
+                    success:true,
+                    data: result[0].Mode,
+                    status: "Mode absen"
+                })
+
+            }
+
         })
     } else if (id == 0 && mode == "baru"){
 
     }
-    con.end();
 }
 
 const editMode = (req,res) => {
@@ -92,7 +105,5 @@ const editMode = (req,res) => {
             data: result
         })
     })
-}
-
-
+} 
 module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode}
