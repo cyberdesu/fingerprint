@@ -14,8 +14,7 @@ app.use('/', appRoute,expressCspHeader({
   directives: {
     'script-src': [SELF]
   }
-}),cors)
-
+})).set('Access-Control-Allow-Origin', '*')
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
