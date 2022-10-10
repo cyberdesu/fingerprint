@@ -31,14 +31,14 @@ const deletefingerprint = (req, res) => {
     const sql = "DELETE FROM siswa WHERE id = ?"
     con.query(sql,[id],function(err,result,fields){
         if (err) throw err;
-        res.status(200)
+        res.status(200).set('Access-Control-Allow-Origin', '*')
         if (result.affectedRows == 0){
             res.send({
                 success: false,
                 message: "id siswa sudah dihapus atau kosong"
             })
         } else{
-            res.status(500)
+            res.status(500).set('Access-Control-Allow-Origin', '*')
             res.send({
                 success: true,
                 message: "id siswa telah dihapus"
@@ -72,15 +72,20 @@ const DeviceMode = (req, res) => {
             if(data == "0"){
                 res.send({
                     success:true,
-                    data: result[0].Mode,
-                    status: "mode daftar"
+                    data: {
+                        Mode:result[0].Mode,
+                        status: "Mode Daftar"
+                    }
+
                 })
             }
             else if(data == "1"){
                 res.send({
                     success:true,
-                    data: result[0].Mode,
-                    status: "Mode absen"
+                    data: {
+                        Mode:result[0].Mode,
+                        status: "Mode Absen"
+                    }
                 })
 
             }
