@@ -7,7 +7,7 @@ router.get('/',home)
 router.get('/addfinger',addfingerprint)
 router.delete('/deletefinger/:id',deletefingerprint)
 router.get('/siswa',getDatasiswa)
-router.get('/check/:mode/',checkfingerID)
+router.get('/check/:mode/:finger',checkfingerID)
 router.get('/device/:mode/:id',DeviceMode)
 router.put('/device/edit/:id',editMode)
 
