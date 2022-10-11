@@ -5,43 +5,135 @@
 #include <WiFiClient.h> 
 #include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
+#include <SimpleTimer.h> 
 WiFiClient client;
 HTTPClient http; 
+SimpleTimer timer;
+#include <Adafruit_Fingerprint.h>
+SoftwareSerial mySerial(13, 15);
+Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
+uint8_t id;
 
 // Set the LCD address to 0x27 for a 16 chars and 2 line display
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 ESP8266WebServer server(81); //Menyatakan Webserver pada port 80
 
-
+int FingerID = 0, t1, t2;                           // The Fingerprint ID from the scanner 
+bool device_Mode = false;                           // Default Mode Enrollment
+bool firstConnect = false;
+String url = "http://10.10.10.7:3000";
+String getData, Link;
+unsigned long previousMillis = 0;
 
 
 void setup(){
   wifi();
   lcd.init();
   enroll();
+  finger.getTemplateCount();
+  Serial.print("Sensor contains "); Serial.print(finger.templateCount); Serial.println(" templates");
+  Serial.println("Waiting for valid finger...");\
+  //Timers---------------------------------------
+  timer.setInterval(25000L,CheckMode);
+  t1 = timer.setInterval(10000L,ChecktoAddID);      //Set an internal timer every 10sec to check if there a new fingerprint in the website to add it.
+  t2 = timer.setInterval(15000L,ChecktoDeleteID);   //Set an internal timer every 15sec to check wheater there an ID to delete in the website.
+  CheckMode();
 
 }
 
 void loop(){
-  loop_enroll();
-
-
-  delay(1000);
-
+  timer.run();      //Keep the timer in the loop function in order to update the time as soon as possible
+  //check if there's a connection to Wi-Fi or not
+  if(!WiFi.isConnected()){
+    if (millis() - previousMillis >= 10000) {
+      previousMillis = millis();
+      wifi();    //Retry to connect to Wi-Fi
+    }
+  }
+  CheckFingerprint();   //Check the sensor if the there a finger.
+  delay(10);
 }
 
-void httpserver(){
-  server.on("/register",[](){
-    enroll();
-    server.send(200,"text/plain","pendaftaran sidik jari telah aktif!");
-
-  });
-  server.on("/delete",[](){
-    server.send(200,"text/plain","id sidik jari telah dihapus");
-  });
-
+//================================Check Fingerprint========================================
+void CheckFingerprint(){
+  FingerID = getFingerprintID();
+  DisplayFingerprintID();
 }
 
+
+//===================================Check Mode======================================
+void CheckMode(){
+  Serial.println("Check Mode");
+  if(WiFi.isConnected()){
+    getData ="/device/check/1";
+    Link = url + getData;
+    http.begin(client,Link);
+    int httpCode = http.GET();
+    DynamicJsonDocument doc(2048);
+    if(httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){ 
+      String response = http.getString();
+      Serial.println("Koneksi aktif");
+      DeserializationError err = deserializeJson(doc,response);
+      if (err) {
+        Serial.print(F("deserializeJson() failed with code "));
+        Serial.println(err.f_str());
+      }
+      JsonObject obj = doc.as<JsonObject>();
+      Serial.println(obj);
+      int result = obj[String("data")]["Mode"];
+      Serial.println(result);
+      if(!firstConnect){
+        device_Mode = result;
+        firstConnect = true;
+      }
+      if(device_Mode && result){
+        device_Mode = false;
+        timer.disable(t1);
+        timer.disable(t2);
+        Serial.println("Device Mode: attendance");
+      } 
+      else if(!device_Mode && !result){
+        device_Mode = true;
+        timer.enable(t1);
+        timer.enable(t2);
+        Serial.println("Device Mode: Enrollment");
+      }
+      http.end();
+    }
+    http.end();
+
+  }
+
+}
+//===========================check to add id=================================
+void ChecktoAddID(){
+//  Serial.println("Check to Add ID");
+  if(WiFi.isConnected()){
+    HTTPClient http;    //Declare object of class HTTPClient
+    //GET Data
+    getData = "?Get_Fingerid=get_id&device_token="; // Add the Fingerprint ID to the Post array in order to send it
+    //GET methode
+    Link = url + getData;
+    http.begin(client, Link); //initiate HTTP request,
+//    Serial.println(Link);
+    int httpCode = http.GET();   //Send the request
+    String payload = http.getString();    //Get the response payload
+  
+    if (payload.substring(0, 6) == "add-id") {
+      String add_id = payload.substring(6);
+      Serial.println(add_id);
+      id = add_id.toInt();
+      http.end();  //Close connection
+      getFingerprintID();
+    }
+    http.end();  //Close connection
+  }
+}
+
+//========================check to delete id====================================
+void ChecktoDeleteID(){
+
+}
 
 
 //=============================================================================first of WIFI======================================================================
@@ -74,14 +166,39 @@ void wifi(){
   Serial.println(WiFi.localIP());
 }
 
+//===============================Display fingerprint id===========================================
+void DisplayFingerprintID(){
+  //Fingerprint has been detected 
+  if (FingerID > 0){
+    SendFingerprintID( FingerID ); // Send the Fingerprint ID to the website.
+    delay(2000);
+  }
+  //---------------------------------------------
+  //No finger detected
+  else if (FingerID == 0){
+  }
+  //---------------------------------------------
+  //Didn't find a match
+  else if (FingerID == -1){
+  }
+  //---------------------------------------------
+  //Didn't find the scanner or there an error
+  else if (FingerID == -2){
+  }
+}
 
+void SendFingerprintID(int finger){
+  Serial.println("Sending the Fingerprint ID");
+  if(WiFi.isConnected()){
+    getData = "/"+String(finger)+"/1";
+    Link = url+getData;
+    http.begin(client,Link);
+  }
+
+}
 
 //=============================================================================end of WIFI======================================================================
 //=============================================================================first of enroll======================================================================
-#include <Adafruit_Fingerprint.h>
-SoftwareSerial mySerial(13, 15);
-Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
-uint8_t id;
 
 void enroll(){
   Serial.begin(9600);
@@ -145,155 +262,75 @@ void loop_enroll(){
     Serial.print("Enrolling ID #");
     Serial.println(id);
 
-    while (!  getFingerprintEnroll() );
-
-
+    //while (!  getFingerprintEnroll() );
+    client.stop();
   }
+  client.stop();
   delay(4000);
 }
 
-uint8_t getFingerprintEnroll() {
-
-  int p = -1;
-  Serial.print("Waiting for valid finger to enroll as #"); Serial.println(id);
-  while (p != FINGERPRINT_OK) {
-    p = finger.getImage();
-    switch (p) {
-    case FINGERPRINT_OK:
-      Serial.println("Image taken");
-      break;
-    case FINGERPRINT_NOFINGER:
-      Serial.println(".");
-      break;
-    case FINGERPRINT_PACKETRECIEVEERR:
-      Serial.println("Communication error");
-      break;
-    case FINGERPRINT_IMAGEFAIL:
-      Serial.println("Imaging error");
-      break;
-    default:
-      Serial.println("Unknown error");
-      break;
-    }
-  }
-
-  // OK success!
-
-  p = finger.image2Tz(1);
+uint8_t getFingerprintID() {
+  uint8_t p = finger.getImage();
   switch (p) {
     case FINGERPRINT_OK:
-      Serial.println("Image converted");
-      break;
-    case FINGERPRINT_IMAGEMESS:
-      Serial.println("Image too messy");
-      return p;
-    case FINGERPRINT_PACKETRECIEVEERR:
-      Serial.println("Communication error");
-      return p;
-    case FINGERPRINT_FEATUREFAIL:
-      Serial.println("Could not find fingerprint features");
-      return p;
-    case FINGERPRINT_INVALIDIMAGE:
-      Serial.println("Could not find fingerprint features");
-      return p;
-    default:
-      Serial.println("Unknown error");
-      return p;
-  }
-
-  Serial.println("Remove finger");
-  delay(2000);
-  p = 0;
-  while (p != FINGERPRINT_NOFINGER) {
-    p = finger.getImage();
-  }
-  Serial.print("ID "); Serial.println(id);
-  p = -1;
-  Serial.println("Place same finger again");
-  while (p != FINGERPRINT_OK) {
-    p = finger.getImage();
-    switch (p) {
-    case FINGERPRINT_OK:
-      Serial.println("Image taken");
+      //Serial.println("Image taken");
       break;
     case FINGERPRINT_NOFINGER:
-      Serial.print(".");
-      break;
+      //Serial.println("No finger detected");
+      return 0;
     case FINGERPRINT_PACKETRECIEVEERR:
-      Serial.println("Communication error");
-      break;
+      //Serial.println("Communication error");
+      return -2;
     case FINGERPRINT_IMAGEFAIL:
-      Serial.println("Imaging error");
-      break;
+      //Serial.println("Imaging error");
+      return -2;
     default:
-      Serial.println("Unknown error");
-      break;
-    }
+      //Serial.println("Unknown error");
+      return -2;
   }
-
   // OK success!
-
-  p = finger.image2Tz(2);
+  p = finger.image2Tz();
   switch (p) {
     case FINGERPRINT_OK:
-      Serial.println("Image converted");
+      //Serial.println("Image converted");
       break;
     case FINGERPRINT_IMAGEMESS:
-      Serial.println("Image too messy");
-      return p;
+      //Serial.println("Image too messy");
+      return -1;
     case FINGERPRINT_PACKETRECIEVEERR:
-      Serial.println("Communication error");
-      return p;
+      //Serial.println("Communication error");
+      return -2;
     case FINGERPRINT_FEATUREFAIL:
-      Serial.println("Could not find fingerprint features");
-      return p;
+      //Serial.println("Could not find fingerprint features");
+      return -2;
     case FINGERPRINT_INVALIDIMAGE:
-      Serial.println("Could not find fingerprint features");
-      return p;
+      //Serial.println("Could not find fingerprint features");
+      return -2;
     default:
-      Serial.println("Unknown error");
-      return p;
+      //Serial.println("Unknown error");
+      return -2;
   }
-
   // OK converted!
-  Serial.print("Creating model for #");  Serial.println(id);
-
-  p = finger.createModel();
+  p = finger.fingerFastSearch();
   if (p == FINGERPRINT_OK) {
-    Serial.println("Prints matched!");
+    //Serial.println("Found a print match!");
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
-    Serial.println("Communication error");
-    return p;
-  } else if (p == FINGERPRINT_ENROLLMISMATCH) {
-    Serial.println("Fingerprints did not match");
-    return p;
+    //Serial.println("Communication error");
+    return -2;
+  } else if (p == FINGERPRINT_NOTFOUND) {
+    //Serial.println("Did not find a match");
+    return -1;
   } else {
-    Serial.println("Unknown error");
-    return p;
-  }
+    //Serial.println("Unknown error");
+    return -2;
+  }   
+  // found a match!
+  Serial.print("Found ID #"); Serial.print(finger.fingerID); 
+  Serial.print(" with confidence of "); Serial.println(finger.confidence); 
 
-  Serial.print("ID "); Serial.println(id);
-  p = finger.storeModel(id);
-  if (p == FINGERPRINT_OK) {
-    Serial.println("Stored!");
-  } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
-    Serial.println("Communication error");
-    return p;
-  } else if (p == FINGERPRINT_BADLOCATION) {
-    Serial.println("Could not store in that location");
-    return p;
-  } else if (p == FINGERPRINT_FLASHERR) {
-    Serial.println("Error writing to flash");
-    return p;
-  } else {
-    Serial.println("Unknown error");
-    return p;
-  }
-
-  return true;
+  return finger.fingerID;
 }
-//=============================================================================end of enroll======================================================================
-
+//=============================================================================end of enroll=======================================================================
 //=============================================================================first of delete====================================================================
 void delfinger(){
   Serial.println("Please type in the ID # (from 1 to 127) you want to delete...");
