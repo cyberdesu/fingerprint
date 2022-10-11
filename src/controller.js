@@ -110,5 +110,31 @@ const editMode = (req,res) => {
             data: result
         })
     })
-} 
-module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode}
+}
+const checkfingerID = (req,res) => {
+    const mode = req.params.mode
+    const finger = req.params.finger
+    const sql = "SELECT * FROM device WHERE device_id=? "
+    const sql2 = "SELECT * FROM murid WHERE id=?"
+
+    const res1 = () =>{
+        const [rows]= con.query(sql,[mode],function(err,result){
+        if (err) throw err;
+        res1_data = result[0].Mode
+        })
+        
+    }
+    const res1_data = ''
+
+    res1(function(result){
+        res1_data = result
+        console.log(res1_data)
+
+        res.send({
+            success:true,
+            data: res1_data
+        })
+    })
+
+}
+module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID}
