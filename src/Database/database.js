@@ -5,6 +5,7 @@ const connection = mysql.createConnection({
   user: 'root',
   password: '',
   database: 'absensi',
+  multipleStatements: true
 });
 connection.connect(function (err){
   if(err) throw err;
