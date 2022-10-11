@@ -114,18 +114,28 @@ const editMode = (req,res) => {
 const checkfingerID = (req,res) => {
     const mode = req.params.mode
     const finger = req.params.finger
-    const sql = "SELECT * FROM device WHERE device_id=? AND SELECT * FROM murid WHERE id=?"
-    const sql2 = ""
+    const sql = "SELECT * FROM device WHERE device_id=?"
+    const sql2 = "SELECT * FROM siswa WHERE id=?"
 
-    con.query(sql,[mode,finger],function(err,result){
+    con.query(sql,[mode],function(err,result){
         if (err){
             console.log(err)
             throw err
         }
-        res.send({
-            data: result
-        })
+        res1 = result[0].Mode
+
+        if (res1 == 1){
+            con.query(sql2,[finger],function(err,result){
+                if (err) throw err;
+                res.send({
+                    data: result
+                })
+            })
+            
+        }
+        //if()
     })
+    
 }
 
 module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID}
