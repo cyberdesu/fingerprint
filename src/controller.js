@@ -27,25 +27,39 @@ const addfingerprint = (req, res) => {
 
 const deletefingerprint = (req, res) => {
 
-    let id =  req.params.id
-    const sql = "DELETE FROM siswa WHERE id = ?"
-    con.query(sql,[id],function(err,result,fields){
-        if (err) throw err;
-        res.status(200).set('Access-Control-Allow-Origin', '*')
-        if (result.affectedRows == 0){
-            res.send({
-                success: false,
-                message: "id siswa sudah dihapus atau kosong"
-            })
-        } else{
-            res.status(500).set('Access-Control-Allow-Origin', '*')
-            res.send({
-                success: true,
-                message: "id siswa telah dihapus"
-            })
-        }
-    })
-    
+    deleteID = req.params.deleteID
+    Mode = req.params.Mode
+
+    if(deleteID = "check"){
+        sql = "SELECT * FROM device WHERE device_id=?"
+        con.query(sql,[Mode],function(err,result){
+            if (err) throw err;
+            const data1 = result[0].Mode
+
+            if (data1 == "0"){
+                sql2 = "SELECT id FROM siswa WHERE del_finger=1 LIMIT 1"
+                con.query(sql2,[deleteID],function(err,result){
+                    if (err) throw err
+                    //console.log(data)
+                    if(result.length === 0){
+                        res.send({
+                            message: "Data kosong"
+                        })
+                    } else if (result[0].id == "1"){
+                        res1 = result[0].id
+                        res.send({
+                            message: "sukses",
+                            data: res1
+                        })
+                    }
+                    
+
+                })
+
+            }
+        })
+    }
+
 }
 
 const getDatasiswa = (req,res) => {
@@ -137,5 +151,6 @@ const checkfingerID = (req,res) => {
     })
     
 }
+
 
 module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID}

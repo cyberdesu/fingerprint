@@ -5,7 +5,7 @@ const router = require('express').Router();
 
 router.get('/',home)
 router.get('/addfinger',addfingerprint)
-router.delete('/deletefinger/:id',deletefingerprint)
+router.get('/deleteID/:deleteID/:Mode/',deletefingerprint)
 router.get('/siswa',getDatasiswa)
 router.get('/check/:mode/:finger',checkfingerID)
 router.get('/device/:mode/:id',DeviceMode)
