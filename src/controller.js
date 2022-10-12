@@ -34,35 +34,45 @@ const deletefingerprint = (req, res) => {
         sql = "SELECT * FROM device WHERE device_id=?"
         con.query(sql,[Mode],function(err,result){
             if (err) throw err;
-            const data1 = result[0].Mode
+            if(result.length === 0) {
+                res.send({
+                    status: false,
+                    message: "device mode salah"
 
-            if (data1 == "0"){
-                sql2 = "SELECT id FROM siswa WHERE del_finger=1 LIMIT 1"
-                con.query(sql2,[deleteID],function(err,result){
-                    if (err) throw err
-                    //console.log(data)
-                    if(result.length === 0){
-                        res.send({
-                            message: "Data kosong"
-                        })
-                    } else if (result.length > 0){
-                        res1 = result[0].id
-                        sql3 = "DELETE FROM siswa WHERE del_finger=1"
-                        con.query(sql3,function(err,result){
-                            if (err) throw err
+                }).status(500)
+            } 
+            else if (result.length > 0){
+                data1 = result[0].Mode
+                console.log(result)
+                if(data1 == "0"){
+                    sql2 = "SELECT id FROM siswa WHERE del_finger=1 LIMIT 1"
+                    con.query(sql2,[deleteID],function(err,result){
+                        if (err) throw err
+                        //console.log(data)
+                        if(result.length === 0){
                             res.send({
-                                status: true,
-                                Message: "data berhasil dihapus",
-                                data: res1
+                                message: "Data kosong"
                             })
-                        })
+                        } else if (result.length > 0){
+                            res1 = result[0].id
+                            sql3 = "DELETE FROM siswa WHERE del_finger=1"
+                            con.query(sql3,function(err,result){
+                                if (err) throw err
+                                res.send({
+                                    status: true,
+                                    Message: "data berhasil dihapus",
+                                    data: res1
+                                })
+                            })
+    
+                        }
+    
+                    })
 
-                    }
-                    
-
-                })
+                }
 
             }
+            
         })
     }
 
