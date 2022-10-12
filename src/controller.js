@@ -51,6 +51,7 @@ const deletefingerprint = (req, res) => {
                             message: "sukses",
                             data: res1
                         })
+
                     }
                     
 
@@ -88,7 +89,7 @@ const DeviceMode = (req, res) => {
                     success:true,
                     data: {
                         Mode:result[0].Mode,
-                        status: "Mode Daftar"
+                        status: "Mode Daftar/delete"
                     }
 
                 })
