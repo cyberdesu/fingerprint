@@ -35,11 +35,11 @@ const deletefingerprint = (req, res) => {
         con.query(sql,[Mode],function(err,result){
             if (err) throw err;
             if(result.length === 0) {
-                res.send({
+                res.status(500).send({
                     status: false,
                     message: "device mode salah"
 
-                }).status(500)
+                })
             } 
             else if (result.length > 0){
                 data1 = result[0].Mode
