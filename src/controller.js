@@ -45,11 +45,16 @@ const deletefingerprint = (req, res) => {
                         res.send({
                             message: "Data kosong"
                         })
-                    } else if (result[0].id == "1"){
+                    } else if (result.length > 0){
                         res1 = result[0].id
-                        res.send({
-                            message: "sukses",
-                            data: res1
+                        sql3 = "DELETE FROM siswa WHERE del_finger=1"
+                        con.query(sql3,function(err,result){
+                            if (err) throw err
+                            res.send({
+                                status: true,
+                                Message: "data berhasil dihapus",
+                                data: res1
+                            })
                         })
 
                     }
