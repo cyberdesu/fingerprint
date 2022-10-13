@@ -86,13 +86,9 @@
         <div class="main--content">
             <div class="overview" style="background: url(src/bg4.png);">
                 <div class="title">
-                    <h2 class="section--title" style="color: white;">Overview</h2>
-                    <select name="date" id="date" class="dropdown">
-                        <option value="today">Today</option>
-                        <option value="lastweek">Last Week</option>
-                        <option value="lastmonth">Last Month</option>
-                        <option value="lastyear">Last Year</option>
-                        <option value="alltime">All Time</option>
+                    <h2 class="section--title">Kelas</h2>
+                    <select class="dropdown">
+                        <option>kelas 1</option>
                     </select>
                 </div>
             <div class="Guru">
@@ -177,9 +173,10 @@
                         </tbody>
                     </table>
                     <script>
-                           fetch('http://localhost:4000/siswa')
+                        fetch('http://192.168.0.119:4000/siswa/kelas/sd')
                         .then(response =>response.json())
                         .then(data => {
+                            console.log(data)
                             const table = document.querySelector('table')
                             hasil = data.data
                             hasil.forEach((result) => {
@@ -197,6 +194,16 @@
                         })
                     </script>
                 </div>
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <div  style="text-align: center;">
+                <button><a href="/daftarsd.html" >kelas 1</a></button>
+                <button><a href="/daftarsd/daftarsd2.html" >kelas 2</a></button>
+                <button><a href="/daftarsd/daftarsd3.html" >kelas 3</a></button>
+                <button><a href="/daftarsd/daftarsd4.html" >kelas 4</a></button>
+                <button><a href="/daftarsd/daftarsd5.html" >kelas 5</a></button>
+                <button><a href="/daftarsd/daftarsd6.html" >kelas 6</a></button>
             </div>
         </div>
     </section>
