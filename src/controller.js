@@ -106,7 +106,7 @@ const getdatakelas = (req,res) => {
             })
         })
     } else if (kelas == "sd"){
-        sql3 = "SELECT * FROM siswa WHERE kelas < 6"
+        sql3 = "SELECT * FROM siswa WHERE kelas < 7"
         con.query(sql3,function(err,result){
             if (err) throw err
             res.set('Access-Control-Allow-Origin', '*').send({
