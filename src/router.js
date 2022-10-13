@@ -1,4 +1,4 @@
-const { addfingerprint, home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID } = require('./controller');
+const { addfingerprint, home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas } = require('./controller');
 
 const router = require('express').Router();
 
@@ -10,5 +10,6 @@ router.get('/siswa',getDatasiswa)
 router.get('/check/:mode/:finger',checkfingerID)
 router.get('/device/:mode/:id',DeviceMode)
 router.put('/device/edit/:id',editMode)
+router.get('/siswa/kelas/:kelas',getdatakelas)
 
 module.exports = router
