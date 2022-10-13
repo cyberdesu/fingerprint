@@ -99,7 +99,7 @@ const getdatakelas = (req,res) => {
         sql2= "SELECT * FROM siswa WHERE kelas > 6"
         con.query(sql2,function(err,result){
             if (err) throw err;
-            res.send({
+            res.set('Access-Control-Allow-Origin', '*').send({
                 status: true,
                 message: "menampilkan data siswa SMP",
                 data: result
@@ -109,7 +109,7 @@ const getdatakelas = (req,res) => {
         sql3 = "SELECT * FROM siswa WHERE kelas < 6"
         con.query(sql3,function(err,result){
             if (err) throw err
-            res.send({
+            res.set('Access-Control-Allow-Origin', '*').send({
                 status: true,
                 message: "menampilkan data siswa SD",
                 data: result
@@ -119,13 +119,13 @@ const getdatakelas = (req,res) => {
         con.query(sql,[kelas],function(err,result){
             if (err) throw err;
             if (result.length == 0){
-                res.send({
+                res.set('Access-Control-Allow-Origin', '*').send({
                     status: false,
                     message: "tidak ada kelas yg ditemukan"
                 })
             }
             else {
-                res.status(404).send({
+                res.status(404).set('Access-Control-Allow-Origin', '*').send({
                     status: true,
                     message: "data telah dapat",
                     data: result
@@ -136,8 +136,6 @@ const getdatakelas = (req,res) => {
     }
 
 }
-
-
 
 
 const DeviceMode = (req, res) => {
@@ -217,6 +215,5 @@ const checkfingerID = (req,res) => {
     })
     
 }
-
 
 module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas}
