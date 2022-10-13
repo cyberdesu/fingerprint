@@ -94,24 +94,50 @@ const getDatasiswa = (req,res) => {
 const getdatakelas = (req,res) => {
     kelas = req.params.kelas
     const sql = "SELECT * FROM siswa WHERE kelas=?"
-    con.query(sql,[kelas],function(err,result){
-        if (err) throw err;
-        if (result.length == 0){
+
+    if(kelas =="smp"){
+        sql2= "SELECT * FROM siswa WHERE kelas > 6"
+        con.query(sql2,function(err,result){
+            if (err) throw err;
             res.send({
-                status: false,
-                message: "tidak ada kelas yg ditemukan"
-            })
-        }
-        else {
-            res.status(404).send({
                 status: true,
-                message: "data telah dapat",
+                message: "menampilkan data siswa SMP",
                 data: result
-    
             })
-        }
-    })
+        })
+    } else if (kelas == "sd"){
+        sql3 = "SELECT * FROM siswa WHERE kelas < 6"
+        con.query(sql3,function(err,result){
+            if (err) throw err
+            res.send({
+                status: true,
+                message: "menampilkan data siswa SD",
+                data: result
+            })
+        })
+    } else{
+        con.query(sql,[kelas],function(err,result){
+            if (err) throw err;
+            if (result.length == 0){
+                res.send({
+                    status: false,
+                    message: "tidak ada kelas yg ditemukan"
+                })
+            }
+            else {
+                res.status(404).send({
+                    status: true,
+                    message: "data telah dapat",
+                    data: result
+        
+                })
+            }
+        })
+    }
+
 }
+
+
 
 
 const DeviceMode = (req, res) => {
