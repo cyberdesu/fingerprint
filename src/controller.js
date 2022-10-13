@@ -90,6 +90,30 @@ const getDatasiswa = (req,res) => {
     })
 }
 
+
+const getdatakelas = (req,res) => {
+    kelas = req.params.kelas
+    const sql = "SELECT * FROM siswa WHERE kelas=?"
+    con.query(sql,[kelas],function(err,result){
+        if (err) throw err;
+        if (result.length == 0){
+            res.send({
+                status: false,
+                message: "tidak ada kelas yg ditemukan"
+            })
+        }
+        else {
+            res.status(404).send({
+                status: true,
+                message: "data telah dapat",
+                data: result
+    
+            })
+        }
+    })
+}
+
+
 const DeviceMode = (req, res) => {
     let id = req.params.id
     let mode = req.params.mode
@@ -169,4 +193,4 @@ const checkfingerID = (req,res) => {
 }
 
 
-module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID}
+module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas}
