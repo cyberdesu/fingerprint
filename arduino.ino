@@ -21,7 +21,7 @@ ESP8266WebServer server(81); //Menyatakan Webserver pada port 80
 int FingerID = 0, t1, t2;                           // The Fingerprint ID from the scanner 
 bool device_Mode = false;                           // Default Mode Enrollment
 bool firstConnect = false;
-String url = "http://10.10.10.7:3000";
+String url = "http://10.10.10.7:4000";
 String getData, Link;
 unsigned long previousMillis = 0;
 
@@ -132,6 +132,34 @@ void ChecktoAddID(){
 
 //========================check to delete id====================================
 void ChecktoDeleteID(){
+  Serial.println("check to delete ID");
+  if(WiFi.isConnected()){
+    getData = "/deleteid/check/"+ String(device_Mode);
+    Link = url + getData;
+    Serial.println(Link);
+    http.begin(client,Link);
+    int httpCode = http.GET();
+    String payload = http.getString();
+    DynamicJsonDocument doc(2048);
+    if(httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){
+      String response = http.getString();
+      Serial.println("check delete ID aktif");
+      DeserializationError err = deserializeJson(doc,response);
+      if (err) {
+        Serial.print(F("deserializeJson() failed with code "));
+        Serial.println(err.f_str());
+      }
+      JsonObject obj = doc.as<JsonObject>();
+      String data = obj[String("data")];
+      //int result = obj["data"];
+      Serial.println("ID Data yg dihapus: "+ data);
+      http.end();
+      //deleteFingerprint(result);
+      delay(1000);
+    }
+    http.end();
+    
+  }
 
 }
 
@@ -190,9 +218,10 @@ void DisplayFingerprintID(){
 void SendFingerprintID(int finger){
   Serial.println("Sending the Fingerprint ID");
   if(WiFi.isConnected()){
-    getData = "/"+String(finger)+"/1";
+    getData = "/check/"+String(finger)+"/1";
     Link = url+getData;
     http.begin(client,Link);
+
   }
 
 }
@@ -240,7 +269,7 @@ uint8_t readnumber(void) {
 void loop_enroll(){
   String response;
   int httpcode = http.GET();
-  http.begin(client,"http://10.10.10.7:3000/addfinger");
+  http.begin(client,"http://10.10.10.7:4000/addfinger");
   yield();
 
   Serial.println("Ready to enroll a fingerprint!");
