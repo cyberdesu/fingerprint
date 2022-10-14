@@ -215,4 +215,49 @@ const checkfingerID = (req,res) => {
     
 }
 
-module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas}
+const getFingerID = (req,res) => {
+    const get_id = req.params.get_id
+    const id = req.params.id
+
+    sql = "SELECT* FROM device WHERE device_id=?"
+    con.query(sql,[id],function(err,result){
+        if (err) throw err;
+        data = result[0].Mode
+        if(data != "0"){
+            res.status(500).send({
+                status: false,
+                message: "device sedang dalam mode absen"
+            })
+        } else {
+            if(get_id == "get_id"){
+                sql2 = "SELECT id FROM siswa WHERE add_finger=1 LIMIT 1";
+                con.query(sql2,[id],function(err,result){
+                    if (err) throw err;
+
+                    if (result.length > 0){
+                        res1 = result[0].id
+                        res.send({
+                            data: res1
+                        })
+                    } else {
+                        res.status(404).send({
+                            status: false,
+                            message: "tidak ada data id yang akan ditambahkan"
+                        })
+                    }
+
+                    
+                })
+            } else{
+                res.status(500).send({
+                    status: false,
+                    message: "get_id tidak ada di url?"
+
+                })
+            }
+        }
+    })
+
+}
+
+module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID}
