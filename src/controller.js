@@ -43,7 +43,6 @@ const deletefingerprint = (req, res) => {
             } 
             else if (result.length > 0){
                 data1 = result[0].Mode
-                console.log(result)
                 if(data1 == "0"){
                     sql2 = "SELECT id FROM siswa WHERE del_finger=1 LIMIT 1"
                     con.query(sql2,[deleteID],function(err,result){
