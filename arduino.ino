@@ -190,9 +190,76 @@ void SendFingerprintID(int finger){
     getData = "/check/"+String(finger)+"/1";
     Link = url+getData;
     http.begin(client,Link);
+    int httpCode = http.GET();
+    String payload = http.getString();
+    Serial.println(httpCode);   //Print HTTP return code
+    Serial.println(payload);    //Print request response payload
+    Serial.println("ID finger yang akan didaftarkan: "+finger); 
 
   }
 
+}
+//********************Get the Fingerprint ID******************
+int getFingerprintID() {
+  uint8_t p = finger.getImage();
+  switch (p) {
+    case FINGERPRINT_OK:
+      //Serial.println("Image taken");
+      break;
+    case FINGERPRINT_NOFINGER:
+      //Serial.println("No finger detected");
+      return 0;
+    case FINGERPRINT_PACKETRECIEVEERR:
+      //Serial.println("Communication error");
+      return -2;
+    case FINGERPRINT_IMAGEFAIL:
+      //Serial.println("Imaging error");
+      return -2;
+    default:
+      //Serial.println("Unknown error");
+      return -2;
+  }
+  // OK success!
+  p = finger.image2Tz();
+  switch (p) {
+    case FINGERPRINT_OK:
+      //Serial.println("Image converted");
+      break;
+    case FINGERPRINT_IMAGEMESS:
+      //Serial.println("Image too messy");
+      return -1;
+    case FINGERPRINT_PACKETRECIEVEERR:
+      //Serial.println("Communication error");
+      return -2;
+    case FINGERPRINT_FEATUREFAIL:
+      //Serial.println("Could not find fingerprint features");
+      return -2;
+    case FINGERPRINT_INVALIDIMAGE:
+      //Serial.println("Could not find fingerprint features");
+      return -2;
+    default:
+      //Serial.println("Unknown error");
+      return -2;
+  }
+  // OK converted!
+  p = finger.fingerFastSearch();
+  if (p == FINGERPRINT_OK) {
+    //Serial.println("Found a print match!");
+  } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
+    //Serial.println("Communication error");
+    return -2;
+  } else if (p == FINGERPRINT_NOTFOUND) {
+    //Serial.println("Did not find a match");
+    return -1;
+  } else {
+    //Serial.println("Unknown error");
+    return -2;
+  }   
+  // found a match!
+  Serial.print("Found ID #"); Serial.print(finger.fingerID); 
+  Serial.print(" with confidence of "); Serial.println(finger.confidence); 
+
+  return finger.fingerID;
 }
 
 //=============================================================================end of WIFI======================================================================
@@ -267,66 +334,164 @@ void loop_enroll(){
   delay(4000);
 }
 
-uint8_t getFingerprintID() {
-  uint8_t p = finger.getImage();
-  switch (p) {
+uint8_t getFingerprintEnroll() {
+  int p = -1;
+  while (p != FINGERPRINT_OK) {
+          
+    p = finger.getImage();
+    switch (p) {
     case FINGERPRINT_OK:
       //Serial.println("Image taken");
       break;
     case FINGERPRINT_NOFINGER:
-      //Serial.println("No finger detected");
-      return 0;
+      //Serial.println(".");
+      break;
     case FINGERPRINT_PACKETRECIEVEERR:
-      //Serial.println("Communication error");
-      return -2;
+      break;
     case FINGERPRINT_IMAGEFAIL:
-      //Serial.println("Imaging error");
-      return -2;
+      Serial.println("Imaging error");
+      break;
     default:
-      //Serial.println("Unknown error");
-      return -2;
+      Serial.println("Unknown error");
+      break;
+    }
   }
+
   // OK success!
-  p = finger.image2Tz();
+  p = finger.image2Tz(1);
+  switch (p) {
+    case FINGERPRINT_OK:
+      break;
+    case FINGERPRINT_IMAGEMESS:
+      return p;
+    case FINGERPRINT_PACKETRECIEVEERR:
+      Serial.println("Communication error");
+      return p;
+    case FINGERPRINT_FEATUREFAIL:
+      Serial.println("Could not find fingerprint features");
+      return p;
+    case FINGERPRINT_INVALIDIMAGE:
+      Serial.println("Could not find fingerprint features");
+      return p;
+    default:
+      Serial.println("Unknown error");
+      return p;
+  }
+  //Serial.println("Remove finger");
+  delay(2000);
+  p = 0;
+  while (p != FINGERPRINT_NOFINGER) {
+    p = finger.getImage();
+  }
+  Serial.print("ID "); Serial.println(id);
+  p = -1;
+  while (p != FINGERPRINT_OK) {
+    p = finger.getImage();
+    switch (p) {
+    case FINGERPRINT_OK:
+      //Serial.println("Image taken");
+      break;
+    case FINGERPRINT_NOFINGER:
+      //Serial.println(".");
+      break;
+    case FINGERPRINT_PACKETRECIEVEERR:
+      Serial.println("Communication error");
+      break;
+    case FINGERPRINT_IMAGEFAIL:
+      Serial.println("Imaging error");
+      break;
+    default:
+      Serial.println("Unknown error");
+      break;
+    }
+  }
+
+  // OK success!
+
+  p = finger.image2Tz(2);
   switch (p) {
     case FINGERPRINT_OK:
       //Serial.println("Image converted");
       break;
     case FINGERPRINT_IMAGEMESS:
       //Serial.println("Image too messy");
-      return -1;
+      return p;
     case FINGERPRINT_PACKETRECIEVEERR:
-      //Serial.println("Communication error");
-      return -2;
+      Serial.println("Communication error");
+      return p;
     case FINGERPRINT_FEATUREFAIL:
-      //Serial.println("Could not find fingerprint features");
-      return -2;
+      Serial.println("Could not find fingerprint features");
+      return p;
     case FINGERPRINT_INVALIDIMAGE:
-      //Serial.println("Could not find fingerprint features");
-      return -2;
+      Serial.println("Could not find fingerprint features");
+      return p;
     default:
-      //Serial.println("Unknown error");
-      return -2;
+      Serial.println("Unknown error");
+      return p;
   }
+  
   // OK converted!
-  p = finger.fingerFastSearch();
+  Serial.print("Creating model for #");  Serial.println(id);
+  
+  p = finger.createModel();
   if (p == FINGERPRINT_OK) {
-    //Serial.println("Found a print match!");
+    Serial.println("Prints matched!");
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
-    //Serial.println("Communication error");
-    return -2;
-  } else if (p == FINGERPRINT_NOTFOUND) {
-    //Serial.println("Did not find a match");
-    return -1;
+    Serial.println("Communication error");
+    return p;
+  } else if (p == FINGERPRINT_ENROLLMISMATCH) {
+    Serial.println("Fingerprints did not match");
+    return p;
   } else {
-    //Serial.println("Unknown error");
-    return -2;
+      Serial.println("Unknown error");
+    return p;
   }   
-  // found a match!
-  Serial.print("Found ID #"); Serial.print(finger.fingerID); 
-  Serial.print(" with confidence of "); Serial.println(finger.confidence); 
+  
+  Serial.print("ID "); Serial.println(id);
+  p = finger.storeModel(id);
+  if (p == FINGERPRINT_OK) {
+    Serial.println("Stored!");
+    confirmAdding(id);
+  } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
+    Serial.println("Communication error");
+    return p;
+  } else if (p == FINGERPRINT_BADLOCATION) {
+    Serial.println("Could not store in that location");
+    return p;
+  } else if (p == FINGERPRINT_FLASHERR) {
+    Serial.println("Error writing to flash");
+    return p;
+  } else {
+    Serial.println("Unknown error");
+    return p;
+  }   
 
-  return finger.fingerID;
+}
+
+
+//******************Check if there a Fingerprint ID to add******************
+void confirmAdding(int id){
+  Serial.println("confirm Adding");
+  if(WiFi.status() == WL_CONNECTED){
+    HTTPClient http;    //Declare object of class HTTPClient
+    //GET Data
+    getData = "";// Add the Fingerprint ID to the Post array in order to send it
+    //GET methode
+    Link = url + getData;
+    
+    http.begin(client, Link); //initiate HTTP request,
+//    Serial.println(Link);
+    int httpCode = http.GET();   //Send the request
+    String payload = http.getString();    //Get the response payload
+    if(httpCode == 200){
+      Serial.println(payload);
+      delay(2000);
+    }
+    else{
+      Serial.println("Error Confirm!!");      
+    }
+    http.end();  //Close connection
+  }
 }
 //=============================================================================end of enroll=======================================================================
 //=============================================================================first of delete====================================================================
