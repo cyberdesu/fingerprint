@@ -184,7 +184,8 @@ const editMode = (req,res) => {
         if (err) throw err;
         res.send({
             success: true,
-            data: result
+            data: result,
+
         })
     })
 }
@@ -233,12 +234,13 @@ const getFingerID = (req,res) => {
                 sql2 = "SELECT id FROM siswa WHERE add_finger=1 LIMIT 1";
                 con.query(sql2,[id],function(err,result){
                     if (err) throw err;
-
                     if (result.length > 0){
                         res1 = result[0].id
                         res.send({
                             data: res1
                         })
+
+
                     } else {
                         res.status(404).send({
                             status: false,
@@ -260,4 +262,25 @@ const getFingerID = (req,res) => {
 
 }
 
-module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID}
+
+
+const tambahsiswa = (req,res) => {
+    sql = "INSERT INTO siswa SET ?"
+    let data = {
+        nama : req.body.nama,
+        kelas : req.body.kelas,
+        jenis_kelamin: req.body.kelamin,
+        no_ortu: req.body.no,
+        add_finger: 1,
+        del_finger: 0
+    }
+
+    con.query(sql,data,function(err,result){
+        if (err) throw err;
+        res.send({
+            message: "data berhasil ditambah",
+            data: result
+        })
+    })
+}
+module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa}
