@@ -7,6 +7,7 @@ const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+app.use(cors())
 
 const appRoute = require('./router');
 app.use('/', appRoute)
