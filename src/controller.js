@@ -280,6 +280,7 @@ const tambahsiswa = (req,res) => {
         device = result[0].Mode
 
         if(device == "0"){
+
             sql2 = "INSERT INTO siswa SET ?"
             con.query(sql2,data,function(err,result){
                 if (err) throw err
@@ -292,11 +293,9 @@ const tambahsiswa = (req,res) => {
         } else {
             res.status(500).send({
                 status: false,
-                message: "device sedang dalam mode absen, mohon diubah dulu ke mode daftar/hapus"
+                message: "device sedang dalam mode absen, mohon diubah dulu ke mode daftar atau hapus"
             })
         }
     })
-
-
 }
 module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa}
