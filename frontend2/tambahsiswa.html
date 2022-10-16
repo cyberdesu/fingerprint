@@ -53,25 +53,30 @@
       var form = document.getElementById('form')
       form.addEventListener('submit',function(e){
         e.preventDefault()
-        var nama = document.getElementById('nama')
-        var kelas = document.getElementById('kelas')
-        var jenis_kelamin = document.getElementById('jenis_kelamin')
-        var no_orangtua = document.getElementById('no_orangtua')
+        var nama = document.getElementById('nama').value
+        var kelas = document.getElementById('kelas').value
+        var jenis_kelamin = document.getElementById('jenis_kelamin').value
+        var no_orangtua = document.getElementById('no_orangtua').value
+
 
         fetch('http://localhost:4000/siswa/tambah/',{
           method: "POST",
           body: JSON.stringify({
-              nama : nama,
-              kelas : kelas,
-              kelamin : jenis_kelamin,
-              no : no_orangtua
+              "nama" : nama,
+              "kelas" : kelas,
+              "kelamin" : jenis_kelamin,
+              "no" : no_orangtua
             }),
             headers: {
               'Content-type': 'application/json; charset=UTF-8'
             },
         })
-
-
+        .then(function(response){
+          return response.json()
+        })
+        .then(function(data){
+          console.log(data)
+        })
       })
     </script>
    
