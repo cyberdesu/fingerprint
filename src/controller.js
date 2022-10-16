@@ -337,6 +337,11 @@ const confirmID = (req,res) => {
                     }
                 }
             })
+        } else {
+            res.set(500).send({
+                status: false,
+                message: "silahkan ubah terlebih dahulu ke Mode Daftar"
+            })
         }
     })
 
