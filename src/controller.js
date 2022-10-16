@@ -265,7 +265,7 @@ const getFingerID = (req,res) => {
 
 
 const tambahsiswa = (req,res) => {
-    sql = "INSERT INTO siswa SET ?"
+    sql = "SELECT * FROM device WHERE device_id=1"
     let data = {
         nama : req.body.nama,
         kelas : req.body.kelas,
@@ -275,12 +275,28 @@ const tambahsiswa = (req,res) => {
         del_finger: 0
     }
 
-    con.query(sql,data,function(err,result){
+    con.query(sql,function(err,result){
         if (err) throw err;
-        res.send({
-            message: "data berhasil ditambah",
-            data: result
-        })
+        device = result[0].Mode
+
+        if(device == "0"){
+            sql2 = "INSERT INTO siswa SET ?"
+            con.query(sql2,data,function(err,result){
+                if (err) throw err
+                res.send({
+                    status: true,
+                    message: "data berhasil ditambah",
+                    data: result
+                })
+            })
+        } else {
+            res.status(500).send({
+                status: false,
+                message: "device sedang dalam mode absen, mohon diubah dulu ke mode daftar/hapus"
+            })
+        }
     })
+
+
 }
 module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa}
