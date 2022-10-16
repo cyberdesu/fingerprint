@@ -50,7 +50,7 @@
     </div>
     <br>
     <script>
-      var form = document.getElementById('from')
+      var form = document.getElementById('form')
       form.addEventListener('submit',function(e){
         e.preventDefault()
         var nama = document.getElementById('nama')
@@ -58,22 +58,21 @@
         var jenis_kelamin = document.getElementById('jenis_kelamin')
         var no_orangtua = document.getElementById('no_orangtua')
 
+        fetch('http://localhost:4000/siswa/tambah/',{
+          method: "POST",
+          body: JSON.stringify({
+              nama : nama,
+              kelas : kelas,
+              kelamin : jenis_kelamin,
+              no : no_orangtua
+            }),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8'
+            },
+        })
+
 
       })
-       fetch('http://localhost:4000/siswa/tambah/', {
-        method: "POST",
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify(
-          {
-            'nama' : nama,
-            'kelas' : kelas,
-            'kelamin' : jenis_kelamin,
-            'no' : no_orangtua
-          }
-        )
-       })
     </script>
    
   </div>
