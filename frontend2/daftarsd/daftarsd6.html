@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>dasbord</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
-<body >
+<body>
     <section class="header" style="background: #111">
         <div class="logo">
             <i class="ri-menu-line icon icon-0 menu"></i>
@@ -29,7 +29,7 @@
                     <i class="ri-wechat-2-line"></i>
                 </div>
                 <div class="picon profile">
-                    <img src="src/images.png" alt="">
+                    <img src="/src/images.png" alt="">
                 </div>
             </div>
         </div>
@@ -38,31 +38,31 @@
         <div class="sidebar" style="background: url(/src/bg4.png);">
             <ul class="sidebar--items">
                 <li>
-                    <a href="halaman.html">
+                    <a href="/halaman.html">
                         <span class="icon icon-1"><i class="ri-layout-grid-line"></i></span>
                         <span class="sidebar--item"  style="color: white;">Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="daftarsd.html" id="active--link">
+                    <a href="/daftarsd.html" id="active--link">
                         <span class="icon icon-2"><i class="ri-user-2-line"></i></span>
                         <span class="sidebar--item"  style="color: white;">Daftar Siswa SD</span>
                     </a>
                 </li>
                 <li>
-                    <a href="absensisd.html">
+                    <a href="/absensisd.html">
                         <span class="icon icon-3"><i class="ri-user-line"></i></span>
                         <span class="sidebar--item"  style="color: white;">Absensi Siswa SD</span>
                     </a>
                 </li>
                 <li>
-                    <a href="daftarsmp.html">
+                    <a href="/daftarsmp.html">
                         <span class="icon icon-4"><i class="ri-user-2-line"></i></span>
                         <span class="sidebar--item"  style="color: white;">Daftar Siswa SMP</span>
                     </a>
                 </li>
                 <li>
-                    <a href="absensismp.html">
+                    <a href="/absensismp.html">
                         <span class="icon icon-5"><i class="ri-user-line"></i></span>
                         <span class="sidebar--item"  style="color: white;">Absensi Siswa SMP</span>
                     </a>
@@ -70,13 +70,13 @@
             </ul>
             <ul class="sidebar--bottom-items">
                 <li>
-                    <a href="pengaturan.html">
+                    <a href="/pengaturan.html">
                         <span class="icon icon-6"><i class="ri-settings-3-line"></i></span>
                         <span class="sidebar--item"  style="color: white;">Settings</span>
                     </a>
                 </li>
                 <li>
-                    <a href="halaman.html">
+                    <a href="/halaman.html">
                         <span class="icon icon-7"><i class="ri-logout-box-r-line"></i></span>
                         <span class="sidebar--item"  style="color: white;">Logout</span>
                     </a>
@@ -84,11 +84,11 @@
             </ul>
         </div>
         <div class="main--content">
-            <div class="overview" style="background: url(src/bg4.png);">
+            <div class="overview" style="background: url(/src/bg4.png);">
                 <div class="title">
-                    <h2 class="section--title">Kelas</h2>
+                    <h2 class="section--title" style="color: white;">Kelas</h2>
                     <select class="dropdown">
-                        <option>kelas 1</option>
+                        <option>kelas 6</option>
                     </select>
                 </div>
             <div class="Guru">
@@ -173,10 +173,9 @@
                         </tbody>
                     </table>
                     <script>
-                        fetch('http://192.168.0.119:4000/siswa/kelas/sd')
+                        fetch('http://localhost:4000/siswa/kelas/6/')
                         .then(response =>response.json())
                         .then(data => {
-                            console.log(data)
                             const table = document.querySelector('table')
                             hasil = data.data
                             hasil.forEach((result) => {
@@ -198,7 +197,8 @@
         </div>
         <div style="text-align: center;">
             <div  style="text-align: center;">
-                <button><a href="/daftarsd.html" >kelas 1</a></button>
+                <button><a href="/daftarsd.html" >beranda</a></button>
+                <button><a href="/daftarsd/daftarsd1.html" >kelas 1</a></button>
                 <button><a href="/daftarsd/daftarsd2.html" >kelas 2</a></button>
                 <button><a href="/daftarsd/daftarsd3.html" >kelas 3</a></button>
                 <button><a href="/daftarsd/daftarsd4.html" >kelas 4</a></button>
@@ -206,6 +206,11 @@
                 <button><a href="/daftarsd/daftarsd6.html" >kelas 6</a></button>
             </div>
         </div>
+        <br>
+        <div style="text-align: center;">
+        <button><a href="/tambahsiswa.html" > Tambah Mahasiswa </a></button>
+    </div>
+    <br><br>
     </section>
     <script src="app.js"></script>
 </body>
