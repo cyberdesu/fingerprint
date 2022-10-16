@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
-<body >
+<body>
     <section class="header" style="background: #111">
         <div class="logo">
             <i class="ri-menu-line icon icon-0 menu"></i>
@@ -86,11 +86,11 @@
         <div class="main--content">
             <div class="overview" style="background: url(src/bg4.png);">
                 <div class="title">
-                    <h2 class="section--title">Kelas</h2>
+                    <h2 class="section--title" style="color: white;">Kelas</h2>
                     <select class="dropdown">
-                        <option>kelas 1</option>
+                        <option>Daftar Kelas SD</option>
                     </select>
-                </div>
+                </div>  
             <div class="Guru">
                 <div class="title">
                     <h1 class="section--title" style="color: white;">Guru SD</h1>
@@ -173,7 +173,7 @@
                         </tbody>
                     </table>
                     <script>
-                        fetch('http://192.168.0.119:4000/siswa/kelas/sd')
+                        fetch('http://localhost:4000/siswa/kelas/sd')
                         .then(response =>response.json())
                         .then(data => {
                             console.log(data)
@@ -198,7 +198,8 @@
         </div>
         <div style="text-align: center;">
             <div  style="text-align: center;">
-                <button><a href="/daftarsd.html" >kelas 1</a></button>
+                <button><a href="/daftarsd.html" >beranda</a></button>
+                <button><a href="/daftarsd/daftarsd1.html" >kelas 1</a></button>
                 <button><a href="/daftarsd/daftarsd2.html" >kelas 2</a></button>
                 <button><a href="/daftarsd/daftarsd3.html" >kelas 3</a></button>
                 <button><a href="/daftarsd/daftarsd4.html" >kelas 4</a></button>
@@ -206,6 +207,11 @@
                 <button><a href="/daftarsd/daftarsd6.html" >kelas 6</a></button>
             </div>
         </div>
+        <br>
+        <div style="text-align: center;">
+        <button><a href="/tambahsiswa.html" > Tambah Mahasiswa </a></button>
+    </div>
+    <br><br>
     </section>
     <script src="app.js"></script>
 </body>
