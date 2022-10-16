@@ -1,4 +1,4 @@
-const { addfingerprint, home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas, getFingerID, tambahsiswa } = require('./controller');
+const { addfingerprint, home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas, getFingerID, tambahsiswa, confirmID } = require('./controller');
 
 const router = require('express').Router();
 
@@ -14,5 +14,6 @@ router.get('/siswa/kelas/:kelas',getdatakelas)
 router.get('/getfingerid/:get_id/:id',getFingerID)
 router.post('/siswa/tambah',tambahsiswa)
 router.post('siswa/edit')
+router.get('/confirm/:id/:confirmid',confirmID)
 
 module.exports = router
