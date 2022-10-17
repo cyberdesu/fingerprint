@@ -7,24 +7,6 @@ const home = (req,res) => {
     res.status(200)
     res.send("API aktifk bre")
 }
-
-const addfingerprint = (req, res) => {
-    const sql = "INSERT INTO `siswa` (`id`, `nama`, `kelas`, `jenis kelamin`, `no_ortu`) VALUES (NULL, NULL, NULL, NULL, NULL)"
-
-    con.query(sql,function(err,result,fields){
-        if (err) throw err;
-        res.status(200)
-        res.send({
-            success: 201,
-            message: "id telah ditambahkan",
-            data: {id: result.insertId}
-        })
-        console.log(result.insertId)
-    })
-}
-
-
-
 const deletefingerprint = (req, res) => {
 
     deleteID = req.params.deleteID
@@ -50,7 +32,7 @@ const deletefingerprint = (req, res) => {
                         //console.log(data)
                         if(result.length === 0){
                             res.send({
-                                message: "Data kosong"
+                                message: "Data del_finger kosong"
                             })
                         } else if (result.length > 0){
                             res1 = result[0].id
@@ -68,6 +50,11 @@ const deletefingerprint = (req, res) => {
     
                     })
 
+                } else{
+                    res.send({
+                        status: false,
+                        message: "device sedang dalam Mode Absen"
+                    })
                 }
 
             }
@@ -217,7 +204,7 @@ const checkfingerID = (req,res) => {
 }
 
 const getFingerID = (req,res) => {
-    const get_id = req.params.get_id
+    const getfingerid = req.params.getfingerid
     const id = req.params.id
 
     sql = "SELECT* FROM device WHERE device_id=?"
@@ -230,7 +217,7 @@ const getFingerID = (req,res) => {
                 message: "device sedang dalam mode absen"
             })
         } else {
-            if(get_id == "get_id"){
+            if(getfingerid == "get_id"){
                 sql2 = "SELECT id FROM siswa WHERE add_finger=1 LIMIT 1";
                 con.query(sql2,[id],function(err,result){
                     if (err) throw err;
@@ -299,6 +286,7 @@ const tambahsiswa = (req,res) => {
     })
 }
 
+
 const confirmID = (req,res) => {
     id = req.params.id
     const confirmid = req.params.confirmid
@@ -317,7 +305,7 @@ const confirmID = (req,res) => {
                         status: false,
                         message: "tidak ada fingeprint yg akan ditambah"
                     })
-                } else{
+                } else  {
                     res1 = result[0].id
                     if(res1 == confirmid){
                         sql3 = "UPDATE siswa SET add_finger=0 WHERE id=?"
@@ -346,4 +334,4 @@ const confirmID = (req,res) => {
     })
 
 }
-module.exports = {addfingerprint,home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID}
+module.exports = {home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID}

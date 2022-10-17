@@ -81,7 +81,6 @@ void CheckMode(){
       JsonObject obj = doc.as<JsonObject>();
       //Serial.println(obj);
       int result = obj[String("data")]["Mode"];
-      Serial.println(result);
       if(!firstConnect){
         device_Mode = result;
         firstConnect = true;
@@ -106,30 +105,6 @@ void CheckMode(){
 
 }
 //===========================check to add id=================================
-void ChecktoAddID(){
-//  Serial.println("Check to Add ID");
-  if(WiFi.isConnected()){
-    HTTPClient http;    //Declare object of class HTTPClient
-    //GET Data
-    getData = "?Get_Fingerid=get_id&device_token="; // Add the Fingerprint ID to the Post array in order to send it
-    //GET methode
-    Link = url + getData;
-    http.begin(client, Link); //initiate HTTP request,
-//    Serial.println(Link);
-    int httpCode = http.GET();   //Send the request
-    String payload = http.getString();    //Get the response payload
-  
-    if (payload.substring(0, 6) == "add-id") {
-      String add_id = payload.substring(6);
-      Serial.println(add_id);
-      id = add_id.toInt();
-      http.end();  //Close connection
-      getFingerprintID();
-    }
-    http.end();  //Close connection
-  }
-}
-
 
 
 
@@ -192,9 +167,9 @@ void SendFingerprintID(int finger){
     http.begin(client,Link);
     int httpCode = http.GET();
     String payload = http.getString();
-    Serial.println(httpCode);   //Print HTTP return code
-    Serial.println(payload);    //Print request response payload
-    Serial.println("ID finger yang akan didaftarkan: "+finger); 
+    //Serial.println(httpCode);   //Print HTTP return code
+    //Serial.println(payload);    //Print request response payload
+    //Serial.println("ID finger yang akan didaftarkan: "+finger); 
 
   }
 
@@ -302,36 +277,38 @@ uint8_t readnumber(void) {
   return num;
 }
 
-void loop_enroll(){
-  String response;
+void ChecktoAddID(){
   int httpcode = http.GET();
-  http.begin(client,"http://10.10.10.7:4000/addfinger");
-  yield();
-
-  Serial.println("Ready to enroll a fingerprint!");
-  Serial.println("Please type in the ID # (from 1 to 127) you want to save this finger as...");
-  DynamicJsonDocument doc(2048);
-  if(httpcode == HTTP_CODE_OK || httpcode == HTTP_CODE_MOVED_PERMANENTLY){ 
-    response = http.getString();
-    DeserializationError err = deserializeJson(doc,response);
-    if (err) {
-      Serial.print(F("deserializeJson() failed with code "));
-      Serial.println(err.f_str());
-    }
-    JsonObject obj = doc.as<JsonObject>();
-
-    id = obj[String("data")]["id"];
-    if (id == 0) {// ID #0 not allowed, try again!
-     return;
-    }
-    Serial.print("Enrolling ID #");
-    Serial.println(id);
-
-    //while (!  getFingerprintEnroll() );
-    client.stop();
+  if(WiFi.isConnected()){
+    getData = "/getfingerid/get_id/1";
+    Link = url + "/getfingerid/get_id/1";
+    Serial.println(Link);
+    http.begin(client,Link);
+    DynamicJsonDocument doc(2048);
+    if(httpcode == HTTP_CODE_OK || httpcode == HTTP_CODE_MOVED_PERMANENTLY){
+      Serial.println("Ready to enroll a fingerprint!");
+      Serial.println("Please type in the ID # (from 1 to 127) you want to save this finger as..."); 
+      String payload = http.getString();
+      DeserializationError err = deserializeJson(doc,payload);
+      Serial.println("data addfinger:"+payload);
+      if (err) {
+        Serial.print(F("deserializeJson() failed with code "));
+        Serial.println(err.f_str());
+      }
+      JsonObject obj = doc.as<JsonObject>();
+      Serial.println(obj);
+      id = obj[String("data")];
+      Serial.println(id);
+      if (id == 0) {// ID #0 not allowed, try again!
+       return;
+      }
+      Serial.print("Enrolling ID #");
+      Serial.println(id);
+      getFingerprintEnroll();
+      http.end();
+   }
+    http.end();
   }
-  client.stop();
-  delay(4000);
 }
 
 uint8_t getFingerprintEnroll() {
@@ -341,10 +318,10 @@ uint8_t getFingerprintEnroll() {
     p = finger.getImage();
     switch (p) {
     case FINGERPRINT_OK:
-      //Serial.println("Image taken");
+      Serial.println("Image taken");
       break;
     case FINGERPRINT_NOFINGER:
-      //Serial.println(".");
+      Serial.println(".");
       break;
     case FINGERPRINT_PACKETRECIEVEERR:
       break;
@@ -475,16 +452,23 @@ void confirmAdding(int id){
   if(WiFi.status() == WL_CONNECTED){
     HTTPClient http;    //Declare object of class HTTPClient
     //GET Data
-    getData = "";// Add the Fingerprint ID to the Post array in order to send it
+    getData = "/confirm/1/" + String(id);// Add the Fingerprint ID to the Post array in order to send it
     //GET methode
     Link = url + getData;
     
     http.begin(client, Link); //initiate HTTP request,
-//    Serial.println(Link);
     int httpCode = http.GET();   //Send the request
-    String payload = http.getString();    //Get the response payload
-    if(httpCode == 200){
-      Serial.println(payload);
+    String payload = http.getString();
+    Serial.println(Link);  
+    DynamicJsonDocument doc(2048);  //Get the response payload
+    if(httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){
+      DeserializationError err = deserializeJson(doc,payload);
+      if (err) {
+        Serial.print(F("deserializeJson() failed with code "));
+        Serial.println(err.f_str());
+      }
+      JsonObject obj = doc.as<JsonObject>();
+      Serial.println(obj);
       delay(2000);
     }
     else{
@@ -519,6 +503,7 @@ void ChecktoDeleteID(){
       http.end();
       deleteFingerprint(data);
       delay(1000);
+      http.end();
     }
     http.end();
     
