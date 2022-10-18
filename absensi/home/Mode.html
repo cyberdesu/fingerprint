@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body style="background-color: #111; ">
+    <style>
+        .switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+    </style>
+    <br><br>
+    <center><div class="img--cover">
+      <div class="img">
+                      <img src="src/zyro-image.png" alt="">
+                  </div>
+              </div></center>
+              <br>
+              <center><h1 style="color: white;">Madrasah Ibtidaiyah Al-Hasani</h1></center>
+              <br>
+<center><p style="color: white;">Jl.Batara, RT.02/RW.06,<br>Ciluar,Kec.Bogor Utara,Kota Bogor<br>Jawa Barat 16710</p></center>
+    <center><div class="jumbotron" style="background-image: url(src/bg4.png) ;">
+      <hr class="my-4">
+        <h1 class="display-4" style="color: #fff;">Mode</h1>
+        <p class="lead" style="color: #fff;">fungsi dari fitur Mode ini adalah untuk menamplikan fitur tambah siswa
+        </p>
+        <p style="color: #fff;">Jika mode off maka tidak akan bisa menambahkan tambah siswa sedangkan jika on maka bisa menambahkan tambah siswa.</p>
+        <center><label class="switch" id="swit">
+            <input type="checkbox" value="1" checked id="checked">
+            <span class="slider round" id="slider"></span>
+          </label>
+          <script>
+            const checked = document.querySelector("#checked");
+            const swit = document.querySelector("#swit");
+            const slider = document.querySelector("#slider");
+
+            // gets data from API and sets the content of #result div
+            fetch('http://localhost:4000/device/edit/1',{
+              method: "POST",
+              body: JSON.stringify({
+                  "nama" : nama,
+                  "mode" : mode
+                }),
+                headers: {
+                  'Content-type': 'application/json; charset=UTF-8'
+                  },
+                })
+
+            // add event listener for #fetchdata button
+            fetchDataBtn.addEventListener("click", getData);
+          </script>
+          
+          <br><br>
+          <a href="halaman.html" class="btn btn-primary">Kembali </a>
+          <hr class="my-4"></center>
+      </div></center>
+      <center> <div class="container">
+        <img src="src/facebook.png" width="30" height="30" class="rounded-4" alt="...">
+        <img src="src/instagram.png" width="30" height="30" class="rounded-4" alt="...">
+        <img src="src/twitter.png" width="30" height="30" class="rounded-4" alt="...">
+        <img src="src/discord.png" width="30" height="30" class="rounded-4" alt="...">
+      </div> </center>
+      <br>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>dasbord</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <section class="header" style="background: #111">
+        <div class="logo">
+            <i class="ri-menu-line icon icon-0 menu"></i>
+            <h2  style="color: white;">MTS <span>AL-Hasani</span></h2>
+        </div>
+        <div class="search--notification--profile">
+            <div class="search">
+                <input type="text" placeholder="Search Scdule..">
+                <button><i class="ri-search-2-line"></i></button>
+            </div>
+            <div class="notification--profile">
+                <div class="picon lock">
+                    <i class="ri-lock-line"></i>
+                </div>
+                <div class="picon bell">
+                    <i class="ri-notification-2-line"></i>
+                </div>
+                <div class="picon chat">
+                    <i class="ri-wechat-2-line"></i>
+                </div>
+                <div class="picon profile">
+                    <img src="src/images.png" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="main" style="background: url(src/bg3.png);">
+        <div class="sidebar" style="background: url(src/bg4.png);">
+            <ul class="sidebar--items">
+                <li>
+                    <a href="halaman.html">
+                        <span class="icon icon-1"><i class="ri-layout-grid-line"></i></span>
+                        <span class="sidebar--item"  style="color: white;">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="daftarsd.html" >
+                        <span class="icon icon-2"><i class="ri-user-2-line"></i></span>
+                        <span class="sidebar--item"  style="color: white;">Daftar Siswa SD</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="absensisd.html">
+                        <span class="icon icon-3"><i class="ri-user-line"></i></span>
+                        <span class="sidebar--item"  style="color: white;">Absensi Siswa SD</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="daftarsmp.html">
+                        <span class="icon icon-4"><i class="ri-user-2-line"></i></span>
+                        <span class="sidebar--item"  style="color: white;">Daftar Siswa SMP</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="absensismp.html" id="active--link">
+                        <span class="icon icon-5"><i class="ri-user-line"></i></span>
+                        <span class="sidebar--item"  style="color: white;">Absensi Siswa SMP</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="sidebar--bottom-items">
+                <li>
+                    <a href="pengaturan.html">
+                        <span class="icon icon-6"><i class="ri-settings-3-line"></i></span>
+                        <span class="sidebar--item"  style="color: white;">Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="halaman.html">
+                        <span class="icon icon-7"><i class="ri-logout-box-r-line"></i></span>
+                        <span class="sidebar--item"  style="color: white;">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="main--content" style="background: url(src/bg3.png);">
+            <div class="overview" style="background: url(src/bg4.png);">
+                <div class="title">
+                    <h2 class="section--title"style="color: white;">Kelas</h2>
+                    <select class="dropdown">
+                        <option>Absensi SMP</option>
+                    </select>
+                </div>
+            <div class="recent--Siswa">
+                <div class="title">
+                    <h1 class="section--title" style="color: white;">Siswa SMP</h1>
+                </div>
+                <div class="table" style="color: white;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Tanggal</th>
+                                <th>Nama</th>
+                                <th>Jenis Kelamin</th>
+                                <th>Kelas</th>
+                                <th>Kehadiran</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>12/9/22</td>
+                                <td>Ucup</td>
+                                <td>Pria</td>
+                                <td>5</td>
+                                <td>hadir</td>
+                            </tr>
+                            <tr>
+                               <tr>
+                                <td>2</td>
+                                <td>12/9/22</td>
+                                <td>Ucup</td>
+                                <td>Pria</td>
+                                <td>5</td>
+                                <td>hadir</td>
+                            </tr> 
+                            <tr>
+                                <tr>
+                                <td>3</td>
+                                <td>12/9/22</td>
+                                <td>Ucup</td>
+                                <td>Pria</td>
+                                <td>5</td>
+                                <td>hadir</td>
+                            </tr>
+                            <tr>
+                                <tr>
+                                <td>4</td>
+                                <td>12/9/22</td>
+                                <td>Ucup</td>
+                                <td>Pria</td>
+                                <td>5</td>
+                                <td>hadir</td>
+                            </tr>
+                            <tr>
+                                <tr>
+                                <td>5</td>
+                                <td>12/9/22</td>
+                                <td>Ucup</td>
+                                <td>Pria</td>
+                                <td>5</td>
+                                <td>hadir</td>
+                            </tr>
+                            <tr>
+                                <tr>
+                                <td>6</td>
+                                <td>12/9/22</td>
+                                <td>Ucup</td>
+                                <td>Pria</td>
+                                <td>5</td>
+                                <td>hadir</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <center><div>
+            <button><a href="absensismp.html" >kelas 7</a></button>
+            <button><a href="absensismp2.html" >kelas 8</a></button>
+            <button><a href="absensismp3.html" >kelas 9</a></button>
+        </div></center>
+    </section>
+    <script src="app.js"></script>
+</body>
+</html>
