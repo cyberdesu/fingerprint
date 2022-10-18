@@ -81,20 +81,28 @@ input:checked + .slider:before {
         </p>
         <p style="color: #fff;">Jika mode off maka tidak akan bisa menambahkan tambah siswa sedangkan jika on maka bisa menambahkan tambah siswa.</p>
         <center><label class="switch" id="swit">
-            <input type="checkbox" value="1" checked id="checked">
+            <input type="checkbox" value="1" id="slide" >
             <span class="slider round" id="slider"></span>
           </label>
           <script>
-            const checked = document.querySelector("#checked");
-            const swit = document.querySelector("#swit");
-            const slider = document.querySelector("#slider");
-
+            //const checked = document.querySelector("#checked");
+            //const swit = document.querySelector("#swit");
+            //const slider = document.querySelector("#slider");
+            const cb = document.querySelector('#slide')
+            if (cb.checked == true){
+              hasil = cb.value = 0
+              console.log(hasil)
+            } else if (cb.checked == false){
+              hasil = cb.value = 1
+              //console.log(hasil)
+              
+            }
             // gets data from API and sets the content of #result div
             fetch('http://localhost:4000/device/edit/1',{
               method: "POST",
               body: JSON.stringify({
-                  "nama" : nama,
-                  "mode" : mode
+                  "nama" : "fingerprint device",
+                  "mode" : hasil
                 }),
                 headers: {
                   'Content-type': 'application/json; charset=UTF-8'
