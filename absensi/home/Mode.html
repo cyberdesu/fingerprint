@@ -90,7 +90,7 @@ input:checked + .slider:before {
             //const slider = document.querySelector("#slider");
             const cb = document.querySelector('#slide')
             if (cb.checked == true){
-              hasil = cb.value = 0
+              hasil = cb.value = 0+
               console.log(hasil)
             } else if (cb.checked == false){
               hasil = cb.value = 1
@@ -108,7 +108,7 @@ input:checked + .slider:before {
                   'Content-type': 'application/json; charset=UTF-8'
                   },
                 })
-
+                
             // add event listener for #fetchdata button
             fetchDataBtn.addEventListener("click", getData);
           </script>
