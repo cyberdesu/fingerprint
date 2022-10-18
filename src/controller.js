@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { response } = require('express');
-const con = require('./Database/database')
+const con = require('./Database/database');
 
 
 const home = (req,res) => {
@@ -179,8 +179,8 @@ const editMode = (req,res) => {
 const checkfingerID = (req,res) => {
     const mode = req.params.mode
     const finger = req.params.finger
-    const sql = "SELECT * FROM device WHERE device_id=?"
-    const sql2 = "SELECT * FROM siswa WHERE id=?"
+    sql = "SELECT * FROM device WHERE device_id=?"
+    sql2 = "SELECT * FROM siswa WHERE id=?"
 
     con.query(sql,[mode],function(err,result){
         if (err){
@@ -192,13 +192,94 @@ const checkfingerID = (req,res) => {
         if (res1 == 1){
             con.query(sql2,[finger],function(err,result){
                 if (err) throw err;
-                res.send({
-                    data: result
-                })
+                if (result.length > 0){
+                    add = result[0].add_finger
+                    masuk = result[0].jam_masuk
+                    pulang = result[0].jam_keluar
+                    uname = result[0].nama
+    
+                    if(add == 0){
+                        const addZero = i => {
+                            if (i < 10) {i = "0" + i}
+                            return i;
+                          }
+                        const waktu = new Date()
+                        const jam = addZero(waktu.getHours())+":"+addZero(waktu.getMinutes())+":"+addZero(waktu.getSeconds())
+                        const month = ["01","02","03","04","05","06","07","08","09","10","11","12"];
+                        tanggal = addZero(waktu.getFullYear())+"-"+month[waktu.getMonth()]+"-"+addZero(waktu.getDate())
+    
+                        sql3 = "SELECT tanggal FROM absen WHERE id_sidikjari=?"
+                        con.query(sql3,finger,function(err,result){
+                            if (err) throw err;
+    
+                            if(result.length == 0){
+                                if(jam <= masuk && jam >= "05:00:00"){
+                                    sql4 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,tanggal) VALUES (?,?,'00:00:00',NOW())"
+                                    con.query(sql4,[finger,jam],function(err,result){
+                                        if (err) throw err;
+                                        success = result.affectedRows
+                                        if(success == 1){
+                                            res.send("selamat datang "+uname)
+    
+                                        }
+                                    })
+                                } else {
+                                    res.send("anda sudah absen hari ini goblok")
+                                }
+                            }  else if (result.length > 0) {
+                                tgl = new Date(result[0].tanggal)
+                                tgl_final = addZero(tgl.getFullYear())+"-"+month[tgl.getMonth()]+"-"+addZero(tgl.getDate())
+                                if(jam <= masuk && jam >= "05:00:00" && tanggal != tgl_final){
+                                    sql4 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,tanggal) VALUES (?,?,'00:00:00',NOW())"
+                                    con.query(sql4,[finger,jam],function(err,result){
+                                        if (err) throw err;
+                                        success = result.affectedRows
+                                        if(success == 1){
+                                         
+                                            res.send("selamat datang "+uname)
+    
+                                        }
+                                        
+                                    })
+                                } else {
+                                    res.send("anda sudah absen hari ini goblok 2")
+                                }
+                            }
+                            
+                        })
+                        
+                    } else {
+                        res.status(500).send("tidak ada id yang akan diabsen")
+                    }
+                    
+                } else {
+                    res.status(404).send("id siswa tidak ditemukan")
+                }
+   
+
             })
             
+        } else if (res1 == 0){
+            sql = "SELECT * FROM siswa WHERE id=?"
+            con.query(sql,finger,function(err,result){
+                if (err) throw err
+                if (result.length == 0){
+                    res.send({
+                        status: false,
+                        message: "device sedang dalam mode daftar atau hapus",
+                        data: "id tidak ditemukan saat absensi"
+                    })
+                } else {
+                    add = result[0].add_finger
+                    del = result[0].del_finger
+
+                    if (add == 0 && del == 0  ){
+                        res.send("id sudah sukses ditambahkan ke database")
+                    }
+                }
+
+            })
         }
-        //if()
     })
     
 }
@@ -301,7 +382,7 @@ const confirmID = (req,res) => {
             con.query(sql2,function(err,result){
                 console.log(result)
                 if(result.length === 0){
-                    res.set(404).send({
+                    res.status(404).send({
                         status: false,
                         message: "tidak ada fingeprint yg akan ditambah"
                     })
@@ -318,7 +399,7 @@ const confirmID = (req,res) => {
                         })
 
                     } else {
-                        res.set(404).send({
+                        res.status(404).send({
                             status: false,
                             message: "id fingerprint tidak cocok dengan database"
                         })
@@ -326,7 +407,7 @@ const confirmID = (req,res) => {
                 }
             })
         } else {
-            res.set(500).send({
+            res.status(500).send({
                 status: false,
                 message: "silahkan ubah terlebih dahulu ke Mode Daftar"
             })
