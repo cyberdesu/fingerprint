@@ -176,6 +176,7 @@ const editMode = (req,res) => {
         })
     })
 }
+
 const checkfingerID = (req,res) => {
     const mode = req.params.mode
     const finger = req.params.finger
@@ -415,4 +416,10 @@ const confirmID = (req,res) => {
     })
 
 }
-module.exports = {home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID}
+
+const getDataAbsen = (req,res) => {
+    kelas = req.params.kelas
+    
+
+}
+module.exports = {home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID,getDataAbsen}
