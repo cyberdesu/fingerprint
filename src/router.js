@@ -1,4 +1,4 @@
-const {home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas, getFingerID, tambahsiswa, confirmID } = require('./controller');
+const {home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas, getFingerID, tambahsiswa, confirmID, getDataAbsen} = require('./controller');
 
 const router = require('express').Router();
 
@@ -6,13 +6,14 @@ const router = require('express').Router();
 router.get('/',home)
 router.get('/deleteID/:deleteID/:Mode/',deletefingerprint)
 router.get('/siswa',getDatasiswa)
-router.get('/check/:mode/:finger',checkfingerID)
-router.get('/device/:mode/:id',DeviceMode)
-router.put('/device/edit/:id',editMode)
-router.get('/siswa/kelas/:kelas',getdatakelas)
+router.get('/check/:finger/:mode',checkfingerID) //arduino
+router.get('/device/:mode/:id',DeviceMode) //arduino
+router.post('/device/edit/:id',editMode) //untuk ubah mode ke daftar atau absen
+router.get('/siswa/kelas/:kelas',getdatakelas) //front end
 router.get('/getfingerid/:getfingerid/:id',getFingerID)
 router.post('/siswa/tambah',tambahsiswa)
 router.post('siswa/edit')
 router.get('/confirm/:id/:confirmid',confirmID)
+router.get('/absen/kelas/:kelas',getDataAbsen)
 
 module.exports = router
