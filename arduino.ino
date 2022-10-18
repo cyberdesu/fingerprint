@@ -167,9 +167,13 @@ void SendFingerprintID(int finger){
     http.begin(client,Link);
     int httpCode = http.GET();
     String payload = http.getString();
-    //Serial.println(httpCode);   //Print HTTP return code
-    //Serial.println(payload);    //Print request response payload
-    //Serial.println("ID finger yang akan didaftarkan: "+finger); 
+    Serial.println(httpCode);   //Print HTTP return code
+    if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){
+      Serial.println(payload);    //Print request response payload
+      Serial.println("ID finger yang akan didaftarkan: "+finger);
+
+    }
+   
 
   }
 
@@ -324,6 +328,7 @@ uint8_t getFingerprintEnroll() {
       Serial.println(".");
       break;
     case FINGERPRINT_PACKETRECIEVEERR:
+      Serial.println("Communication error");
       break;
     case FINGERPRINT_IMAGEFAIL:
       Serial.println("Imaging error");
@@ -338,8 +343,10 @@ uint8_t getFingerprintEnroll() {
   p = finger.image2Tz(1);
   switch (p) {
     case FINGERPRINT_OK:
+      Serial.println("Image converted");
       break;
     case FINGERPRINT_IMAGEMESS:
+      Serial.println("Image too messy");
       return p;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -366,10 +373,10 @@ uint8_t getFingerprintEnroll() {
     p = finger.getImage();
     switch (p) {
     case FINGERPRINT_OK:
-      //Serial.println("Image taken");
+      Serial.println("Image taken");
       break;
     case FINGERPRINT_NOFINGER:
-      //Serial.println(".");
+      Serial.println(".");
       break;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -388,10 +395,10 @@ uint8_t getFingerprintEnroll() {
   p = finger.image2Tz(2);
   switch (p) {
     case FINGERPRINT_OK:
-      //Serial.println("Image converted");
+      Serial.println("Image converted");
       break;
     case FINGERPRINT_IMAGEMESS:
-      //Serial.println("Image too messy");
+      Serial.println("Image too messy");
       return p;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
