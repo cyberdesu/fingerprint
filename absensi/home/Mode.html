@@ -81,36 +81,49 @@ input:checked + .slider:before {
         </p>
         <p style="color: #fff;">Jika mode off maka tidak akan bisa menambahkan tambah siswa sedangkan jika on maka bisa menambahkan tambah siswa.</p>
         <center><label class="switch" id="swit">
-            <input type="checkbox" value="1" id="slide" >
+            <input type="checkbox" id="slide" >
             <span class="slider round" id="slider"></span>
           </label>
           <script>
             //const checked = document.querySelector("#checked");
             //const swit = document.querySelector("#swit");
             //const slider = document.querySelector("#slider");
-            const cb = document.querySelector('#slide')
-            if (cb.checked == true){
-              hasil = cb.value = 0+
-              console.log(hasil)
-            } else if (cb.checked == false){
-              hasil = cb.value = 1
-              //console.log(hasil)
-              
-            }
-            // gets data from API and sets the content of #result div
-            fetch('http://localhost:4000/device/edit/1',{
-              method: "POST",
-              body: JSON.stringify({
-                  "nama" : "fingerprint device",
-                  "mode" : hasil
-                }),
-                headers: {
-                  'Content-type': 'application/json; charset=UTF-8'
-                  },
-                })
+            function EditMode (){
+              const cb = document.querySelector('#slide')
+
+              setTimeout(function(){
+                var val_slide
+                if (cb.checked == true){
+                  localStorage.clear()
+                  val_slide = 0
+                  localStorage.setItem('slide', cb.checked);
+                } else if (cb.checked == false){
+                  localStorage.clear()
+                  val_slide = 1
+                  localStorage.setItem('slide',cb.checked)
+                  //console.log(hasil)
+                  
+                }
+                console.log(val_slide)
+  
+                fetch('http://localhost:4000/device/edit/1',{
+                  method: "POST",
+                  body: JSON.stringify({
+                      "nama" : "fingerprint device",
+                      "mode" : val_slide
+                    }),
+                    headers: {
+                      'Content-type': 'application/json; charset=UTF-8'
+                      },
+                  })
                 
+              },1000)
+              // gets data from API and sets the content of #result div
+            }
             // add event listener for #fetchdata button
-            fetchDataBtn.addEventListener("click", getData);
+            EditMode()
+            document.addEventListener("click", EditMode);
+            clearInterval(EditMode)
           </script>
           
           <br><br>
