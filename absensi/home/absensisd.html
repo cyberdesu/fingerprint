@@ -101,7 +101,7 @@
                             <tr>
                                 <th>Tanggal</th>
                                 <th>Nama</th>
-                                <th>Gander</th>
+                                <th>Gender</th>
                                 <th>Kelas</th>
                                 <th>Kehadiran</th>
                             </tr>
@@ -116,12 +116,15 @@
                             const table = document.querySelector('table')
                             hasil = data.data
                             hasil.forEach((result) => {
+                                tgl = result.tanggal
+                                final = tgl.substring(0,10)
                                 table.innerHTML += `
                                 <tr>
+                                    <td>${final}</td>
                                     <td>${result.nama}</td>
                                     <td>${result.jenis_kelamin}</td>
                                     <td>${result.kelas}</td>
-                                    <td>${result.no_ortu}</td>
+                                    <td>${result.status}</td>
                                     <td><span><a href=""><i class="ri-edit-line edit" style="color: yellow;"></i></a><a href=""><i class="ri-delete-bin-line delete" style="color: red;"></i></a></span></td>  
                                 </tr>
                                 `;
