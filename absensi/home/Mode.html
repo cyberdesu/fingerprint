@@ -89,19 +89,18 @@ input:checked + .slider:before {
             //const swit = document.querySelector("#swit");
             //const slider = document.querySelector("#slider");
             function EditMode (){
-              const cb = document.querySelector('#slide')
+              
 
               setTimeout(function(){
+                var cb = document.querySelector('#slide')
                 var val_slide
                 if (cb.checked == true){
-                  localStorage.clear()
                   val_slide = 0
-                  localStorage.setItem('slide', cb.checked);
+                  console.log(val_slide)
+
                 } else if (cb.checked == false){
-                  localStorage.clear()
                   val_slide = 1
-                  localStorage.setItem('slide',cb.checked)
-                  //console.log(hasil)
+                  console.log(val_slide)
                   
                 }
                 console.log(val_slide)
