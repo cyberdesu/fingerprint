@@ -72,17 +72,12 @@
             },
         })
         .then(function(response){
-<<<<<<< Updated upstream
           if(response.status ==200){
             alert("data sudah masuk")
           } else if(response.status == 500){
             alert("sedang dalam mode absen")
           }
 
-=======
-          return response.json()
-          alert("data telah disimpan");
->>>>>>> Stashed changes
         }) 
         form.reset()
         .then(function(data){
