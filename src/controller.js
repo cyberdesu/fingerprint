@@ -101,7 +101,7 @@ const getdatakelas = (req,res) => {
                 data: result
             })
         })
-    } else{
+    } else if (kelas < 10){
         con.query(sql,[kelas],function(err,result){
             if (err) throw err;
             if (result.length == 0){
@@ -119,6 +119,8 @@ const getdatakelas = (req,res) => {
                 })
             }
         })
+    } else {
+        res.status(404).send("kelas tidak ditemukan")
     }
 
 }
@@ -215,7 +217,17 @@ const checkfingerID = (req,res) => {
     
                             if(result.length == 0){
                                 if(jam <= masuk && jam >= "05:00:00"){
-                                    sql4 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,tanggal) VALUES (?,?,'00:00:00',NOW())"
+                                    sql4 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','hadir',NOW())"
+                                    con.query(sql4,[finger,jam],function(err,result){
+                                        if (err) throw err;
+                                        success = result.affectedRows
+                                        if(success == 1){
+                                            res.send("selamat datang "+uname)
+    
+                                        }
+                                    })
+                                } else if (jam > masuk && jam >= "05:00:00" && tanggal != tgl_final){
+                                    sql5 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','telat hadir',NOW())"
                                     con.query(sql4,[finger,jam],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
@@ -225,13 +237,13 @@ const checkfingerID = (req,res) => {
                                         }
                                     })
                                 } else {
-                                    res.send("anda sudah absen hari ini goblok")
+                                    res.send("sudah absen woi")
                                 }
                             }  else if (result.length > 0) {
                                 tgl = new Date(result[0].tanggal)
                                 tgl_final = addZero(tgl.getFullYear())+"-"+month[tgl.getMonth()]+"-"+addZero(tgl.getDate())
                                 if(jam <= masuk && jam >= "05:00:00" && tanggal != tgl_final){
-                                    sql4 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,tanggal) VALUES (?,?,'00:00:00',NOW())"
+                                    sql6 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','hadir',NOW())"
                                     con.query(sql4,[finger,jam],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
@@ -242,8 +254,18 @@ const checkfingerID = (req,res) => {
                                         }
                                         
                                     })
+                                } else if (jam > masuk && jam >= "05:00:00" && tanggal != tgl_final){
+                                    sql7 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','telat hadir',NOW())"
+                                    con.query(sql4,[finger,jam],function(err,result){
+                                        if (err) throw err;
+                                        success = result.affectedRows
+                                        if(success == 1){
+                                            res.send("selamat datang "+uname)
+    
+                                        }
+                                    })
                                 } else {
-                                    res.send("anda sudah absen hari ini goblok 2")
+                                    res.send("sudah absen woi 2")
                                 }
                             }
                             
@@ -419,7 +441,29 @@ const confirmID = (req,res) => {
 
 const getDataAbsen = (req,res) => {
     kelas = req.params.kelas
-    
+    if (kelas == "sd"){
+        sql = "SELECT absen.tanggal,siswa.nama,siswa.jenis_kelamin,siswa.kelas,absen.status FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE siswa.kelas <= 6"
+        con.query(sql,function(err,result){
+            if (err) throw err
+            res.send(result)
+        })
+
+    } else if (kelas == "smp"){
+        sql2 = "SELECT absen.tanggal,siswa.nama,siswa.jenis_kelamin,siswa.kelas,absen.status FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE siswa.kelas >= 7"
+        con.query(sql,function(err,result){
+            if (err) throw err
+            res.send(result)
+        })
+    } else if (kelas < 10){
+        sql3 = "SELECT absen.tanggal,siswa.nama,siswa.jenis_kelamin,siswa.kelas,absen.status FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE siswa.kelas = ?"
+        con.query(sql3,kelas,function(err,result){
+            if (err) throw err
+            res.send(result)
+            console.log(kelas)
+        })
+    } else {
+        res.status(404).send("kelas tidak ditemukan")
+    }
 
 }
 module.exports = {home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID,getDataAbsen}
