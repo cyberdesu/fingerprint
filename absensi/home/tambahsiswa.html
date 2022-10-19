@@ -45,12 +45,12 @@
       <input type="text" class="form-control" placeholder="no orangtua" name="No orangtua"  id="no_orangtua" >
   </div>
     <div class="mb-3">
-        <input type="submit" class="btn btn-success" value="Simpan" href="halaman.html" onclick="javascript:eraseText()";>
+        <input type="submit" class="btn btn-success" value="Simpan"  href="halaman.html" onclick="javascript:eraseText()";  onClick="alert('Data siswa disimpan')">
         <a href="halaman.html" class="btn btn-primary">Kembali </a>
     </div>
     <br>
     <script>
-      var form = document.getElementById('form')
+        var form = document.getElementById('form')
       form.addEventListener('submit',function handleSubmit(e){
         e.preventDefault()
         var nama = document.getElementById('nama').value
@@ -72,12 +72,17 @@
             },
         })
         .then(function(response){
+<<<<<<< Updated upstream
           if(response.status ==200){
             alert("data sudah masuk")
           } else if(response.status == 500){
             alert("sedang dalam mode absen")
           }
 
+=======
+          return response.json()
+          alert("data telah disimpan");
+>>>>>>> Stashed changes
         }) 
         form.reset()
         .then(function(data){

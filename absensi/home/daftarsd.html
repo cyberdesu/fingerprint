@@ -162,11 +162,11 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>id</th>
                                 <th>Nama</th>
-                                <th>Jenis Kelamin</th>
+                                <th>Gander</th>
                                 <th>Kelas</th>
                                 <th>no orangtua</th>
+                                <th>Setting</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -182,16 +182,13 @@
                             hasil.forEach((result) => {
                                 table.innerHTML += `
                                 <tr>
-                                    <td>${result.id}</td>
                                     <td>${result.nama}</td>
                                     <td>${result.jenis_kelamin}</td>
                                     <td>${result.kelas}</td>
                                     <td>${result.no_ortu}</td>
-                                    <td><span><a href=""><i class="ri-edit-line edit"></i></a><a href=""><i class="ri-delete-bin-line delete"></i></a></span></td>
-
-
-                                
+                                    <td><span><a href=""><i class="ri-edit-line edit" style="color: yellow;"></i></a><a href=""><i class="ri-delete-bin-line delete" style="color: red;"></i></a></span></td>
                                 </tr>
+
                                 `;
                             })
                         })
@@ -200,8 +197,7 @@
             </div>
         </div>
         <div style="text-align: center;">
-            <div  style="text-align: center;">
-                <button><a href="daftarsd.html" >beranda</a></button>
+            <div  style="text-align: center;">  
                 <button><a href="daftarsd1.html" >kelas 1</a></button>
                 <button><a href="daftarsd2.html" >kelas 2</a></button>
                 <button><a href="daftarsd3.html" >kelas 3</a></button>
@@ -213,6 +209,7 @@
         <br>
         <div style="text-align: center;">
         <button><a href="tambahsiswa.html" > Tambah Siswa </a></button>
+        <button><a href="daftarsd.html" >beranda</a></button>
     </div>
     <br><br>
     </section>

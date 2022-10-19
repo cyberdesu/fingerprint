@@ -99,70 +99,33 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Id</th>
                                 <th>Tanggal</th>
                                 <th>Nama</th>
-                                <th>Jenis Kelamin</th>
+                                <th>Gander</th>
                                 <th>Kelas</th>
                                 <th>Kehadiran</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>12/9/22</td>
-                                <td>Ucup</td>
-                                <td>Pria</td>
-                                <td>5</td>
-                                <td>hadir</td>
-                            </tr>
-                            <tr>
-                               <tr>
-                                <td>2</td>
-                                <td>12/9/22</td>
-                                <td>Ucup</td>
-                                <td>Pria</td>
-                                <td>5</td>
-                                <td>hadir</td>
-                            </tr> 
-                            <tr>
-                                <tr>
-                                <td>3</td>
-                                <td>12/9/22</td>
-                                <td>Ucup</td>
-                                <td>Pria</td>
-                                <td>5</td>
-                                <td>hadir</td>
-                            </tr>
-                            <tr>
-                                <tr>
-                                <td>4</td>
-                                <td>12/9/22</td>
-                                <td>Ucup</td>
-                                <td>Pria</td>
-                                <td>5</td>
-                                <td>hadir</td>
-                            </tr>
-                            <tr>
-                                <tr>
-                                <td>5</td>
-                                <td>12/9/22</td>
-                                <td>Ucup</td>
-                                <td>Pria</td>
-                                <td>5</td>
-                                <td>hadir</td>
-                            </tr>
-                            <tr>
-                                <tr>
-                                <td>6</td>
-                                <td>12/9/22</td>
-                                <td>Ucup</td>
-                                <td>Pria</td>
-                                <td>5</td>
-                                <td>hadir</td>
-                            </tr>
-                        </tbody>
                     </table>
+                     <script>
+                      fetch('http://localhost:4000/absen/kelas/6')
+                        .then(response =>response.json())
+                        .then(data => {
+                            const table = document.querySelector('table')
+                            hasil = data.data
+                            hasil.forEach((result) => {
+                                table.innerHTML += `
+                                <tr>
+                                    <td>${result.nama}</td>
+                                    <td>${result.jenis_kelamin}</td>
+                                    <td>${result.kelas}</td>
+                                    <td>${result.no_ortu}</td>
+                                    <td><span><a href=""><i class="ri-edit-line edit" style="color: yellow;"></i></a><a href=""><i class="ri-delete-bin-line delete" style="color: red;"></i></a></span></td>  
+                                </tr>
+                                `;
+                            })
+                        })
+                    </script>
                 </div>
             </div>
         </div>

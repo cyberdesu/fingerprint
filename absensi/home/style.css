@@ -389,12 +389,13 @@ th {
     }
 }
 
-@media screen and (max-width:1024px) {
+@media screen and (max-width:1350px) {
     table {
-        min-width: 290px;
+        min-width: 450px;
+        overflow-x: scroll;
     }
     tr{
-        min-width: 300px;
+        min-width: 400px;
     }
 }
 

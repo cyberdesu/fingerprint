@@ -162,11 +162,11 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>id</th>
                                 <th>Nama</th>
                                 <th>Jenis Kelamin</th>
                                 <th>Kelas</th>
                                 <th>no orangtua</th>
+                                <th>Setting</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -183,12 +183,11 @@
                             hasil.forEach((result) => {
                                 table.innerHTML += `
                                 <tr>
-                                    <td>${result.id}</td>
                                     <td>${result.nama}</td>
                                     <td>${result.jenis_kelamin}</td>
                                     <td>${result.kelas}</td>
-                                    <td>${result.no_ortu}</td>
-                                
+                                    <td>${result.no_ortu}</td> 
+                                    <td><span><a href=""><i class="ri-edit-line edit" style="color: yellow;"></i></a><a href=""><i class="ri-delete-bin-line delete" style="color: red;"></i></a></span></td>
                                 </tr>
                                 `;
                             })
