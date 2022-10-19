@@ -88,7 +88,7 @@
                 <div class="title">
                     <h2 class="section--title"style="color: white;">Kelas</h2>
                     <select class="dropdown">
-                        <option>8</option>
+                        <option>kelas 8</option>
                     </select>
                 </div>
             <div class="recent--Siswa">
@@ -114,6 +114,8 @@
                             const table = document.querySelector('table')
                             hasil = data.data
                             hasil.forEach((result) => {
+                                tgl = result.tanggal
+                                final = tgl.substring(0,10)
                                 table.innerHTML += `
                                 <tr>
                                     <td>${result.nama}</td>
