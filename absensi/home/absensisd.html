@@ -101,7 +101,7 @@
                             <tr>
                                 <th>Tanggal</th>
                                 <th>Nama</th>
-                                <th>Gender</th>
+                                <th>Gander</th>
                                 <th>Kelas</th>
                                 <th>Kehadiran</th>
                             </tr>
@@ -134,7 +134,13 @@
                             .then(data => daftarAbsen(data))
                         function daftarsiswa(id){
                             var Table = document.querySelector('table')
-                            Table.innerHTML = "";
+                            Table.innerHTML = `<tr>
+                                <th>Tanggal</th>
+                                <th>Nama</th>
+                                <th>Gender</th>
+                                <th>Kelas</th>
+                                <th>Kehadiran</th>
+                            </tr>`;
                             if (id == "1"){
                                 fetch(url+"/absen/kelas/1")
                                     .then(response =>response.json())

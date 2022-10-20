@@ -443,7 +443,7 @@ const confirmID = (req,res) => {
 const getDataAbsen = (req,res) => {
     kelas = req.params.kelas
     if (kelas == "sd"){
-        sql = "SELECT absen.tanggal,siswa.nama,siswa.jenis_kelamin,siswa.kelas,absen.status FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE siswa.kelas <= 6 ORDER BY absen.id_absen DESC "
+        sql = "SELECT absen.tanggal,siswa.nama,siswa.jenis_kelamin,siswa.kelas,absen.status FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE siswa.kelas < 7 ORDER BY absen.id_absen DESC "
         con.query(sql,function(err,result){
             if (err) throw err
             res.send({
@@ -452,10 +452,11 @@ const getDataAbsen = (req,res) => {
         })
 
     } else if (kelas == "smp"){
-        sql2 = "SELECT absen.tanggal,siswa.nama,siswa.jenis_kelamin,siswa.kelas,absen.status FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE siswa.kelas >= 7 ORDER BY absen.id_absen DESC "
-        con.query(sql,function(err,result){
+        sql2 = "SELECT absen.tanggal,siswa.nama,siswa.jenis_kelamin,siswa.kelas,absen.status FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE siswa.kelas > 6 ORDER BY absen.id_absen DESC "
+        con.query(sql2,function(err,result){
             if (err) throw err
             res.send({
+                message: "data smp",
                 data: result
             })
         })

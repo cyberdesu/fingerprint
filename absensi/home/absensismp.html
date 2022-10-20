@@ -108,9 +108,8 @@
                         </thead>
                     </table>
                     <script>
-                        fetch('http://localhost:4000/absen/kelas/7')
-                        .then(response =>response.json())
-                        .then(data => {
+                        const url = "http://localhost:4000"
+                        const daftarAbsen =(data)=>{
                             const table = document.querySelector('table')
                             hasil = data.data
                             hasil.forEach((result) => {
@@ -118,23 +117,55 @@
                                 final = tgl.substring(0,10)
                                 table.innerHTML += `
                                 <tr>
+                                    <td>${final}</td>
                                     <td>${result.nama}</td>
                                     <td>${result.jenis_kelamin}</td>
                                     <td>${result.kelas}</td>
-                                    <td>${result.no_ortu}</td>
+                                    <td>${result.status}</td>
                                     <td><span><a href=""><i class="ri-edit-line edit" style="color: yellow;"></i></a><a href=""><i class="ri-delete-bin-line delete" style="color: red;"></i></a></span></td>  
                                 </tr>
                                 `;
                             })
-                        })
+                        }
+                        fetch(url+"/absen/kelas/smp")
+                            .then(response =>response.json())
+                            .then(data => daftarAbsen(data))
+                        function daftarsiswa(id){
+                            var Table = document.querySelector('table')
+                            Table.innerHTML = `<tr>
+                                <th>Tanggal</th>
+                                <th>Nama</th>
+                                <th>Gender</th>
+                                <th>Kelas</th>
+                                <th>Kehadiran</th>
+                            </tr>`;
+                            if (id == "7"){
+                                fetch(url+"/absen/kelas/7")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            } else if (id == "8"){
+                                fetch(url+"/absen/kelas/8")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            }else if (id == "9"){
+                                fetch(url+"/absen/kelas/9")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            } else {
+                                fetch(url+"/absen/kelas/smp")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            }
+                        }
+
                     </script>
                 </div>
             </div>
         </div>
         <center><div>
-            <button><a href="absensismp.html" >kelas 7</a></button>
-            <button><a href="absensismp2.html" >kelas 8</a></button>
-            <button><a href="absensismp3.html" >kelas 9</a></button>
+            <button id="7" onclick="daftarsiswa(this.id)"><a>kelas 7</a></button>
+            <button id="8" onclick="daftarsiswa(this.id)"><a>kelas 8</a></button>
+            <button id="9" onclick="daftarsiswa(this.id)"><a>kelas 9</a></button>
         </div></center>
     </section>
     <script src="app.js"></script>
