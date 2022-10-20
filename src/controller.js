@@ -228,7 +228,7 @@ const checkfingerID = (req,res) => {
                                     })
                                 } else if (jam > masuk && jam >= "05:00:00"){
                                     sql5 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','telat hadir',NOW())"
-                                    con.query(sql4,[finger,jam],function(err,result){
+                                    con.query(sql5,[finger,jam],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
@@ -257,7 +257,7 @@ const checkfingerID = (req,res) => {
                                     })
                                 } else if (jam > masuk && jam >= "05:00:00" && tanggal != tgl_final){
                                     sql7 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','telat hadir',NOW())"
-                                    con.query(sql4,[finger,jam],function(err,result){
+                                    con.query(sql7,[finger,jam],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
