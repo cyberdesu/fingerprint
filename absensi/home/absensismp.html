@@ -114,7 +114,8 @@
                             hasil = data.data
                             hasil.forEach((result) => {
                                 tgl = result.tanggal
-                                final = tgl.substring(0,10)
+                                bulan = tgl.substr(0,10)
+                                final = bulan.substr(8,8) + bulan.substr(4,4)+bulan.substr(0,4)
                                 table.innerHTML += `
                                 <tr>
                                     <td>${final}</td>

@@ -101,7 +101,7 @@
                             <tr>
                                 <th>Tanggal</th>
                                 <th>Nama</th>
-                                <th>Gander</th>
+                                <th>Gender</th>
                                 <th>Kelas</th>
                                 <th>Kehadiran</th>
                             </tr>
@@ -116,7 +116,8 @@
                             hasil = data.data
                             hasil.forEach((result) => {
                                 tgl = result.tanggal
-                                final = tgl.substring(0,10)
+                                bulan = tgl.substr(0,10)
+                                final = bulan.substr(8,8) + bulan.substr(4,4)+bulan.substr(0,4)
                                 table.innerHTML += `
                                 <tr>
                                     <td>${final}</td>
