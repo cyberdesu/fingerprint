@@ -26,10 +26,20 @@
                     <i class="ri-wechat-2-line"></i>
                 </div>
                <div class="picon button">
-                    <a href=""><button style="background: white;
+                    <a href=""><button id="status" style="background: white;
     color: #22a4cf;border: 4px solid white;
      border-radius: 10px;">Active</button></a>
                 </div>
+                <script>
+                    fetch('http://localhost:4000/device/check/1')
+                    .then(response =>response.json())
+                    .then(data => {
+                        const table = document.getElementById('status')
+                        hasil = data.data.status
+                        console.log(hasil) 
+                        table.innerHTML = hasil
+                    })
+                </script>
                 <div class="picon profile">
                     <img src="src/images.png" alt="">
                 </div>
