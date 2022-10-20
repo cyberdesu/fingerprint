@@ -107,7 +107,7 @@ const getdatakelas = (req,res) => {
             if (result.length == 0){
                 res.set('Access-Control-Allow-Origin', '*').send({
                     status: false,
-                    data: result
+                    message: "data kosong"
                 })
             }
             else {
