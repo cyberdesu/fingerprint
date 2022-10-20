@@ -110,9 +110,8 @@
                         </tbody>
                     </table>
                      <script>
-                      fetch('http://localhost:4000/absen/kelas/1')
-                        .then(response =>response.json())
-                        .then(data => {
+                        const url = "http://localhost:4000"
+                        const daftarAbsen =(data)=>{
                             const table = document.querySelector('table')
                             hasil = data.data
                             hasil.forEach((result) => {
@@ -129,19 +128,60 @@
                                 </tr>
                                 `;
                             })
-                        })
+                        }
+                        fetch(url+"/absen/kelas/sd")
+                            .then(response =>response.json())
+                            .then(data => daftarAbsen(data))
+                        function daftarsiswa(id){
+                            var Table = document.querySelector('table')
+                            Table.innerHTML = "";
+                            if (id == "1"){
+                                fetch(url+"/absen/kelas/1")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            } else if (id == "2"){
+                                fetch(url+"/absen/kelas/2")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            }else if (id == "3"){
+                                fetch(url+"/absen/kelas/3")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            }else if (id == "4"){
+                                fetch(url+"/absen/kelas/4")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            }else if (id == "5"){
+                                fetch(url+"/absen/kelas/5")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            }else if (id == "6"){
+                                fetch(url+"/absen/kelas/6")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            }else if (id == "beranda"){
+                                fetch(url+"/absen/kelas/sd")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            } else {
+                                fetch(url+"/absen/kelas/sd")
+                                    .then(response =>response.json())
+                                    .then(data => daftarAbsen(data))
+                            }
+                        }
+
                     </script>
                 </div>
             </div>
         </div>
         <div style="text-align: center;">
             <div  style="text-align: center;">
-                <button><a href="absensisd.html" >kelas 1</a></button>
-                <button><a href="absensisd2.html" >kelas 2</a></button>
-                <button><a href="absensisd3.html" >kelas 3</a></button>
-                <button><a href="absensisd4.html" >kelas 4</a></button>
-                <button><a href="absensisd5.html" >kelas 5</a></button>
-                <button><a href="absensisd6.html" >kelas 6</a></button>
+                <button  id="1" onclick="daftarsiswa(this.id)"><a>kelas 1</a></button>
+                <button  id="2" onclick="daftarsiswa(this.id)"><a>kelas 2</a></button>
+                <button  id="3" onclick="daftarsiswa(this.id)"><a>kelas 3</a></button>
+                <button  id="4" onclick="daftarsiswa(this.id)"><a>kelas 4</a></button>
+                <button  id="5" onclick="daftarsiswa(this.id)"><a>kelas 5</a></button>
+                <button  id="6" onclick="daftarsiswa(this.id)"><a>kelas 6</a></button>
             </div>
         </div>
     </section>
