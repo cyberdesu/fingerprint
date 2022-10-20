@@ -211,7 +211,7 @@ const checkfingerID = (req,res) => {
                         const month = ["01","02","03","04","05","06","07","08","09","10","11","12"];
                         tanggal = addZero(waktu.getFullYear())+"-"+month[waktu.getMonth()]+"-"+addZero(waktu.getDate())
     
-                        sql3 = "SELECT tanggal FROM absen WHERE id_sidikjari=?"
+                        sql3 = "SELECT tanggal FROM absen WHERE id_sidikjari=? ORDER BY tanggal DESC LIMIT 1"
                         con.query(sql3,finger,function(err,result){
                             if (err) throw err;
     
@@ -222,17 +222,17 @@ const checkfingerID = (req,res) => {
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
-                                            res.send("selamat datang "+uname)
+                                            res.send("selamat datang1 "+uname)
     
                                         }
                                     })
-                                } else if (jam > masuk && jam >= "05:00:00" && tanggal != tgl_final){
+                                } else if (jam > masuk && jam >= "05:00:00"){
                                     sql5 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','telat hadir',NOW())"
                                     con.query(sql4,[finger,jam],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
-                                            res.send("selamat datang "+uname)
+                                            res.send("selamat datang2 "+uname)
     
                                         }
                                     })
@@ -240,16 +240,17 @@ const checkfingerID = (req,res) => {
                                     res.send("sudah absen woi")
                                 }
                             }  else if (result.length > 0) {
+                                console.log(result)
                                 tgl = new Date(result[0].tanggal)
                                 tgl_final = addZero(tgl.getFullYear())+"-"+month[tgl.getMonth()]+"-"+addZero(tgl.getDate())
                                 if(jam <= masuk && jam >= "05:00:00" && tanggal != tgl_final){
                                     sql6 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','hadir',NOW())"
-                                    con.query(sql4,[finger,jam],function(err,result){
+                                    con.query(sql6,[finger,jam],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
                                          
-                                            res.send("selamat datang "+uname)
+                                            res.send("selamat datang3 "+uname)
     
                                         }
                                         
@@ -260,7 +261,7 @@ const checkfingerID = (req,res) => {
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
-                                            res.send("selamat datang "+uname)
+                                            res.send("selamat datang4 "+uname)
     
                                         }
                                     })
@@ -445,25 +446,33 @@ const getDataAbsen = (req,res) => {
         sql = "SELECT absen.tanggal,siswa.nama,siswa.jenis_kelamin,siswa.kelas,absen.status FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE siswa.kelas <= 6 ORDER BY absen.id_absen DESC "
         con.query(sql,function(err,result){
             if (err) throw err
-            res.send(result)
+            res.send({
+                data: result
+            })
         })
 
     } else if (kelas == "smp"){
         sql2 = "SELECT absen.tanggal,siswa.nama,siswa.jenis_kelamin,siswa.kelas,absen.status FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE siswa.kelas >= 7 ORDER BY absen.id_absen DESC "
         con.query(sql,function(err,result){
             if (err) throw err
-            res.send(result)
+            res.send({
+                data: result
+            })
         })
     } else if (kelas < 10){
         sql3 = "SELECT absen.tanggal,siswa.nama,siswa.jenis_kelamin,siswa.kelas,absen.status FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE siswa.kelas = ?"
         con.query(sql3,kelas,function(err,result){
             if (err) throw err
-            res.send(result)
-            console.log(kelas)
+            res.send({
+                data: result
+            })
         })
     } else {
         res.status(404).send("kelas tidak ditemukan")
     }
 
+}
+const editsiswa = (req,res) => {
+    
 }
 module.exports = {home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID,getDataAbsen}
