@@ -192,6 +192,9 @@
                                 
                             })
                         }
+                        fetch(url+"/siswa/kelas/sd")
+                        .then(response =>response.json())
+                        .then(data => datasiswa(data))
                         function daftarsiswa(id){
                             var Table = document.querySelector('table')
                             Table.innerHTML = "";

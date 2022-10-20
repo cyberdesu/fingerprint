@@ -174,10 +174,12 @@
                         </tbody>
                     </table>
                     <script>
-
-                        fetch('http://localhost:4000/siswa/kelas/smp')
+                        const url = "http://localhost:4000"
+                        fetch(url+"/siswa/kelas/smp")
                         .then(response =>response.json())
-                        .then(data => {
+                        .then(data => datasiswa(data))
+                        const datasiswa = (data) => {
+                            console.log(data)
                             const table = document.querySelector('table')
                             hasil = data.data
                             hasil.forEach((result) => {
@@ -186,22 +188,46 @@
                                     <td>${result.nama}</td>
                                     <td>${result.jenis_kelamin}</td>
                                     <td>${result.kelas}</td>
-                                    <td>${result.no_ortu}</td> 
+                                    <td>${result.no_ortu}</td>
                                     <td><span><a href=""><i class="ri-edit-line edit" style="color: yellow;"></i></a><a href=""><i class="ri-delete-bin-line delete" style="color: red;"></i></a></span></td>
                                 </tr>
+                        
                                 `;
+                                
                             })
-                        })
+                        }
+                        function daftarsiswa(id){
+                            var Table = document.querySelector('table')
+                            Table.innerHTML = "";
+                            if (id == "7"){
+                                fetch(url+"/siswa/kelas/7")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            } else if (id == "8"){
+                                fetch(url+"/siswa/kelas/8")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            }else if (id == "9"){
+                                fetch(url+"/siswa/kelas/9")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            }else if (id == "smp"){
+                                fetch(url+"/siswa/kelas/smp")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            }
+                        }
+                        
                     </script>
                 </div>
             </div>
         </div>
         <div style="text-align: center;">
             <div  style="text-align: center;">
-                <button><a href="daftarsmp.html" >beranda</a></button>
-                <button><a href="daftarsmp1.html" >kelas 7</a></button>
-                <button><a href="daftarsmp2.html" >kelas 8</a></button>
-                <button><a href="daftarsmp3.html" >kelas 9</a></button>
+                <button id="smp"  onclick="daftarsiswa(this.id)"><a>beranda</a></button>
+                <button id="7" onclick="daftarsiswa(this.id)"><a>kelas 7</a></button>
+                <button id="8" onclick="daftarsiswa(this.id)"><a>kelas 8</a></button>
+                <button id="9" onclick="daftarsiswa(this.id)"><a>kelas 9</a></button>
             </div>
         </div>
         <br>
