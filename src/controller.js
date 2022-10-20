@@ -107,13 +107,13 @@ const getdatakelas = (req,res) => {
             if (result.length == 0){
                 res.set('Access-Control-Allow-Origin', '*').send({
                     status: false,
-                    message: "tidak ada kelas yg ditemukan"
+                    data: result
                 })
             }
             else {
-                res.status(404).set('Access-Control-Allow-Origin', '*').send({
+                res.status(200).set('Access-Control-Allow-Origin', '*').send({
                     status: true,
-                    message: "data telah dapat",
+                    message: "data didapatkan",
                     data: result
         
                 })
