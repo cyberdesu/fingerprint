@@ -69,9 +69,12 @@ void CheckMode(){
     Link = url + getData;
     http.begin(client,Link);
     int httpCode = http.GET();
+    String response = http.getString();
+    Serial.println(Link);
+    Serial.println("output:"+response);
     DynamicJsonDocument doc(2048);
     if(httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){ 
-      String response = http.getString();
+      Serial.println(response);
       Serial.println("Koneksi aktif");
       DeserializationError err = deserializeJson(doc,response);
       if (err) {
@@ -79,8 +82,9 @@ void CheckMode(){
         Serial.println(err.f_str());
       }
       JsonObject obj = doc.as<JsonObject>();
-      //Serial.println(obj);
+      Serial.println(obj);
       int result = obj[String("data")]["Mode"];
+      Serial.println(result);
       if(!firstConnect){
         device_Mode = result;
         firstConnect = true;
@@ -183,55 +187,55 @@ int getFingerprintID() {
   uint8_t p = finger.getImage();
   switch (p) {
     case FINGERPRINT_OK:
-      //Serial.println("Image taken");
+      Serial.println("Image taken");
       break;
     case FINGERPRINT_NOFINGER:
-      //Serial.println("No finger detected");
+      Serial.println("No finger detected");
       return 0;
     case FINGERPRINT_PACKETRECIEVEERR:
-      //Serial.println("Communication error");
+      Serial.println("Communication error");
       return -2;
     case FINGERPRINT_IMAGEFAIL:
-      //Serial.println("Imaging error");
+      Serial.println("Imaging error");
       return -2;
     default:
-      //Serial.println("Unknown error");
+      Serial.println("Unknown error");
       return -2;
   }
   // OK success!
   p = finger.image2Tz();
   switch (p) {
     case FINGERPRINT_OK:
-      //Serial.println("Image converted");
+      Serial.println("Image converted");
       break;
     case FINGERPRINT_IMAGEMESS:
-      //Serial.println("Image too messy");
+      Serial.println("Image too messy");
       return -1;
     case FINGERPRINT_PACKETRECIEVEERR:
-      //Serial.println("Communication error");
+      Serial.println("Communication error");
       return -2;
     case FINGERPRINT_FEATUREFAIL:
-      //Serial.println("Could not find fingerprint features");
+      Serial.println("Could not find fingerprint features");
       return -2;
     case FINGERPRINT_INVALIDIMAGE:
-      //Serial.println("Could not find fingerprint features");
+      Serial.println("Could not find fingerprint features");
       return -2;
     default:
-      //Serial.println("Unknown error");
+      Serial.println("Unknown error");
       return -2;
   }
   // OK converted!
   p = finger.fingerFastSearch();
   if (p == FINGERPRINT_OK) {
-    //Serial.println("Found a print match!");
+    Serial.println("Found a print match!");
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
-    //Serial.println("Communication error");
+    Serial.println("Communication error");
     return -2;
   } else if (p == FINGERPRINT_NOTFOUND) {
-    //Serial.println("Did not find a match");
+    Serial.println("Did not find a match");
     return -1;
   } else {
-    //Serial.println("Unknown error");
+    Serial.println("Unknown error");
     return -2;
   }   
   // found a match!
@@ -286,7 +290,6 @@ void ChecktoAddID(){
   if(WiFi.isConnected()){
     getData = "/getfingerid/get_id/1";
     Link = url + "/getfingerid/get_id/1";
-    Serial.println(Link);
     http.begin(client,Link);
     DynamicJsonDocument doc(2048);
     if(httpcode == HTTP_CODE_OK || httpcode == HTTP_CODE_MOVED_PERMANENTLY){
@@ -491,7 +494,6 @@ void ChecktoDeleteID(){
   if(WiFi.isConnected()){
     getData = "/deleteid/check/"+ String(device_Mode);
     Link = url + getData;
-    Serial.println(Link);
     http.begin(client,Link);
     int httpCode = http.GET();
     String payload = http.getString();
