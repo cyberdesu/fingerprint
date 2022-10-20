@@ -173,9 +173,8 @@
                         </tbody>
                     </table>
                     <script>
-                        fetch('http://localhost:4000/siswa/kelas/sd')
-                        .then(response =>response.json())
-                        .then(data => {
+                        const url = "http://localhost:4000"
+                        const datasiswa = (data) => {
                             console.log(data)
                             const table = document.querySelector('table')
                             hasil = data.data
@@ -188,28 +187,67 @@
                                     <td>${result.no_ortu}</td>
                                     <td><span><a href=""><i class="ri-edit-line edit" style="color: yellow;"></i></a><a href=""><i class="ri-delete-bin-line delete" style="color: red;"></i></a></span></td>
                                 </tr>
-
+                        
                                 `;
+                                
                             })
-                        })
+                        }
+                        function daftarsiswa(id){
+                            var Table = document.querySelector('table')
+                            Table.innerHTML = "";
+                            if (id == "1"){
+                                fetch(url+"/siswa/kelas/1")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            } else if (id == "2"){
+                                fetch(url+"/siswa/kelas/2")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            }else if (id == "3"){
+                                fetch(url+"/siswa/kelas/3")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            }else if (id == "4"){
+                                fetch(url+"/siswa/kelas/4")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            }else if (id == "5"){
+                                fetch(url+"/siswa/kelas/5")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            }else if (id == "6"){
+                                fetch(url+"/siswa/kelas/6")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            }else if (id == "beranda"){
+                                fetch(url+"/siswa/kelas/sd")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            } else {
+                                fetch(url+"/siswa/kelas/sd")
+                                    .then(response =>response.json())
+                                    .then(data => datasiswa(data))
+                            }
+                        }
+                        
                     </script>
                 </div>
             </div>
         </div>
         <div style="text-align: center;">
             <div  style="text-align: center;">  
-                <button><a href="daftarsd1.html" >kelas 1</a></button>
-                <button><a href="daftarsd2.html" >kelas 2</a></button>
-                <button><a href="daftarsd3.html" >kelas 3</a></button>
-                <button><a href="daftarsd4.html" >kelas 4</a></button>
-                <button><a href="daftarsd5.html" >kelas 5</a></button>
-                <button><a href="daftarsd6.html" >kelas 6</a></button>
+                <button id="1" onclick="daftarsiswa(this.id)"><a>kelas 1</a></button>
+                <button id="2" onclick="daftarsiswa(this.id)"><a>kelas 2</a></button>
+                <button id="3" onclick="daftarsiswa(this.id)"><a></a> kelas 3</a></button>
+                <button id="4" onclick="daftarsiswa(this.id)"><a>kelas 4</a></button>
+                <button id="5" onclick="daftarsiswa(this.id)"><a></a> kelas 5</a></button>
+                <button id="6" onclick="daftarsiswa(this.id)"><a>kelas 6</a></button>
             </div>
         </div>
         <br>
         <div style="text-align: center;">
         <button><a href="tambahsiswa.html" > Tambah Siswa </a></button>
-        <button><a href="daftarsd.html" >beranda</a></button>
+        <button onclick="daftarsiswa(this.id)"><a>beranda</a></button>
     </div>
     <br><br>
     </section>
