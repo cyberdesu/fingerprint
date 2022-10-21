@@ -7,7 +7,7 @@ const home = (req,res) => {
     res.status(200)
     res.send("API aktifk bre")
 }
-const deletefingerprint = (req, res) => {
+const deletefingerprint = (req, res) => { //FOR ARDUINO
 
     deleteID = req.params.deleteID
     Mode = req.params.Mode
@@ -36,7 +36,7 @@ const deletefingerprint = (req, res) => {
                             })
                         } else if (result.length > 0){
                             res1 = result[0].id
-                            sql3 = "DELETE FROM siswa WHERE del_finger=1"
+                            sql3 = "DELETE FROM siswa WHERE del_finger=1 LIMIT 1"
                             con.query(sql3,function(err,result){
                                 if (err) throw err
                                 res.send({
@@ -62,6 +62,18 @@ const deletefingerprint = (req, res) => {
         })
     }
 
+}
+
+const deleteid = (req,res) => {
+    id = req.params.id
+    sql = "UPDATE siswa SET del_finger=1 WHERE id=?"
+    con.query(sql,id,function(err,result){
+        if (err) throw err
+        res.send({
+            status: true,
+            message: "data telah berhasil dihapus"
+        })
+    })
 }
 
 const getDatasiswa = (req,res) => {
@@ -505,4 +517,4 @@ const editsiswa = (req,res) => {
 
     
 }
-module.exports = {home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID,getDataAbsen,editsiswa}
+module.exports = {home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID,getDataAbsen,editsiswa,deleteid}

@@ -180,15 +180,15 @@
                             hasil = data.data
                             hasil.forEach((result) => {
                                 table.innerHTML += `
-                                <tr>
-                                    <td>${result.nama}</td>
+                                <tr class="tabel">
+                                    <td id="nama-sd">${result.nama}</td>
                                     <td>${result.jenis_kelamin}</td>
                                     <td>${result.kelas}</td>
                                     <td>${result.no_ortu}</td>
-                                    <td  >
+                                    <td>
                                         <span>
-                                            <a data-id=${result.id} href=""><i id="edit-post-sd" class="ri-edit-line edit" style="color: yellow;"></i></a>
-                                            <a href=""><i id="delete-post-sd"class="ri-delete-bin-line delete" style="color: red;"></i></a>
+                                            <a data-id=${result.id}><i  id="edit-post-sd" class="ri-edit-line edit" style="color: yellow;"></i></a>
+                                            <a data-id=${result.id}><i id="delete-post-sd"class="ri-delete-bin-line delete" style="color: red;"></i></a>
                                         </span>
                                     </td>
                                 </tr>
@@ -202,7 +202,7 @@
                         .then(data => datasiswa(data))
                         function daftarsiswa(id){
                             var Table = document.querySelector('table')
-                            Table.innerHTML =`<tr>
+                            Table.innerHTML =`<tr class="table">
                                 <th>Nama</th>
                                 <th>Gender</th>
                                 <th>Kelas</th>
@@ -243,6 +243,32 @@
                                     .then(data => datasiswa(data))
                             }
                         }
+                        const editlist = document.querySelector('.table')
+                        //const url = "http://localhost:4000"
+
+                        editlist.addEventListener('click',(e)=>{
+                            e.preventDefault();
+                            let delbutton = e.target.id == "delete-post-sd"
+                            let editbutton = e.target.id == "edit-post.sd"
+
+                            let id = e.target.parentElement.dataset.id
+                            //console.log(e.target.parentElement)
+
+
+                            if(delbutton && confirm("Apakah anda yakin ingin menghapus ini ?")){
+                                fetch(`${url}/siswa/delete/${id}`)
+                                .then(response =>response.json())
+                            }
+
+                            if(editbutton && confirm("Apakah anda yakin ingin mengubah data siswa ini?")){
+                                console.log(editbutton)
+                                const parent = e.target.parentElement
+                                const titleContent = parent.getElementById('nama-sd').innerText
+                                console.log(titleContent)
+                            }
+                            
+
+                        })
                         
                     </script>
                 </div>

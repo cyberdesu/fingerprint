@@ -1,10 +1,11 @@
-const {home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas, getFingerID, tambahsiswa, confirmID, getDataAbsen, editsiswa} = require('./controller');
+const {home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas, getFingerID, tambahsiswa, confirmID, getDataAbsen, editsiswa, deleteid} = require('./controller');
 
 const router = require('express').Router();
 
 
 router.get('/',home)
 router.get('/deleteID/:deleteID/:Mode/',deletefingerprint)
+router.get('/siswa/delete/:id',deleteid)
 router.get('/siswa',getDatasiswa)
 router.get('/check/:finger/:mode',checkfingerID) //arduino
 router.get('/device/:mode/:id',DeviceMode) //arduino
