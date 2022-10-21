@@ -513,8 +513,33 @@ const editsiswa = (req,res) => {
         }
     })
     
+}
 
+const editjadwal = (req,res) => {
+    const id = req.params.id
+    let data = {
+        jam_masuk : req.body.masuk,
+        jam_pulang : req.body.pulang
+    }
+    sql = "SELECT id FROM siswa WHERE id =? LIMIT 1"
+    con.query(sql,id,function(err,result){
+        if (err) throw err;
+        if (result.length == 0){
+            res.send("data tidak ada")
+        } else {
+            idsiswa = result[0].id
+            sql2 = "UPDATE siswa SET ? WHERE id =?"
+            con.query(sql2,[data,idsiswa],function(err,result){
 
+                res.send({
+                    status: true,
+                    message: "data telah berhasil di update"
+
+                })
+
+            })
+        }
+    })
     
 }
 module.exports = {home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID,getDataAbsen,editsiswa,deleteid}
