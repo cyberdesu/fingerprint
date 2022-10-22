@@ -4,7 +4,6 @@ const app = express()
 const port = process.env.PORT || 4000
 const cors = require ('cors')
 const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
-const qrcode = require('qrcode-terminal');
 
 
 
@@ -13,19 +12,18 @@ app.use(bodyParser.json())
 app.use(cors())
 
 const appRoute = require('./router');
-const { bot } = require('./bot-wa/bot')
+const { botsession,bot } = require('./bot-wa/bot')
 app.use('/', appRoute)
 
-bot.on('qr', qr => {
-  qrcode.generate(qr, {small: true});
+botsession()
+
+bot.on('message', message => {
+	if(message.body === '!ping') {
+		bot.sendMessage(message.from, 'pong');
+    console.log(message.from)
+
+	}
 });
-
-bot.on('authenticated', () => {
-  console.log("success")
-});
-bot.initialize();
-
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
