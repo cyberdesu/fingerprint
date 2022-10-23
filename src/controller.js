@@ -5,7 +5,7 @@ const con = require('./Database/database');
 
 const home = (req,res) => {
     res.status(200)
-    res.send("API aktifk bre")
+    res.render('/absensi/home/halaman.html',{root: __dirname})
 }
 const deletefingerprint = (req, res) => { //FOR ARDUINO
 
@@ -385,8 +385,11 @@ const tambahsiswa = (req,res) => {
 
         if(device == "0"){
 
-            sql2 = "INSERT INTO siswa SET ?"
-            con.query(sql2,data,function(err,result){
+            sql2= "SELECT jam_masuk,jam_pulang WHERE kelas=? LIMIT 1"
+            con.query(sql2,kelas,err)
+
+            sql3 = "INSERT INTO siswa SET jam_masuk= ?"
+            con.query(sql3,data,function(err,result){
                 if (err) throw err
                 res.send({
                     status: true,
@@ -485,13 +488,25 @@ const getDataAbsen = (req,res) => {
     }
 
 }
+
+const detailsiswa =(req,res) =>{
+    id = req.params.id
+    sql = "SELECT * FROM siswa WHERE id=? LIMIT 1"
+    con.query(sql,id,function(err,result){
+        if(result.length > 0){
+            res.sendFile(__dirname + "/absensi/home/edit.html")
+            
+
+        }
+    })
+}
 const editsiswa = (req,res) => {
     const id = req.params.id
     let data = {
         nama : req.body.nama,
         kelas : req.body.kelas,
         jenis_kelamin: req.body.kelamin,
-        no_ortu: req.body.no
+        no_ortu: req.body.no,
     }
     sql = "SELECT id FROM siswa WHERE id =? LIMIT 1"
     con.query(sql,id,function(err,result){
@@ -516,30 +531,34 @@ const editsiswa = (req,res) => {
 }
 
 const editjadwal = (req,res) => {
-    const id = req.params.id
+    const kelas = req.params.kelas
     let data = {
         jam_masuk : req.body.masuk,
         jam_pulang : req.body.pulang
     }
-    sql = "SELECT id FROM siswa WHERE id =? LIMIT 1"
-    con.query(sql,id,function(err,result){
-        if (err) throw err;
-        if (result.length == 0){
-            res.send("data tidak ada")
-        } else {
-            idsiswa = result[0].id
-            sql2 = "UPDATE siswa SET ? WHERE id =?"
-            con.query(sql2,[data,idsiswa],function(err,result){
-
-                res.send({
-                    status: true,
-                    message: "data telah berhasil di update"
-
-                })
-
+    sql = "SELECT jam_masuk,jam_pulang FROM siswa WHERE kelas=?"
+    con.query(sql,kelas,function(err,result){
+        if (err) throw err
+        if(result.length > 0){
+            sql2 ="UPDATE siswa SET ? WHERE kelas=?"
+            con.query(sql2,[data,kelas],function(err,result){
+                res.send(result)
             })
         }
+        
     })
-    
+
 }
-module.exports = {home,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID,getDataAbsen,editsiswa,deleteid}
+
+const checkJadwal = (req,res) => {
+    sql="SELECT kelas,jam_masuk,jam_pulang,COUNT(*) AS TOTAL FROM siswa GROUP BY kelas"
+    con.query(sql,function(err,result){
+        if(err) throw err
+        res.send({
+            status: true,
+            message: "menampilkan total siswa",
+            data: result
+        })
+    })
+}
+module.exports = {home,editjadwal,detailsiswa,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID,getDataAbsen,editsiswa,deleteid,checkJadwal}
