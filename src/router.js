@@ -1,3 +1,4 @@
+const { botabsen } = require('./bot-wa/bot-handler');
 const {home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas, getFingerID, tambahsiswa, confirmID, getDataAbsen, editsiswa, deleteid} = require('./controller');
 
 const router = require('express').Router();
@@ -13,9 +14,9 @@ router.post('/device/edit/:id',editMode) //untuk ubah mode ke daftar atau absen
 router.get('/siswa/kelas/:kelas',getdatakelas) //front end
 router.get('/getfingerid/:getfingerid/:id',getFingerID)
 router.post('/siswa/tambah',tambahsiswa)
-router.post('siswa/edit')
 router.get('/confirm/:id/:confirmid',confirmID)
 router.get('/absen/kelas/:kelas',getDataAbsen)
 router.put('/siswa/edit/:id',editsiswa)
+router.get('/absen/bot/check',botabsen)
 
 module.exports = router

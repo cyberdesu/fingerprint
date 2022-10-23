@@ -23,6 +23,7 @@ function botsession(){
     bot.on('authenticated', () => {
         console.log("success")
     });
+     
     bot.initialize();
 }
 module.exports = {bot, botsession}

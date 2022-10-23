@@ -180,11 +180,11 @@
                             hasil = data.data
                             hasil.forEach((result) => {
                                 table.innerHTML += `
-                                <tr class="tabel">
-                                    <td id="nama-sd">${result.nama}</td>
-                                    <td>${result.jenis_kelamin}</td>
-                                    <td>${result.kelas}</td>
-                                    <td>${result.no_ortu}</td>
+                                <tr>
+                                    <td class="nama-sd">${result.nama}</td>
+                                    <td class="kelamin-sd">${result.jenis_kelamin}</td>
+                                    <td class="kelas-sd">${result.kelas}</td>
+                                    <td class="no-sd">${result.no_ortu}</td>
                                     <td>
                                         <span>
                                             <a data-id=${result.id}><i  id="edit-post-sd" class="ri-edit-line edit" style="color: yellow;"></i></a>
@@ -202,7 +202,7 @@
                         .then(data => datasiswa(data))
                         function daftarsiswa(id){
                             var Table = document.querySelector('table')
-                            Table.innerHTML =`<tr class="table">
+                            Table.innerHTML =`<tr>
                                 <th>Nama</th>
                                 <th>Gender</th>
                                 <th>Kelas</th>
@@ -243,32 +243,49 @@
                                     .then(data => datasiswa(data))
                             }
                         }
-                        const editlist = document.querySelector('.table')
+                        const editlist = document.querySelector('table')
                         //const url = "http://localhost:4000"
 
                         editlist.addEventListener('click',(e)=>{
                             e.preventDefault();
                             let delbutton = e.target.id == "delete-post-sd"
-                            let editbutton = e.target.id == "edit-post.sd"
+                            let editbutton = e.target.id == "edit-post-sd"
+
+                            console.log(editbutton)
 
                             let id = e.target.parentElement.dataset.id
                             //console.log(e.target.parentElement)
+                            console.log()
 
 
                             if(delbutton && confirm("Apakah anda yakin ingin menghapus ini ?")){
                                 fetch(`${url}/siswa/delete/${id}`)
                                 .then(response =>response.json())
+                                .then(()=> location.reload())
                             }
 
-                            if(editbutton && confirm("Apakah anda yakin ingin mengubah data siswa ini?")){
-                                console.log(editbutton)
-                                const parent = e.target.parentElement
-                                const titleContent = parent.getElementById('nama-sd').innerText
-                                console.log(titleContent)
+                            if(editbutton && confirm("Apakah anda yakin ingin mengubah informasi murid ini ?")){
+                                parent = e.target.parentElement.parentElement.parentElement.parentElement
+                                let nama = parent.querySelector( ".nama-sd" ).innerText
+                                let kelamin = parent.querySelector( ".kelamin-sd" ).innerText
+                                let kelas = parent.querySelector( ".kelas-sd" ).innerText
+                                let no = parent.querySelector( ".no-sd" ).innerText
+                                
+
+                               const edit_nama = document.getElementById('nama')
+                                edit_nama.value = nama
+
+                                window.location.href="./edit.html"
+                               
+                                
+                              
+
+                                
                             }
                             
 
                         })
+
                         
                     </script>
                 </div>
@@ -292,5 +309,6 @@
     <br><br>
     </section>
     <script src="app.js"></script>
+    <script src="jquery.js"></script>
 </body>
 </html>
