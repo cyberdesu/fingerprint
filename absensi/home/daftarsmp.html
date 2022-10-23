@@ -182,11 +182,16 @@
                             hasil.forEach((result) => {
                                 table.innerHTML += `
                                 <tr>
-                                    <td>${result.nama}</td>
-                                    <td>${result.jenis_kelamin}</td>
-                                    <td>${result.kelas}</td>
-                                    <td>${result.no_ortu}</td>
-                                    <td><span><a href=""><i class="ri-edit-line edit" style="color: yellow;"></i></a><a href=""><i class="ri-delete-bin-line delete" style="color: red;"></i></a></span></td>
+                                    <td class="nama-smp">${result.nama}</td>
+                                    <td class="kelamin-smp">${result.jenis_kelamin}</td>
+                                    <td class="kelas-smp">${result.kelas}</td>
+                                    <td class="no-smp">${result.no_ortu}</td>
+                                    <td>
+                                        <span>
+                                            <a data-id=${result.id}><i  id="edit-post-smp" class="ri-edit-line edit" style="color: yellow;"></i></a>
+                                            <a data-id=${result.id}><i id="delete-post-smp"class="ri-delete-bin-line delete" style="color: red;"></i></a>
+                                        </span>
+                                    </td>
                                 </tr>
                         
                                 `;
@@ -223,6 +228,44 @@
                                     .then(data => datasiswa(data))
                             }
                         }
+                        const editlist = document.querySelector('table')
+                        //const url = "http://localhost:4000"
+
+                        editlist.addEventListener('click',(e)=>{
+                            e.preventDefault();
+                            let delbutton = e.target.id == "delete-post-smp"
+                            let editbutton = e.target.id == "edit-post-smp"
+
+                            console.log(editbutton)
+
+                            let id = e.target.parentElement.dataset.id
+                            //console.log(e.target.parentElement)
+                            console.log()
+
+
+                            if(delbutton && confirm("Apakah anda yakin ingin menghapus ini ?")){
+                                fetch(`${url}/siswa/delete/${id}`)
+                                .then(response =>response.json())
+                                .then(()=> location.reload())
+                            }
+
+                            if(editbutton && confirm("Apakah anda yakin ingin mengubah informasi murid ini ?")){
+                                parent = e.target.parentElement.parentElement.parentElement.parentElement
+
+                                let nama = parent.querySelector( ".nama-smp" ).innerText
+                                let kelamin = parent.querySelector( ".kelamin-smp" ).innerText
+                                let kelas = parent.querySelector( ".kelas-smp" ).innerText
+                                let no = parent.querySelector( ".no-smp" ).innerText
+                                
+                                localStorage.setItem('id',id)
+                                localStorage.setItem('nama',nama)
+                                localStorage.setItem('kelamin',kelamin)
+                                localStorage.setItem('kelas',kelas)
+                                localStorage.setItem('no',no)
+                                window.location.href = "edit.html"
+                            }
+
+                        })
                         
                     </script>
                 </div>

@@ -34,9 +34,9 @@
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="jenis_kelamin" value="Wanita" id="Prempuan" checked>
-            <label class="form-check-label" for="Prempuan"  style="color: white;">
-                Prempuan
+            <input class="form-check-input" type="radio" name="jenis_kelamin" value="Perempuan" id="Perempuan" checked>
+            <label class="form-check-label" for="Perempuan"  style="color: white;">
+                Perempuan
             </label>
         </div>
     </div>
@@ -51,14 +51,57 @@
     <br>
   </div>
   <script>
-    const nama = localStorage.getItem('nama')
-    const kelas = localStorage.getItem('kelas')
-    const kelamin = localStorage.getItem('kelamin')
-    const no = localStorage.getItem('no')
+    var id = localStorage.getItem('id')
+    var nama = localStorage.getItem('nama')
+    var kelas = localStorage.getItem('kelas')
+    var kelamin = localStorage.getItem('kelamin')
+    no = localStorage.getItem('no')
+
     document.getElementById('nama').value = nama
     document.getElementById('kelas').value = kelas
     document.querySelector('input[name="jenis_kelamin"]:checked').value = kelamin
     document.getElementById('no_orangtua').value = no
+
+
+
+
+
+
+    form.addEventListener('submit',function handleSubmit(e){
+      e.preventDefault()
+      var nama_input = document.getElementById('nama').value
+      var kelas_input = document.getElementById('kelas').value
+      var kelamin_input = document.querySelector('input[name="jenis_kelamin"]:checked').value
+      var no_input = document.getElementById('no_orangtua').value
+      localStorage.clear()
+
+
+      fetch(`http://localhost:4000/siswa/edit/${id}`,{
+        method: "PUT",
+        body: JSON.stringify({
+            "nama" : nama_input,
+            "kelas" : kelas_input,
+            "kelamin" : kelamin_input,
+            "no" : no_input
+          }),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+          },
+      })
+      .then(function(response){
+        if(response.status == 200){
+          alert("data sudah masuk")
+        } else if(response.status == 500){
+          alert("sedang dalam mode absen")
+        }
+
+      }) 
+      form.reset()
+
+    })
+
+    
+
   </script>
 </form>
       
