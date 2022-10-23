@@ -14,16 +14,11 @@ app.use(cors())
 const appRoute = require('./router');
 const { botsession,bot } = require('./bot-wa/bot')
 app.use('/', appRoute)
+app.use(express.static(__dirname));
+app.set('view engine','ejs')
 
-botsession()
+//botsession()
 
-bot.on('message', message => {
-	if(message.body === '!ping') {
-		bot.sendMessage(message.from, 'pong');
-    console.log(message.from)
-
-	}
-});
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
