@@ -243,32 +243,36 @@
                                     .then(data => datasiswa(data))
                             }
                         }
-                        const editlist = document.querySelector('.table')
+                        const editlist = document.querySelector('table')
                         //const url = "http://localhost:4000"
 
                         editlist.addEventListener('click',(e)=>{
                             e.preventDefault();
                             let delbutton = e.target.id == "delete-post-sd"
-                            let editbutton = e.target.id == "edit-post.sd"
+                            let editbutton = e.target.id == "edit-post-sd"
+
+                            console.log(editbutton)
 
                             let id = e.target.parentElement.dataset.id
                             //console.log(e.target.parentElement)
+                            console.log(id)
 
 
                             if(delbutton && confirm("Apakah anda yakin ingin menghapus ini ?")){
                                 fetch(`${url}/siswa/delete/${id}`)
                                 .then(response =>response.json())
+                                .then(()=> location.reload())
                             }
 
-                            if(editbutton && confirm("Apakah anda yakin ingin mengubah data siswa ini?")){
-                                console.log(editbutton)
-                                const parent = e.target.parentElement
-                                const titleContent = parent.getElementById('nama-sd').innerText
-                                console.log(titleContent)
+                            if(editbutton && confirm("Apakah anda yakin ingin mengubah informasi murid ini ?")){
+                                var $row = $(this).closest("tr");
+                                console.log($row)
+                                
                             }
                             
 
                         })
+
                         
                     </script>
                 </div>
@@ -292,5 +296,6 @@
     <br><br>
     </section>
     <script src="app.js"></script>
+    <script src="jquery.js"></script>
 </body>
 </html>
