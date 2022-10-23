@@ -181,10 +181,10 @@
                             hasil.forEach((result) => {
                                 table.innerHTML += `
                                 <tr>
-                                    <td id="nama-sd">${result.nama}</td>
-                                    <td>${result.jenis_kelamin}</td>
-                                    <td>${result.kelas}</td>
-                                    <td>${result.no_ortu}</td>
+                                    <td class="nama-sd">${result.nama}</td>
+                                    <td class="kelamin-sd">${result.jenis_kelamin}</td>
+                                    <td class="kelas-sd">${result.kelas}</td>
+                                    <td class="no-sd">${result.no_ortu}</td>
                                     <td>
                                         <span>
                                             <a data-id=${result.id}><i  id="edit-post-sd" class="ri-edit-line edit" style="color: yellow;"></i></a>
@@ -255,7 +255,7 @@
 
                             let id = e.target.parentElement.dataset.id
                             //console.log(e.target.parentElement)
-                            console.log(id)
+                            console.log()
 
 
                             if(delbutton && confirm("Apakah anda yakin ingin menghapus ini ?")){
@@ -265,8 +265,21 @@
                             }
 
                             if(editbutton && confirm("Apakah anda yakin ingin mengubah informasi murid ini ?")){
-                                var $row = $(this).closest("tr");
-                                console.log($row)
+                                parent = e.target.parentElement.parentElement.parentElement.parentElement
+                                let nama = parent.querySelector( ".nama-sd" ).innerText
+                                let kelamin = parent.querySelector( ".kelamin-sd" ).innerText
+                                let kelas = parent.querySelector( ".kelas-sd" ).innerText
+                                let no = parent.querySelector( ".no-sd" ).innerText
+                                
+
+                               const edit_nama = document.getElementById('nama')
+                                edit_nama.value = nama
+
+                                window.location.href="./edit.html"
+                               
+                                
+                              
+
                                 
                             }
                             
