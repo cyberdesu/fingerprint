@@ -385,18 +385,35 @@ const tambahsiswa = (req,res) => {
 
         if(device == "0"){
 
-            sql2= "SELECT jam_masuk,jam_pulang WHERE kelas=? LIMIT 1"
-            con.query(sql2,kelas,err)
-
-            sql3 = "INSERT INTO siswa SET jam_masuk= ?"
-            con.query(sql3,data,function(err,result){
+            sql2= "SELECT jam_masuk,jam_pulang FROM siswa WHERE kelas=? LIMIT 1"
+            con.query(sql2,[data.kelas],function(err,result){
                 if (err) throw err
-                res.send({
-                    status: true,
-                    message: "data berhasil ditambah",
-                    data: result
-                })
+                if (result.length !=0){
+                    masuk = result[0].jam_masuk
+                    pulang = result[0].jam_pulang
+                    
+                    const sql3 = "INSERT INTO siswa SET  ?, jam_masuk=?, jam_pulang=?"
+                    con.query(sql3,[data,masuk,pulang],function(err,result){
+                        if (err) throw err
+                        res.send({
+                            status: true,
+                            message: "data berhasil ditambah",
+                            data: result
+                        })
+                    })
+
+                } else {
+                    con.query(sql,data,function(err,result){
+                        if (err) throw err
+                        res.send({
+                            status: true,
+                            message: 'data berhasil ditambah2 '
+                        })
+                    })
+
+                }
             })
+
         } else {
             res.status(500).send({
                 status: false,
