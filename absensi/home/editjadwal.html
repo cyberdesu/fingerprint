@@ -25,7 +25,7 @@
       <input type="text" class="form-control" placeholder="jam_Pulang" name="Pulang"  id="Pulang" >
     </div>
     <div class="mb-3">
-        <input type="submit" class="btn btn-success" value="Simpan" href="halaman.html">
+        <input type="submit" class="btn btn-success" value="Simpan">
         <a href="jadwal.html" class="btn btn-warning">Kembali </a>
     </div>
     <br>
@@ -39,17 +39,15 @@
   document.getElementById('masuk').value = masuk
   document.getElementById('Pulang').value = pulang
 
-  var form = document.querySelector('form')
+  var form = document.getElementById('form')
   form.addEventListener('submit',function handleSubmit(e){
     e.preventDefault()
     var masuk_input = document.getElementById('masuk').value
-    var kelas_input = document.getElementById('Kelas').value
-    var pulang_input = document.querySelector('Pulang').value
+    var pulang_input = document.getElementById('Pulang').value
+
     //localStorage.clear()
-
-
     fetch(`http://localhost:4000/jadwal/edit/${kelas}`,{
-      method: "PUT",
+      method: "POST",
       body: JSON.stringify({
           "masuk" : masuk_input,
           "pulang" : pulang_input,
@@ -59,7 +57,7 @@
         },
     })
     .then(function(response){
-      if(response.status == 200){
+      if(response.status ==200){
         alert("data sudah masuk")
       } else if(response.status == 500){
         alert("sedang dalam mode absen")
