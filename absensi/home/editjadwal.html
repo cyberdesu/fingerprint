@@ -45,7 +45,7 @@
     var masuk_input = document.getElementById('masuk').value
     var pulang_input = document.getElementById('Pulang').value
 
-    //localStorage.clear()
+    localStorage.clear()
     fetch(`http://localhost:4000/jadwal/edit/${kelas}`,{
       method: "POST",
       body: JSON.stringify({
