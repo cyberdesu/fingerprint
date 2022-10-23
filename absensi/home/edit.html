@@ -52,7 +52,13 @@
   </div>
   <script>
     const nama = localStorage.getItem('nama')
+    const kelas = localStorage.getItem('kelas')
+    const kelamin = localStorage.getItem('kelamin')
+    const no = localStorage.getItem('no')
     document.getElementById('nama').value = nama
+    document.getElementById('kelas').value = kelas
+    document.querySelector('input[name="jenis_kelamin"]:checked').value = kelamin
+    document.getElementById('no_orangtua').value = no
   </script>
 </form>
       
