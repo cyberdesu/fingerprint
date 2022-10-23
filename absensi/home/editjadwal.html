@@ -17,11 +17,6 @@
     <center><h1  style="color: white;">Edit Jadwal</h1></center>
     <form id="form" method="post">
     <div class="mb-3">
-      <br>
-        <center><label class="form-label"  style="color: white;">Kelas</label></center>
-        <input type="text" class="form-control" placeholder="Kelas" name="Kelas"  id="Kelas" >
-    </div>
-    <div class="mb-3">
       <center><label class="form-label"  style="color: white;">Jam Masuk</label></center>
       <input type="text" class="form-control" placeholder="jam_masuk" name="masuk"  id="masuk" >
     </div>
@@ -30,16 +25,54 @@
       <input type="text" class="form-control" placeholder="jam_Pulang" name="Pulang"  id="Pulang" >
     </div>
     <div class="mb-3">
-      <center><label class="form-label"  style="color: white;">Total Siswa</label></center>
-      <input type="text" class="form-control" placeholder="Total_Siswa" name="Total"  id="Total">
-    </div>
-    <div class="mb-3">
         <input type="submit" class="btn btn-success" value="Simpan" href="halaman.html">
-        <a href="halaman.html" class="btn btn-warning">Kembali </a>
+        <a href="jadwal.html" class="btn btn-warning">Kembali </a>
     </div>
     <br>
   </div>
 </form>
+<script>
+  var kelas = localStorage.getItem('kelas')
+  var masuk = localStorage.getItem('masuk')
+  var pulang = localStorage.getItem('pulang')
+
+  document.getElementById('masuk').value = masuk
+  document.getElementById('Pulang').value = pulang
+
+  var form = document.querySelector('form')
+  form.addEventListener('submit',function handleSubmit(e){
+    e.preventDefault()
+    var masuk_input = document.getElementById('masuk').value
+    var kelas_input = document.getElementById('Kelas').value
+    var pulang_input = document.querySelector('Pulang').value
+    //localStorage.clear()
+
+
+    fetch(`http://localhost:4000/jadwal/edit/${kelas}`,{
+      method: "PUT",
+      body: JSON.stringify({
+          "masuk" : masuk_input,
+          "pulang" : pulang_input,
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        },
+    })
+    .then(function(response){
+      if(response.status == 200){
+        alert("data sudah masuk")
+      } else if(response.status == 500){
+        alert("sedang dalam mode absen")
+      }
+
+    }) 
+    form.reset()
+
+  })
+
+  
+
+</script>
       
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
