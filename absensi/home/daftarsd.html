@@ -266,14 +266,22 @@
 
                             if(editbutton && confirm("Apakah anda yakin ingin mengubah informasi murid ini ?")){
                                 parent = e.target.parentElement.parentElement.parentElement.parentElement
+
                                 let nama = parent.querySelector( ".nama-sd" ).innerText
                                 let kelamin = parent.querySelector( ".kelamin-sd" ).innerText
                                 let kelas = parent.querySelector( ".kelas-sd" ).innerText
                                 let no = parent.querySelector( ".no-sd" ).innerText
                                 
+                                localStorage.setItem('id',id)
+                                localStorage.setItem('nama',nama)
+                                localStorage.setItem('kelamin',kelamin)
+                                localStorage.setItem('kelas',kelas)
+                                localStorage.setItem('no',no)
+                                window.location.href = "edit.html"
 
 
-                                window.location.href=`./edit.html/${nama}`
+
+                                
                                
                                 
                               
