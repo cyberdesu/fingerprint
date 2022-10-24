@@ -559,6 +559,7 @@ const editjadwal = (req,res) => {
         if(result.length > 0){
             sql2 ="UPDATE siswa SET ? WHERE kelas=?"
             con.query(sql2,[data,kelas],function(err,result){
+                if (err) throw err
                 res.send(result)
             })
         }
@@ -578,4 +579,21 @@ const checkJadwal = (req,res) => {
         })
     })
 }
-module.exports = {home,editjadwal,detailsiswa,deletefingerprint,getDatasiswa,DeviceMode,editMode,checkfingerID,getdatakelas,getFingerID,tambahsiswa,confirmID,getDataAbsen,editsiswa,deleteid,checkJadwal}
+
+module.exports = {home,
+    editjadwal,
+    detailsiswa,
+    deletefingerprint,
+    getDatasiswa,
+    DeviceMode,
+    editMode,
+    checkfingerID,
+    getdatakelas,
+    getFingerID,
+    tambahsiswa,
+    confirmID,
+    getDataAbsen,
+    editsiswa,
+    deleteid,
+    checkJadwal
+}

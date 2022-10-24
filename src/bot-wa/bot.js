@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { resolve } = require('path');
 const qrcode = require('qrcode-terminal');
 
 const { Client, LocalAuth } = require('whatsapp-web.js');
@@ -16,14 +17,20 @@ const bot = new Client({
     })
 });
 function botsession(){
-    bot.on('qr', qr => {
-        qrcode.generate(qr, {small: true});
-    });
+    return new Promise(resolve =>{
+        setTimeout(()=>{
+            bot.on('qr', qr => {
+                qrcode.generate(qr, {small: true});
+            });
+        
+            bot.on('authenticated', () => {
+                console.log("success")
+            });
+             
+            bot.initialize();
 
-    bot.on('authenticated', () => {
-        console.log("success")
-    });
-     
-    bot.initialize();
+        },100)
+    })
+
 }
 module.exports = {bot, botsession}
