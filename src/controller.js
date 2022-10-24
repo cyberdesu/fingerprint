@@ -228,9 +228,9 @@ const checkfingerID = (req,res) => {
                             if (err) throw err;
     
                             if(result.length == 0){
-                                if(jam <= masuk && jam >= "05:00:00"){
-                                    sql4 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','hadir',NOW())"
-                                    con.query(sql4,[finger,jam],function(err,result){
+                                if(jam <= masuk && jam >= pulang){
+                                    sql4 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,?,'hadir',NOW())"
+                                    con.query(sql4,[finger,jam,pulang],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
@@ -238,9 +238,9 @@ const checkfingerID = (req,res) => {
     
                                         }
                                     })
-                                } else if (jam > masuk && jam >= "05:00:00"){
-                                    sql5 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','telat hadir',NOW())"
-                                    con.query(sql5,[finger,jam],function(err,result){
+                                } else if (jam > masuk && jam >= pulang){
+                                    sql5 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,?,'telat hadir',NOW())"
+                                    con.query(sql5,[finger,jam,pulang],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
@@ -255,9 +255,9 @@ const checkfingerID = (req,res) => {
                                 console.log(result)
                                 tgl = new Date(result[0].tanggal)
                                 tgl_final = addZero(tgl.getFullYear())+"-"+month[tgl.getMonth()]+"-"+addZero(tgl.getDate())
-                                if(jam <= masuk && jam >= "05:00:00" && tanggal != tgl_final){
-                                    sql6 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','hadir',NOW())"
-                                    con.query(sql6,[finger,jam],function(err,result){
+                                if(jam <= masuk && jam >= pulang && tanggal != tgl_final){
+                                    sql6 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,?,'hadir',NOW())"
+                                    con.query(sql6,[finger,jam,pulang],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
@@ -267,9 +267,9 @@ const checkfingerID = (req,res) => {
                                         }
                                         
                                     })
-                                } else if (jam > masuk && jam >= "05:00:00" && tanggal != tgl_final){
-                                    sql7 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,'00:00:00','telat hadir',NOW())"
-                                    con.query(sql7,[finger,jam],function(err,result){
+                                } else if (jam > masuk && jam >= pulang && tanggal != tgl_final){
+                                    sql7 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal) VALUES (?,?,?,'telat hadir',NOW())"
+                                    con.query(sql7,[finger,jam,pulang],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
