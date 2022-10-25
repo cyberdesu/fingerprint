@@ -1,6 +1,11 @@
 const fs = require('fs');
 const { resolve } = require('path');
+
+const app = require('../server')
 const qrcode = require('qrcode-terminal');
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
 
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const SESSION_FILE_PATH = './session.json';
@@ -14,23 +19,27 @@ if(fs.existsSync(SESSION_FILE_PATH)) {
 // Use the saved values
 const bot = new Client({
     authStrategy: new LocalAuth({
-    })
+    }),
+    restartOnAuthFail: true,
+    puppeteer: {
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process', // <- this one doesn't works in Windows
+        '--disable-gpu'
+      ],
+    },
 });
-function botsession(){
-    return new Promise(resolve =>{
-        setTimeout(()=>{
-            bot.on('qr', qr => {
-                qrcode.generate(qr, {small: true});
-            });
-        
-            bot.on('authenticated', () => {
-                console.log("success")
-            });
-             
-            bot.initialize();
 
-        },100)
-    })
 
-}
-module.exports = {bot, botsession}
+
+
+
+
+
+module.exports = {bot}

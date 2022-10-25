@@ -17,6 +17,7 @@
           <br>
           <p class="card-text" style="color: white;">Absensi akan masuk melalui WhatsApp setelah melakukan QR pada tombol dibawah ini.</p>
           <a href="#" class="btn btn-primary">Silahkan lakukan QR </a>
+          <img class="img-fluid" src="https://cdn.contentfun.net/files/upload/content/322052eb1cab393f4d7e2f37077d78ea.png" alt="" id="qrcode">
           <a href="halaman.html" class="btn btn-primary">Kembali </a>
         </div>
       </div>
@@ -27,7 +28,23 @@
         <img src="src/twitter.png" width="30" height="30" class="rounded-4" alt="...">
         <img src="src/discord.png" width="30" height="30" class="rounded-4" alt="...">
       </div> </center>
-      
+
+    <script src="jquery.js"></script>
+    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+    <script>
+      $(document).ready(function() {
+        var socket = io.connect('http://localhost:4000');
+        var logsEl = $("#logs");
+
+        socket.on('message', function(msg) {
+          logsEl.append($('<li>').text(msg));
+        });
+
+        socket.on('qr', function(qr) {
+          $("#qrcode").attr("src", qr);
+        });
+      });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>

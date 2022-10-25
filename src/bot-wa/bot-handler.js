@@ -55,6 +55,7 @@ const aksesbot = async () =>{
     const botcheck = await botsession()
 
     const url = `http://localhost:4000`
+    console.log('check notif bot')
 
     fetch(url)
         .then(response.json())

@@ -1,3 +1,4 @@
+const { daftarbot } = require('./bot-wa/bot');
 const { botabsen } = require('./bot-wa/bot-handler');
 const {home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas, getFingerID, tambahsiswa, confirmID, getDataAbsen, editsiswa, deleteid, detailsiswa, checkJadwal, editjadwal} = require('./controller');
 
