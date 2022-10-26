@@ -3,6 +3,8 @@ const { response } = require('express');
 const con = require('../Database/database');
 const { bot, botsession } = require('./bot');
 
+
+
 const botabsen = async(req,res) => {
     //await botsession()
     sql = "SELECT siswa.nama,absen.tanggal,absen.jam_masuk,absen.jam_pulang,absen.status,siswa.no_ortu FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE absen.bot_absen=1 LIMIT 1"
@@ -31,7 +33,7 @@ const botabsen = async(req,res) => {
                 })
               
             }
-            else{
+            else {
                 const chatid = no_ortu + "@c.us"
                 console.log(chatid)
     
@@ -39,7 +41,17 @@ const botabsen = async(req,res) => {
                 //sql2= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=0 WHERE absen.bot_absen=1 LIMIT 1"
                 con.query(sql2,function(err,result){
                     if(err) throw err
-                    bot.sendMessage(chatid,pesan).then(res.send('eaaaa'))
+                    bot.sendMessage(chatid,pesan).then(response => {
+                        res.send({
+                            status: true,
+                            message: "notif sudah terkirim bre",
+                            data: response
+
+                        })
+                    }).catch(err => {
+                        res.status(500).send('bot blom aktif')
+
+                    })
                 })
 
             }

@@ -16,18 +16,23 @@
           <h4 class="card-title" style="color: white;">Absensi Madrasah Ibtidaiyah Al-Hasani</h4>
           <br>
           <p class="card-text" style="color: white;">Absensi akan masuk melalui WhatsApp setelah melakukan QR pada tombol dibawah ini.</p>
-          <a href="#" class="btn btn-primary">Silahkan lakukan QR </a>
-          <img class="img-fluid" src="https://cdn.contentfun.net/files/upload/content/322052eb1cab393f4d7e2f37077d78ea.png" alt="" id="qrcode">
-          <a href="halaman.html" class="btn btn-primary">Kembali </a>
+          <a id="logs" href="#" class="btn btn-primary">Silahkan lakukan QR </a>
         </div>
       </div>
       <br>
       <center> <div class="container">
-        <img src="src/facebook.png" width="30" height="30" class="rounded-4" alt="...">
+       <!-- <img src="src/facebook.png" width="30" height="30" class="rounded-4" alt="...">
         <img src="src/instagram.png" width="30" height="30" class="rounded-4" alt="...">
         <img src="src/twitter.png" width="30" height="30" class="rounded-4" alt="...">
-        <img src="src/discord.png" width="30" height="30" class="rounded-4" alt="...">
+        <img src="src/discord.png" width="30" height="30" class="rounded-4" alt="...">-->
+        <img class="img-fluid" src="https://cdn.contentfun.net/files/upload/content/322052eb1cab393f4d7e2f37077d78ea.png" alt="" id="qrcode">
       </div> </center>
+      <br>
+      <center >
+        <div class="container">
+          <a href="halaman.html" class="btn btn-primary">Kembali </a>
+        </div>
+      </center>
 
     <script src="jquery.js"></script>
     <script src="http://localhost:4000/socket.io/socket.io.js"></script>
@@ -37,7 +42,7 @@
         var logsEl = $("#logs");
 
         socket.on('message', function(msg) {
-          logsEl.append($('<li>').text(msg));
+          logsEl.text(msg);
         });
 
         socket.on('qr', function(qr) {

@@ -2,7 +2,6 @@ const fs = require('fs');
 const { resolve } = require('path');
 
 const app = require('../server')
-const qrcode = require('qrcode-terminal');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
@@ -35,11 +34,5 @@ const bot = new Client({
       ],
     },
 });
-
-
-
-
-
-
 
 module.exports = {bot}
