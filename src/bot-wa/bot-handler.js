@@ -31,15 +31,11 @@ const botabsen = async(req,res) => {
                     res.status(500)
                     res.send("no invalid cok")
                 })
-              
-            }
-            else {
+            } else {
                 const chatid = no_ortu + "@c.us"
                 console.log(chatid)
-    
                 const pesan = ` ${nama} telah ${stat} sekolah pada jam ${masuk} ` 
                 //sql2= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=0 WHERE absen.bot_absen=1 LIMIT 1"
-
                 bot.sendMessage(chatid,pesan).then(response => {
                     con.query(sql2,function(err,result){
                         if(err) throw err
@@ -57,7 +53,6 @@ const botabsen = async(req,res) => {
                 })
 
             }
-
         } else {
             res.status(404).send("gada no yang harus  dikirim notif wa")
         }
