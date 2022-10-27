@@ -87,7 +87,7 @@
             <div class="overview" style="background: url(src/bg4.png);" >
                 <div class="title">
                     <h2 class="section--title"  style="color: white;">Kelas</h2>
-                    <select class="dropdown">
+                    <select class="dropdown" id='list-kelas'>
                         <option>Kelas 1</option>
                     </select>
                 </div>
@@ -146,26 +146,39 @@
                                 fetch(url+"/absen/kelas/1")
                                     .then(response =>response.json())
                                     .then(data => daftarAbsen(data))
+                                var e = document.getElementById('list-kelas')
+                                var text = e.options[e.selectedIndex].text = 'kelas 1'
                             }else if (id == "2"){
                                 fetch(url+"/absen/kelas/2")
                                     .then(response =>response.json())
                                     .then(data => daftarAbsen(data))
+                                    var e = document.getElementById('list-kelas')
+                                    var text = e.options[e.selectedIndex].text = 'kelas 2'
+                                    
                             }else if (id == "3"){
                                 fetch(url+"/absen/kelas/3")
                                     .then(response =>response.json())
                                     .then(data => daftarAbsen(data))
+                                    var e = document.getElementById('list-kelas')
+                                    var text = e.options[e.selectedIndex].text = 'kelas 3'
                             }else if (id == "4"){
                                 fetch(url+"/absen/kelas/4")
                                     .then(response =>response.json())
                                     .then(data => daftarAbsen(data))
+                                    var e = document.getElementById('list-kelas')
+                                    var text = e.options[e.selectedIndex].text = 'kelas 4'
                             }else if (id == "5"){
                                 fetch(url+"/absen/kelas/5")
                                     .then(response =>response.json())
                                     .then(data => daftarAbsen(data))
+                                    var e = document.getElementById('list-kelas')
+                                    var text = e.options[e.selectedIndex].text = 'kelas 5'
                             }else if (id == "6"){
                                 fetch(url+"/absen/kelas/6")
                                     .then(response =>response.json())
                                     .then(data => daftarAbsen(data))
+                                    var e = document.getElementById('list-kelas')
+                                    var text = e.options[e.selectedIndex].text = 'kelas 6'
                             }else if (id == "beranda"){
                                 fetch(url+"/absen/kelas/sd")
                                     .then(response =>response.json())

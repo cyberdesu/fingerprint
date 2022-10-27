@@ -71,7 +71,7 @@ void CheckMode(){
     int httpCode = http.GET();
     String response = http.getString();
     Serial.println(Link);
-    Serial.println("output:"+response);
+    Serial.print("output:"); Serial.println(response);;
     DynamicJsonDocument doc(2048);
     if(httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){ 
       Serial.println(response);
@@ -84,7 +84,7 @@ void CheckMode(){
       JsonObject obj = doc.as<JsonObject>();
       Serial.println(obj);
       int result = obj[String("data")]["Mode"];
-      Serial.println(result);
+      //Serial.println(result);
       if(!firstConnect){
         device_Mode = result;
         firstConnect = true;
@@ -173,10 +173,13 @@ void SendFingerprintID(int finger){
     String payload = http.getString();
     Serial.println(httpCode);   //Print HTTP return code
     if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){
+      Serial.print("ID finger yang akan didaftarkan: ");
+      Serial.println(finger);
       Serial.println(payload);    //Print request response payload
-      Serial.println("ID finger yang akan didaftarkan: "+finger);
 
     }
+    delay(10);
+    http.end();
    
 
   }
@@ -190,7 +193,7 @@ int getFingerprintID() {
       Serial.println("Image taken");
       break;
     case FINGERPRINT_NOFINGER:
-      Serial.println("No finger detected");
+      //Serial.println("No finger detected");
       return 0;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -209,7 +212,7 @@ int getFingerprintID() {
       Serial.println("Image converted");
       break;
     case FINGERPRINT_IMAGEMESS:
-      Serial.println("Image too messy");
+      //Serial.println("Image too messy");
       return -1;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -331,7 +334,7 @@ uint8_t getFingerprintEnroll() {
       Serial.println(".");
       break;
     case FINGERPRINT_PACKETRECIEVEERR:
-      Serial.println("Communication error");
+      //Serial.println("Communication error");
       break;
     case FINGERPRINT_IMAGEFAIL:
       Serial.println("Imaging error");
@@ -349,7 +352,7 @@ uint8_t getFingerprintEnroll() {
       Serial.println("Image converted");
       break;
     case FINGERPRINT_IMAGEMESS:
-      Serial.println("Image too messy");
+      //Serial.println("Image too messy");
       return p;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -508,11 +511,10 @@ void ChecktoDeleteID(){
       }
       JsonObject obj = doc.as<JsonObject>();
       uint8_t data = obj[String("data")];
-      Serial.println("ID Data yg dihapus: "+ data);
-      http.end();
+      Serial.print("ID Data yg dihapus: ");
+      Serial.println(data);
       deleteFingerprint(data);
       delay(1000);
-      http.end();
     }
     http.end();
     

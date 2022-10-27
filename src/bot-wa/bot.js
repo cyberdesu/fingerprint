@@ -29,7 +29,7 @@ const bot = new Client({
         '--disable-accelerated-2d-canvas',
         '--no-first-run',
         '--no-zygote',
-        '--single-process', // <- this one doesn't works in Windows
+        //'--single-process', // <- this one doesn't works in Windows
         '--disable-gpu'
       ],
     },
