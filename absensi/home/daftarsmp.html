@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Daftar SMP</title>
+    <title>Daftar MTS</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
@@ -11,7 +11,7 @@
     <section class="header" style="background: #111">
         <div class="logo">
             <i class="ri-menu-line icon icon-0 menu"></i>
-            <h2  style="color: white;">MTS <span>AL-Hasani</span></h2>
+            <h2  style="color: white;">MTS <span>AL-Mansuri</span></h2>
         </div>
         <div class="search--notification--profile">
             <div class="search">
@@ -46,25 +46,25 @@
                 <li>
                     <a href="daftarsd.html" >
                         <span class="icon icon-2"><i class="ri-user-2-line"></i></span>
-                        <span class="sidebar--item"  style="color: white;">Daftar Siswa SD</span>
+                        <span class="sidebar--item"  style="color: white;">Daftar Siswa MI</span>
                     </a>
                 </li>
                 <li>
                     <a href="absensisd.html">
                         <span class="icon icon-3"><i class="ri-user-line"></i></span>
-                        <span class="sidebar--item"  style="color: white;">Absensi Siswa SD</span>
+                        <span class="sidebar--item"  style="color: white;">Presensi Siswa MI</span>
                     </a>
                 </li>
                 <li>
                     <a href="daftarsmp.html"  id="active--link">
                         <span class="icon icon-4"><i class="ri-user-2-line"></i></span>
-                        <span class="sidebar--item"  style="color: white;">Daftar Siswa SMP</span>
+                        <span class="sidebar--item"  style="color: white;">Daftar Siswa MTS</span>
                     </a>
                 </li>
                 <li>
                     <a href="absensismp.html">
                         <span class="icon icon-5"><i class="ri-user-line"></i></span>
-                        <span class="sidebar--item"  style="color: white;">Absensi Siswa SMP</span>
+                        <span class="sidebar--item"  style="color: white;">Presensi Siswa MTS</span>
                     </a>
                 </li>
             </ul>
@@ -87,13 +87,13 @@
             <div class="overview" style="background: url(src/bg4.png);">
                 <div class="title">
                     <h2 class="section--title" style="color: white;">Kelas</h2>
-                    <select class="dropdown" id="list-kelas">
+                    <select class="dropdown">
                         <option>Daftar Kelas SMP</option>
                     </select>
                 </div>
             <div class="Guru">
                 <div class="title">
-                    <h1 class="section--title" style="color: white;">Guru SMP</h1>
+                    <h1 class="section--title" style="color: white;">Guru MTS</h1>
                 </div>
                 <div class="Guru--cards">
                     <a href="#" class="Guru--card">
@@ -156,7 +156,7 @@
             </div>
             <div class="recent--Siswa">
                 <div class="title">
-                    <h1 class="section--title" style="color: white;">Siswa SMP</h1>
+                    <h1 class="section--title" style="color: white;">Siswa MTS</h1>
                 </div>
                 <div class="table" style="color: white;">
                     <table>
@@ -165,7 +165,7 @@
                                 <th>Nama</th>
                                 <th>Gender</th>
                                 <th>Kelas</th>
-                                <th>no orangtua</th>
+                                <th>Nomor Telepon Orang Tua</th>
                                 <th>Setting</th>
                             </tr>
                         </thead>
@@ -214,26 +214,18 @@
                                 fetch(url+"/siswa/kelas/7")
                                     .then(response =>response.json())
                                     .then(data => datasiswa(data))
-                                    var e = document.getElementById('list-kelas')
-                                    var text = e.options[e.selectedIndex].text = 'kelas 7'
                             } else if (id == "8"){
                                 fetch(url+"/siswa/kelas/8")
                                     .then(response =>response.json())
                                     .then(data => datasiswa(data))
-                                    var e = document.getElementById('list-kelas')
-                                    var text = e.options[e.selectedIndex].text = 'kelas 8'
                             }else if (id == "9"){
                                 fetch(url+"/siswa/kelas/9")
                                     .then(response =>response.json())
                                     .then(data => datasiswa(data))
-                                    var e = document.getElementById('list-kelas')
-                                    var text = e.options[e.selectedIndex].text = 'kelas 9'
                             }else if (id == "smp"){
                                 fetch(url+"/siswa/kelas/smp")
                                     .then(response =>response.json())
                                     .then(data => datasiswa(data))
-                                    var e = document.getElementById('list-kelas')
-                                    var text = e.options[e.selectedIndex].text = 'kelas smp'
                             }
                         }
                         const editlist = document.querySelector('table')
@@ -281,10 +273,10 @@
         </div>
         <div style="text-align: center;">
             <div  style="text-align: center;">
-                <button id="smp"  onclick="daftarsiswa(this.id)"><a>beranda</a></button>
-                <button id="7" onclick="daftarsiswa(this.id)"><a>kelas 7</a></button>
-                <button id="8" onclick="daftarsiswa(this.id)"><a>kelas 8</a></button>
-                <button id="9" onclick="daftarsiswa(this.id)"><a>kelas 9</a></button>
+                <button id="smp"  onclick="daftarsiswa(this.id)"><a>Beranda</a></button>
+                <button id="7" onclick="daftarsiswa(this.id)"><a>Kelas 7</a></button>
+                <button id="8" onclick="daftarsiswa(this.id)"><a>Kelas 8</a></button>
+                <button id="9" onclick="daftarsiswa(this.id)"><a>Kelas 9</a></button>
             </div>
         </div>
         <br>
