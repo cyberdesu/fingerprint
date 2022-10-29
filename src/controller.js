@@ -221,12 +221,11 @@ const checkfingerID = (req,res) => {
                         const waktu = new Date()
                         const jam = addZero(waktu.getHours())+":"+addZero(waktu.getMinutes())+":"+addZero(waktu.getSeconds())
                         const month = ["01","02","03","04","05","06","07","08","09","10","11","12"];
-                        tanggal = addZero(waktu.getFullYear())+"-"+month[waktu.getMonth()]+"-"+addZero(waktu.getDate())
+                        const tanggal = addZero(waktu.getFullYear())+"-"+month[waktu.getMonth()]+"-"+addZero(waktu.getDate())
     
                         sql3 = "SELECT tanggal FROM absen WHERE id_sidikjari=? ORDER BY tanggal DESC LIMIT 1"
                         con.query(sql3,finger,function(err,result){
                             if (err) throw err;
-    
                             if(result.length == 0){
                                 if(jam <= masuk && jam <= pulang){
                                     sql4 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal,bot_absen) VALUES (?,?,?,'hadir',NOW(),'1')"
@@ -244,7 +243,7 @@ const checkfingerID = (req,res) => {
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
-                                            res.send("selamat datang2 "+uname)
+                                            res.send("telat1"+uname)
     
                                         }
                                     })
@@ -254,10 +253,18 @@ const checkfingerID = (req,res) => {
                                     console.log(pulang)
                                 }
                             }  else if (result.length > 0) {
-                                console.log(result)
+                                if(jam < masuk){
+                                    console.log("blom telat coy")
+                                }
+                                else{
+                                    console.log("lu telat ajg")
+                                }
                                 tgl = new Date(result[0].tanggal)
                                 tgl_final = addZero(tgl.getFullYear())+"-"+month[tgl.getMonth()]+"-"+addZero(tgl.getDate())
-                                if(jam <= masuk && jam >= pulang && tanggal != tgl_final){
+
+
+                                if(jam <= masuk && jam <= pulang &&  tgl_final != tanggal){
+                                    console.log("tanggal berapa:"+tanggal)
                                     sql6 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal,bot_absen) VALUES (?,?,?,'hadir',NOW(),'1')"
                                     con.query(sql6,[finger,jam,pulang],function(err,result){
                                         if (err) throw err;
@@ -269,18 +276,20 @@ const checkfingerID = (req,res) => {
                                         }
                                         
                                     })
-                                } else if (jam > masuk && jam <= pulang && tanggal != tgl_final){
+                                } else if (jam > masuk && jam <= pulang && tgl_final != tanggal){
                                     sql7 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal,bot_absen) VALUES (?,?,?,'telat hadir',NOW(),'1')"
                                     con.query(sql7,[finger,jam,pulang],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
                                         if(success == 1){
-                                            res.send("selamat datang4 "+uname)
+                                            res.send("telat2"+uname)
     
                                         }
                                     })
                                 } else {
                                     res.send("sudah absen woi 2")
+                                    console.log(tanggal)
+                                    console.log("sudah absen pada tanggal:"+tgl_final)
                                 }
                             }
                             

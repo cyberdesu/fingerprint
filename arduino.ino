@@ -32,16 +32,26 @@ void setup(){
   enroll();
   finger.getTemplateCount();
   Serial.print("Sensor contains "); Serial.print(finger.templateCount); Serial.println(" templates");
-  Serial.println("Waiting for valid finger...");\
+  Serial.println("Waiting for valid finger...");
+  lcd.backlight();
+  lcd.setCursor(3,0);
+  lcd.print("fingerprint");
+  lcd.setCursor(3,1);
+  lcd.print("telah aktif");
+  delay(2000);
+
   //Timers---------------------------------------
   timer.setInterval(25000L,CheckMode);
-  t1 = timer.setInterval(10000L,ChecktoAddID);      //Set an internal timer every 10sec to check if there a new fingerprint in the website to add it.
-  t2 = timer.setInterval(15000L,ChecktoDeleteID);   //Set an internal timer every 15sec to check wheater there an ID to delete in the website.
+  t1 = timer.setInterval(5000L,ChecktoAddID);
+  t2 = timer.setInterval(15000L,ChecktoDeleteID);  
   CheckMode();
 
 }
 
 void loop(){
+  lcd.init();
+
+  delay(2000);
   timer.run();      //Keep the timer in the loop function in order to update the time as soon as possible
   //check if there's a connection to Wi-Fi or not
   if(!WiFi.isConnected()){
@@ -175,7 +185,71 @@ void SendFingerprintID(int finger){
     if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){
       Serial.print("ID finger yang akan didaftarkan: ");
       Serial.println(finger);
-      Serial.println(payload);    //Print request response payload
+      Serial.println(payload);
+      String test = payload.substring(0,5);
+      Serial.println(test);     //Print request response payload
+
+      if(payload.substring(0,14) == "selamat datang"){
+        String nama = payload.substring(16);
+        Serial.println(nama.length());
+        if (nama.length() < 16){
+          lcd.setCursor(0,0);
+          lcd.print("Selamat datang,");
+          lcd.setCursor(0,1);
+          lcd.print(nama);
+          delay(1000);
+          lcd.clear();
+        } else {
+          lcd.setCursor(0,0);
+          lcd.print("Selamat datang,");
+          delay(1500);
+          lcd.clear();
+          for (int i=0; i<50; i++){
+          lcd.scrollDisplayRight();
+          lcd.setCursor(0,0);
+          lcd.print(nama);
+          delay(200);}
+          lcd.clear();
+        }
+      } else if (payload.substring(0,5) == "telat"){
+        //Serial.println("hayo");
+        String nama = payload.substring(6);
+        Serial.println(nama.length());
+        if (nama.length() < 16){
+          lcd.setCursor(0,0);
+          lcd.print("Selamat datang,");
+          lcd.setCursor(0,1);
+          lcd.print(nama);
+          delay(1500);
+          lcd.clear();
+          lcd.setCursor(1,0);
+          lcd.print("Anda Terlambat");
+          delay(1000);
+          lcd.clear();
+
+        } else {
+          lcd.setCursor(0,0);
+          lcd.print("Selamat datang,");
+          delay(1500);
+          lcd.clear();
+          for (int i=0; i<50; i++){
+          lcd.scrollDisplayRight();
+          lcd.setCursor(0,0);
+          lcd.print(nama);
+          delay(200);}
+          lcd.clear();
+          lcd.setCursor(1,0);
+          lcd.print("Anda Terlambat");
+          delay(1500);
+          lcd.clear();
+        }
+
+      } else if(payload.substring(0,5) == "sudah"){
+          lcd.setCursor(0,0);
+          lcd.print("Anda sudah absen");
+          delay(1500);
+          lcd.clear();
+      }
 
     }
     delay(10);
@@ -190,7 +264,11 @@ int getFingerprintID() {
   uint8_t p = finger.getImage();
   switch (p) {
     case FINGERPRINT_OK:
-      Serial.println("Image taken");
+      Serial.println("Image taken1");
+      lcd.setCursor(0,0);
+      lcd.print("Loading....");
+      delay(1000);
+      lcd.clear();
       break;
     case FINGERPRINT_NOFINGER:
       //Serial.println("No finger detected");
@@ -209,7 +287,7 @@ int getFingerprintID() {
   p = finger.image2Tz();
   switch (p) {
     case FINGERPRINT_OK:
-      Serial.println("Image converted");
+      Serial.println("Image converted1");
       break;
     case FINGERPRINT_IMAGEMESS:
       //Serial.println("Image too messy");
@@ -231,11 +309,18 @@ int getFingerprintID() {
   p = finger.fingerFastSearch();
   if (p == FINGERPRINT_OK) {
     Serial.println("Found a print match!");
+
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     Serial.println("Communication error");
     return -2;
   } else if (p == FINGERPRINT_NOTFOUND) {
     Serial.println("Did not find a match");
+    lcd.setCursor(3,0);
+    lcd.print("sidik jari");
+    lcd.setCursor(2,1);
+    lcd.print("tidak cocok!");
+    delay(1000);
+    lcd.clear();
     return -1;
   } else {
     Serial.println("Unknown error");
@@ -297,7 +382,6 @@ void ChecktoAddID(){
     DynamicJsonDocument doc(2048);
     if(httpcode == HTTP_CODE_OK || httpcode == HTTP_CODE_MOVED_PERMANENTLY){
       Serial.println("Ready to enroll a fingerprint!");
-      Serial.println("Please type in the ID # (from 1 to 127) you want to save this finger as..."); 
       String payload = http.getString();
       DeserializationError err = deserializeJson(doc,payload);
       Serial.println("data addfinger:"+payload);
@@ -314,6 +398,12 @@ void ChecktoAddID(){
       }
       Serial.print("Enrolling ID #");
       Serial.println(id);
+      lcd.setCursor(1,0);
+      lcd.print("silahkan letak'kan");
+      lcd.setCursor(3,1);
+      lcd.print("sidik jari");
+      delay(2000);
+      lcd.clear();
       getFingerprintEnroll();
       http.end();
    }
@@ -328,7 +418,12 @@ uint8_t getFingerprintEnroll() {
     p = finger.getImage();
     switch (p) {
     case FINGERPRINT_OK:
-      Serial.println("Image taken");
+      Serial.println("Image taken2");
+      lcd.setCursor(2,0);
+      lcd.print("Sidik Jari");
+      lcd.setCursor(4,1);
+      lcd.print("terdeteksi");
+      delay(2000);
       break;
     case FINGERPRINT_NOFINGER:
       Serial.println(".");
@@ -349,10 +444,22 @@ uint8_t getFingerprintEnroll() {
   p = finger.image2Tz(1);
   switch (p) {
     case FINGERPRINT_OK:
-      Serial.println("Image converted");
+      Serial.println("Image converted2");
+      lcd.setCursor(2,0);
+      lcd.print("Sidik Jari");
+      lcd.setCursor(2,1);
+      lcd.print("valid");
+      delay(2000);
+      lcd.clear();
       break;
     case FINGERPRINT_IMAGEMESS:
       //Serial.println("Image too messy");
+      lcd.setCursor(2,0);
+      lcd.print("Sidik Jari");
+      lcd.setCursor(2,1);
+      lcd.print(" tidak valid");
+      delay(2000);
+      lcd.clear();
       return p;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -367,8 +474,13 @@ uint8_t getFingerprintEnroll() {
       Serial.println("Unknown error");
       return p;
   }
-  //Serial.println("Remove finger");
+  Serial.println("Remove finger");
+  lcd.setCursor(0,0);
+  lcd.print("Lepaskan");
+  lcd.setCursor(0,1);
+  lcd.print("Sidik Jari");
   delay(2000);
+  lcd.clear();
   p = 0;
   while (p != FINGERPRINT_NOFINGER) {
     p = finger.getImage();
@@ -379,7 +491,7 @@ uint8_t getFingerprintEnroll() {
     p = finger.getImage();
     switch (p) {
     case FINGERPRINT_OK:
-      Serial.println("Image taken");
+      Serial.println("Image taken3");
       break;
     case FINGERPRINT_NOFINGER:
       //Serial.println(".");
@@ -401,7 +513,13 @@ uint8_t getFingerprintEnroll() {
   p = finger.image2Tz(2);
   switch (p) {
     case FINGERPRINT_OK:
-      Serial.println("Image converted");
+      Serial.println("Image converted3");
+      lcd.setCursor(2,0);
+      lcd.print("Sidik Jari");
+      lcd.setCursor(2,1);
+      lcd.print("valid");
+      delay(2000);
+      lcd.clear();
       break;
     case FINGERPRINT_IMAGEMESS:
       //Serial.println("Image too messy");
@@ -426,11 +544,23 @@ uint8_t getFingerprintEnroll() {
   p = finger.createModel();
   if (p == FINGERPRINT_OK) {
     Serial.println("Prints matched!");
+    lcd.setCursor(2,0);
+    lcd.print("Sidik Jari");
+    lcd.setCursor(2,1);
+    lcd.print("cocok!");
+    delay(2000);
+    lcd.clear();
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     //Serial.println("Communication error");
     return p;
   } else if (p == FINGERPRINT_ENROLLMISMATCH) {
     Serial.println("Fingerprints did not match");
+    lcd.setCursor(2,0);
+    lcd.print("Sidik Jari");
+    lcd.setCursor(2,1);
+    lcd.print("tidak cocok!");
+    delay(2000);
+    lcd.clear();
     return p;
   } else {
       Serial.println("Unknown error");
@@ -441,6 +571,12 @@ uint8_t getFingerprintEnroll() {
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
     Serial.println("Stored!");
+      lcd.setCursor(2,0);
+      lcd.print("Sidik Jari");
+      lcd.setCursor(2,1);
+      lcd.print("telah disimpan");
+      delay(2000);
+      lcd.clear();
     confirmAdding(id);
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     //Serial.println("Communication error");
