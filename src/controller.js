@@ -228,7 +228,7 @@ const checkfingerID = (req,res) => {
                             if (err) throw err;
                             if(result.length == 0){
                                 if(jam <= masuk && jam <= pulang){
-                                    sql4 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal,bot_absen) VALUES (?,?,?,'hadir',NOW(),'1')"
+                                    sql4 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal,bot_absen) VALUES (?,?,?,'hadir',NOW(),'2')"
                                     con.query(sql4,[finger,jam,pulang],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
@@ -238,7 +238,7 @@ const checkfingerID = (req,res) => {
                                         }
                                     })
                                 } else if (jam > masuk && jam <= pulang){
-                                    sql5 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal,bot_absen) VALUES (?,?,?,'telat hadir',NOW(),'1')"
+                                    sql5 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal,bot_absen) VALUES (?,?,?,'telat hadir',NOW(),'2')"
                                     con.query(sql5,[finger,jam,pulang],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
@@ -265,7 +265,7 @@ const checkfingerID = (req,res) => {
 
                                 if(jam <= masuk && jam <= pulang &&  tgl_final != tanggal){
                                     console.log("tanggal berapa:"+tanggal)
-                                    sql6 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal,bot_absen) VALUES (?,?,?,'hadir',NOW(),'1')"
+                                    sql6 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal,bot_absen) VALUES (?,?,?,'hadir',NOW(),'2')"
                                     con.query(sql6,[finger,jam,pulang],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows
@@ -277,7 +277,7 @@ const checkfingerID = (req,res) => {
                                         
                                     })
                                 } else if (jam > masuk && jam <= pulang && tgl_final != tanggal){
-                                    sql7 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal,bot_absen) VALUES (?,?,?,'telat hadir',NOW(),'1')"
+                                    sql7 = "INSERT INTO absen (id_sidikjari,jam_masuk,jam_pulang,status,tanggal,bot_absen) VALUES (?,?,?,'telat hadir',NOW(),'2')"
                                     con.query(sql7,[finger,jam,pulang],function(err,result){
                                         if (err) throw err;
                                         success = result.affectedRows

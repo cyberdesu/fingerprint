@@ -7,18 +7,20 @@ const { bot, botsession } = require('./bot');
 
 const botabsen = async(req,res) => {
     //await botsession()
-    sql = "SELECT siswa.nama,absen.tanggal,absen.jam_masuk,absen.jam_pulang,absen.status,siswa.no_ortu FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE absen.bot_absen=1 LIMIT 1"
+    sql = "SELECT siswa.nama,absen.tanggal,absen.jam_masuk,absen.jam_pulang,absen.status,siswa.no_ortu FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE absen.bot_absen=2 LIMIT 1"
     con.query(sql,function(err,result){
         if (err) throw err
         if (result.length != 0){
             nama = result[0].nama
             tanggal = result[0].tanggal
             masuk = result[0].jam_masuk
-            keluar = result[0].jam_keluar
+            pulang = result[0].jam_pulang
             stat = result[0].status
             no_ortu = result[0].no_ortu
 
-            const sql2= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=0 WHERE absen.bot_absen=1 LIMIT 1"
+            const sql2= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=0 WHERE absen.bot_absen=2 LIMIT 1"
+            const sql3= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=1 WHERE absen.bot_absen=2 LIMIT 1"
+            const sql4= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=0 WHERE absen.bot_absen=1 LIMIT 1"
             if(!no_ortu){
                 con.query(sql2,function(err,result){
                     if(err) throw err
@@ -32,25 +34,55 @@ const botabsen = async(req,res) => {
                     res.send("no invalid cok")
                 })
             } else {
+                const addZero = i => {
+                    if (i < 10) {i = "0" + i}
+                    return i;
+                }
+                const waktu = new Date()
+                const jam = addZero(waktu.getHours())+":"+addZero(waktu.getMinutes())+":"+addZero(waktu.getSeconds())
+                const month = ["01","02","03","04","05","06","07","08","09","10","11","12"];
+                const tanggal = addZero(waktu.getFullYear())+"-"+month[waktu.getMonth()]+"-"+addZero(waktu.getDate())
                 const chatid = no_ortu + "@c.us"
                 console.log(chatid)
-                const pesan = ` ${nama} telah ${stat} sekolah pada jam ${masuk} ` 
-                //sql2= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=0 WHERE absen.bot_absen=1 LIMIT 1"
-                bot.sendMessage(chatid,pesan).then(response => {
-                    con.query(sql2,function(err,result){
-                        if(err) throw err
-                        res.send({
-                            status: true,
-                            message: "notif sudah terkirim bre",
-                            data: response
-    
-                        })
-                    })
-                }).catch(err => {
-                    res.status(500).send('bot blom aktif')
-                    return
+                const pesan = ` ${nama} telah ${stat} sekolah pada jam ${masuk}  tanggal ${tanggal} ` 
+                console.log(jam)
 
-                })
+                if(pulang == jam){
+                    pesan = ` ${nama} telah pulang sekolah pada jam ${pulang} tanggal ${tanggal} ` 
+                    bot.sendMessage(chatid,pesan).then(response => {
+                        con.query(sql4,function(err,result){
+                            if(err) throw err
+                            res.send({
+                                status: true,
+                                message: "notif sudah terkirim bre",
+                                data: response
+        
+                            })
+                        })
+                    }).catch(err => {
+                        res.status(500).send('bot blom aktif')
+                        return
+    
+                    })
+                    
+                } else {
+                    bot.sendMessage(chatid,pesan).then(response => {
+                        con.query(sql3,function(err,result){
+                            if(err) throw err
+                            res.send({
+                                status: true,
+                                message: "notif sudah terkirim bre",
+                                data: response
+        
+                            })
+                        })
+                    }).catch(err => {
+                        res.status(500).send('bot blom aktif')
+                        return
+    
+                    })
+
+                }
 
             }
         } else {

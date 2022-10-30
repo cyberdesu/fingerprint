@@ -27,6 +27,8 @@ unsigned long previousMillis = 0;
 
 
 void setup(){
+//  pinMode(1,INPUT);   
+//  pinMode(3,INPUT);
   wifi();
   lcd.init();
   enroll();
