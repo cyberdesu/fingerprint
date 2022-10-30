@@ -104,12 +104,25 @@ void CheckMode(){
         timer.disable(t1);
         timer.disable(t2);
         Serial.println("Device Mode: attendance");
+        lcd.clear();
+        lcd.setCursor(2,0);
+        lcd.print("Device Mode:");
+        lcd.setCursor(4,1);
+        lcd.print("absensi");
+        delay(1000);
+
       } 
       else if(!device_Mode && !result){
         device_Mode = true;
         timer.enable(t1);
         timer.enable(t2);
         Serial.println("Device Mode: Enrollment");
+        lcd.clear();
+        lcd.setCursor(2,0);
+        lcd.print("Device Mode:");
+        lcd.setCursor(5,1);
+        lcd.print("daftar");
+        delay(1000);
       }
       http.end();
     }
@@ -244,11 +257,26 @@ void SendFingerprintID(int finger){
           lcd.clear();
         }
 
-      } else if(payload.substring(0,5) == "sudah"){
+      } else if (payload.substring(0,5) == "sudah"){
           lcd.setCursor(0,0);
           lcd.print("Anda sudah absen");
           delay(1500);
           lcd.clear();
+      } else if (payload.substring(0,2) == "id"){
+        lcd.setCursor(3,0);
+        lcd.print("sidik jari");
+        lcd.setCursor(2,1);
+        lcd.print("sudah terdaftar");
+        delay(1500);
+        lcd.clear();
+
+      } else {
+        lcd.setCursor(2,0);
+        lcd.print("sedang dalam");
+        lcd.setCursor(3,0);
+        lcd.print("Mode Daftar");
+        delay(1500);
+        lcd.clear();
       }
 
     }
