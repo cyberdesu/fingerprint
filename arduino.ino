@@ -447,9 +447,9 @@ uint8_t getFingerprintEnroll() {
     switch (p) {
     case FINGERPRINT_OK:
       Serial.println("Image taken2");
-      lcd.setCursor(2,0);
+      lcd.setCursor(3,0);
       lcd.print("Sidik Jari");
-      lcd.setCursor(4,1);
+      lcd.setCursor(3,1);
       lcd.print("terdeteksi");
       delay(2000);
       break;
@@ -482,10 +482,10 @@ uint8_t getFingerprintEnroll() {
       break;
     case FINGERPRINT_IMAGEMESS:
       //Serial.println("Image too messy");
-      lcd.setCursor(2,0);
+      lcd.setCursor(3,0);
       lcd.print("Sidik Jari");
       lcd.setCursor(2,1);
-      lcd.print(" tidak valid");
+      lcd.print("tidak valid");
       delay(2000);
       lcd.clear();
       return p;
@@ -542,9 +542,9 @@ uint8_t getFingerprintEnroll() {
   switch (p) {
     case FINGERPRINT_OK:
       Serial.println("Image converted3");
-      lcd.setCursor(2,0);
+      lcd.setCursor(3,0);
       lcd.print("Sidik Jari");
-      lcd.setCursor(2,1);
+      lcd.setCursor(6,1);
       lcd.print("valid");
       delay(2000);
       lcd.clear();
@@ -599,9 +599,9 @@ uint8_t getFingerprintEnroll() {
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
     Serial.println("Stored!");
-      lcd.setCursor(2,0);
+      lcd.setCursor(3,0);
       lcd.print("Sidik Jari");
-      lcd.setCursor(2,1);
+      lcd.setCursor(1,1);
       lcd.print("telah disimpan");
       delay(2000);
       lcd.clear();
