@@ -27,8 +27,6 @@ unsigned long previousMillis = 0;
 
 
 void setup(){
-//  pinMode(1,INPUT);   
-//  pinMode(3,INPUT);
   wifi();
   lcd.init();
   enroll();
@@ -65,7 +63,6 @@ void loop(){
   CheckFingerprint();   //Check the sensor if the there a finger.
   delay(10);
 }
-
 //================================Check Fingerprint========================================
 void CheckFingerprint(){
   FingerID = getFingerprintID();
@@ -213,7 +210,6 @@ void SendFingerprintID(int finger){
           lcd.setCursor(0,1);
           lcd.print(nama);
           delay(1000);
-          lcd.clear();
         } else {
           lcd.setCursor(0,0);
           lcd.print("Selamat datang,");
@@ -224,7 +220,6 @@ void SendFingerprintID(int finger){
           lcd.setCursor(0,0);
           lcd.print(nama);
           delay(200);}
-          lcd.clear();
         }
       } else if (payload.substring(0,5) == "telat"){
         //Serial.println("hayo");
@@ -240,7 +235,6 @@ void SendFingerprintID(int finger){
           lcd.setCursor(1,0);
           lcd.print("Anda Terlambat");
           delay(1000);
-          lcd.clear();
 
         } else {
           lcd.setCursor(0,0);
@@ -256,21 +250,18 @@ void SendFingerprintID(int finger){
           lcd.setCursor(1,0);
           lcd.print("Anda Terlambat");
           delay(1500);
-          lcd.clear();
         }
 
       } else if (payload.substring(0,5) == "sudah"){
           lcd.setCursor(0,0);
           lcd.print("Anda sudah absen");
           delay(1500);
-          lcd.clear();
       } else if (payload.substring(0,2) == "id"){
         lcd.setCursor(3,0);
         lcd.print("sidik jari");
-        lcd.setCursor(2,1);
+        lcd.setCursor(1,1);
         lcd.print("sudah terdaftar");
         delay(1500);
-        lcd.clear();
 
       } else {
         lcd.setCursor(2,0);
@@ -278,7 +269,6 @@ void SendFingerprintID(int finger){
         lcd.setCursor(3,0);
         lcd.print("Mode Daftar");
         delay(1500);
-        lcd.clear();
       }
 
     }
@@ -350,7 +340,6 @@ int getFingerprintID() {
     lcd.setCursor(2,1);
     lcd.print("tidak cocok!");
     delay(1000);
-    lcd.clear();
     return -1;
   } else {
     Serial.println("Unknown error");
@@ -585,7 +574,7 @@ uint8_t getFingerprintEnroll() {
     return p;
   } else if (p == FINGERPRINT_ENROLLMISMATCH) {
     Serial.println("Fingerprints did not match");
-    lcd.setCursor(2,0);
+    lcd.setCursor(3,0);
     lcd.print("Sidik Jari");
     lcd.setCursor(2,1);
     lcd.print("tidak cocok!");
