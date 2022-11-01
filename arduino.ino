@@ -213,7 +213,7 @@ void SendFingerprintID(int finger){
         } else {
           lcd.setCursor(0,0);
           lcd.print("Selamat datang,");
-          delay(1500);
+          delay(1000);
           lcd.clear();
           for (int i=0; i<50; i++){
           lcd.scrollDisplayRight();
@@ -230,7 +230,7 @@ void SendFingerprintID(int finger){
           lcd.print("Selamat datang,");
           lcd.setCursor(0,1);
           lcd.print(nama);
-          delay(1500);
+          delay(1000);
           lcd.clear();
           lcd.setCursor(1,0);
           lcd.print("Anda Terlambat");
@@ -249,7 +249,7 @@ void SendFingerprintID(int finger){
           lcd.clear();
           lcd.setCursor(1,0);
           lcd.print("Anda Terlambat");
-          delay(1500);
+          delay(1000);
         }
 
       } else if (payload.substring(0,5) == "sudah"){
