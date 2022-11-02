@@ -21,12 +21,14 @@ ESP8266WebServer server(81); //Menyatakan Webserver pada port 80
 int FingerID = 0, t1, t2;                           // The Fingerprint ID from the scanner 
 bool device_Mode = false;                           // Default Mode Enrollment
 bool firstConnect = false;
-String url = "http://10.10.10.7:4000";
+String url = "http://192.168.0.119:4000";
 String getData, Link;
 unsigned long previousMillis = 0;
 
 
 void setup(){
+  Serial.begin(9600);
+  delay(1000);
   wifi();
   lcd.init();
   enroll();
@@ -41,17 +43,15 @@ void setup(){
   delay(2000);
 
   //Timers---------------------------------------
-  timer.setInterval(25000L,CheckMode);
-  t1 = timer.setInterval(5000L,ChecktoAddID);
-  t2 = timer.setInterval(15000L,ChecktoDeleteID);  
+  timer.setInterval(20000L,CheckMode);
+  t1 = timer.setInterval(2000L,ChecktoAddID);
+  t2 = timer.setInterval(5000L,ChecktoDeleteID);  
   CheckMode();
 
 }
 
 void loop(){
   lcd.init();
-
-  delay(2000);
   timer.run();      //Keep the timer in the loop function in order to update the time as soon as possible
   //check if there's a connection to Wi-Fi or not
   if(!WiFi.isConnected()){
@@ -105,10 +105,10 @@ void CheckMode(){
         Serial.println("Device Mode: attendance");
         lcd.clear();
         lcd.setCursor(2,0);
-        lcd.print("Device Mode:");
+        lcd.print("Device Mode:");                                                                                                                                    
         lcd.setCursor(4,1);
         lcd.print("absensi");
-        delay(1000);
+        delay(500);
 
       } 
       else if(!device_Mode && !result){
@@ -121,7 +121,7 @@ void CheckMode(){
         lcd.print("Device Mode:");
         lcd.setCursor(5,1);
         lcd.print("daftar");
-        delay(1000);
+        delay(500);
       }
       http.end();
     }
@@ -136,8 +136,8 @@ void CheckMode(){
 
 //=============================================================================first of WIFI======================================================================
 void wifi(){
-  const char* ssid = "Cyberdesu";       // Nama SSID AP/Hotspot
-  const char* password = "WibuNolep-21";       // Password Wifi
+  const char* ssid = "Lantai atas";       // Nama SSID AP/Hotspot
+  const char* password = "LaNtaIAtaSDuATiTikEmPaT";       // Password Wifi
  
   Serial.begin(9600);
   delay(10);
@@ -209,11 +209,11 @@ void SendFingerprintID(int finger){
           lcd.print("Selamat datang,");
           lcd.setCursor(0,1);
           lcd.print(nama);
-          delay(1000);
+          delay(500);
         } else {
           lcd.setCursor(0,0);
           lcd.print("Selamat datang,");
-          delay(1000);
+          delay(500);
           lcd.clear();
           for (int i=0; i<50; i++){
           lcd.scrollDisplayRight();
@@ -230,11 +230,11 @@ void SendFingerprintID(int finger){
           lcd.print("Selamat datang,");
           lcd.setCursor(0,1);
           lcd.print(nama);
-          delay(1000);
+          delay(500);
           lcd.clear();
           lcd.setCursor(1,0);
           lcd.print("Anda Terlambat");
-          delay(1000);
+          delay(500);
 
         } else {
           lcd.setCursor(0,0);
@@ -249,7 +249,7 @@ void SendFingerprintID(int finger){
           lcd.clear();
           lcd.setCursor(1,0);
           lcd.print("Anda Terlambat");
-          delay(1000);
+          delay(500);
         }
 
       } else if (payload.substring(0,5) == "sudah"){
@@ -257,6 +257,7 @@ void SendFingerprintID(int finger){
           lcd.print("Anda sudah absen");
           delay(1500);
       } else if (payload.substring(0,2) == "id"){
+        lcd.clear();
         lcd.setCursor(3,0);
         lcd.print("sidik jari");
         lcd.setCursor(1,1);
@@ -284,11 +285,12 @@ int getFingerprintID() {
   uint8_t p = finger.getImage();
   switch (p) {
     case FINGERPRINT_OK:
+      lcd.clear();
       Serial.println("Image taken1");
       lcd.setCursor(0,0);
       lcd.print("Loading....");
-      delay(1000);
       lcd.clear();
+      delay(500);
       break;
     case FINGERPRINT_NOFINGER:
       //Serial.println("No finger detected");
@@ -310,7 +312,7 @@ int getFingerprintID() {
       Serial.println("Image converted1");
       break;
     case FINGERPRINT_IMAGEMESS:
-      //Serial.println("Image too messy");
+      Serial.println("Image too messy1");
       return -1;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -335,11 +337,12 @@ int getFingerprintID() {
     return -2;
   } else if (p == FINGERPRINT_NOTFOUND) {
     Serial.println("Did not find a match");
+    lcd.clear();
     lcd.setCursor(3,0);
     lcd.print("sidik jari");
     lcd.setCursor(2,1);
     lcd.print("tidak cocok!");
-    delay(1000);
+    delay(500);
     return -1;
   } else {
     Serial.println("Unknown error");
@@ -398,8 +401,11 @@ void ChecktoAddID(){
     getData = "/getfingerid/get_id/1";
     Link = url + "/getfingerid/get_id/1";
     http.begin(client,Link);
+    Serial.println(http.getString());
+    Serial.print("kode nya adalah:");
+    Serial.println(httpcode);
     DynamicJsonDocument doc(2048);
-    if(httpcode == HTTP_CODE_OK || httpcode == HTTP_CODE_MOVED_PERMANENTLY){
+    if(httpcode == HTTP_CODE_OK || httpcode == HTTP_CODE_MOVED_PERMANENTLY || httpcode == 200){
       Serial.println("Ready to enroll a fingerprint!");
       String payload = http.getString();
       DeserializationError err = deserializeJson(doc,payload);
@@ -417,12 +423,12 @@ void ChecktoAddID(){
       }
       Serial.print("Enrolling ID #");
       Serial.println(id);
+      lcd.clear();
       lcd.setCursor(1,0);
       lcd.print("silahkan letak'kan");
       lcd.setCursor(3,1);
       lcd.print("sidik jari");
-      delay(2000);
-      lcd.clear();
+      delay(500);
       getFingerprintEnroll();
       http.end();
    }
@@ -438,11 +444,12 @@ uint8_t getFingerprintEnroll() {
     switch (p) {
     case FINGERPRINT_OK:
       Serial.println("Image taken2");
+      lcd.clear();
       lcd.setCursor(3,0);
       lcd.print("Sidik Jari");
       lcd.setCursor(3,1);
       lcd.print("terdeteksi");
-      delay(2000);
+      delay(500);
       break;
     case FINGERPRINT_NOFINGER:
       Serial.println(".");
@@ -464,21 +471,21 @@ uint8_t getFingerprintEnroll() {
   switch (p) {
     case FINGERPRINT_OK:
       Serial.println("Image converted2");
-      lcd.setCursor(2,0);
-      lcd.print("Sidik Jari");
-      lcd.setCursor(2,1);
-      lcd.print("valid");
-      delay(2000);
       lcd.clear();
+      lcd.setCursor(3,0);
+      lcd.print("Sidik Jari");
+      lcd.setCursor(3,1);
+      lcd.print("valid");
+      delay(500);
       break;
     case FINGERPRINT_IMAGEMESS:
-      //Serial.println("Image too messy");
+      Serial.println("Image too messy2");
+      lcd.clear();
       lcd.setCursor(3,0);
       lcd.print("Sidik Jari");
       lcd.setCursor(2,1);
       lcd.print("tidak valid");
-      delay(2000);
-      lcd.clear();
+      delay(500);
       return p;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -494,6 +501,7 @@ uint8_t getFingerprintEnroll() {
       return p;
   }
   Serial.println("Remove finger");
+  lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Lepaskan");
   lcd.setCursor(0,1);
@@ -533,6 +541,7 @@ uint8_t getFingerprintEnroll() {
   switch (p) {
     case FINGERPRINT_OK:
       Serial.println("Image converted3");
+      lcd.clear();
       lcd.setCursor(3,0);
       lcd.print("Sidik Jari");
       lcd.setCursor(6,1);
@@ -541,7 +550,7 @@ uint8_t getFingerprintEnroll() {
       lcd.clear();
       break;
     case FINGERPRINT_IMAGEMESS:
-      //Serial.println("Image too messy");
+      Serial.println("Image too messy3");
       return p;
     case FINGERPRINT_PACKETRECIEVEERR:
       //Serial.println("Communication error");
@@ -562,24 +571,24 @@ uint8_t getFingerprintEnroll() {
   
   p = finger.createModel();
   if (p == FINGERPRINT_OK) {
+    lcd.clear();
     Serial.println("Prints matched!");
     lcd.setCursor(2,0);
     lcd.print("Sidik Jari");
     lcd.setCursor(2,1);
     lcd.print("cocok!");
-    delay(2000);
-    lcd.clear();
+    delay(500);
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     //Serial.println("Communication error");
     return p;
   } else if (p == FINGERPRINT_ENROLLMISMATCH) {
     Serial.println("Fingerprints did not match");
+    lcd.clear();
     lcd.setCursor(3,0);
     lcd.print("Sidik Jari");
     lcd.setCursor(2,1);
     lcd.print("tidak cocok!");
-    delay(2000);
-    lcd.clear();
+    delay(500);
     return p;
   } else {
       Serial.println("Unknown error");
@@ -590,12 +599,12 @@ uint8_t getFingerprintEnroll() {
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
     Serial.println("Stored!");
+      lcd.clear();
       lcd.setCursor(3,0);
       lcd.print("Sidik Jari");
       lcd.setCursor(1,1);
       lcd.print("telah disimpan");
-      delay(2000);
-      lcd.clear();
+      delay(500);
     confirmAdding(id);
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     //Serial.println("Communication error");
@@ -637,7 +646,7 @@ void confirmAdding(int id){
       }
       JsonObject obj = doc.as<JsonObject>();
       Serial.println(obj);
-      delay(2000);
+      delay(500);
     }
     else{
       Serial.println("Error Confirm!!");      
@@ -648,7 +657,6 @@ void confirmAdding(int id){
 //=============================================================================end of enroll=======================================================================
 //=============================================================================first of delete====================================================================
 void ChecktoDeleteID(){
-  Serial.println("check to delete ID");
   if(WiFi.isConnected()){
     getData = "/deleteid/check/"+ String(device_Mode);
     Link = url + getData;
@@ -657,6 +665,7 @@ void ChecktoDeleteID(){
     String payload = http.getString();
     DynamicJsonDocument doc(2048);
     if(httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){
+      Serial.println("check to delete ID");
       String response = http.getString();
       Serial.println("check delete ID aktif");
       DeserializationError err = deserializeJson(doc,response);
@@ -669,7 +678,7 @@ void ChecktoDeleteID(){
       Serial.print("ID Data yg dihapus: ");
       Serial.println(data);
       deleteFingerprint(data);
-      delay(1000);
+      delay(500);
     }
     http.end();
     

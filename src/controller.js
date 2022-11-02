@@ -31,9 +31,7 @@ const deletefingerprint = (req, res) => { //FOR ARDUINO
                         if (err) throw err
                         //console.log(data)
                         if(result.length === 0){
-                            res.send({
-                                message: "Data del_finger kosong"
-                            })
+                            res.status(404).send('tidak ada data fingerprint yang akan dihapus')
                         } else if (result.length > 0){
                             res1 = result[0].id
                             sql3 = "DELETE FROM siswa WHERE del_finger=1 LIMIT 1"
