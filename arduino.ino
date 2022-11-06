@@ -21,7 +21,7 @@ ESP8266WebServer server(81); //Menyatakan Webserver pada port 80
 int FingerID = 0, t1, t2;                           // The Fingerprint ID from the scanner 
 bool device_Mode = false;                           // Default Mode Enrollment
 bool firstConnect = false;
-String url = "http://192.168.0.119:4000";
+String url = "http://192.168.137.1:4000";
 String getData, Link;
 unsigned long previousMillis = 0;
 
@@ -45,7 +45,7 @@ void setup(){
   //Timers---------------------------------------
   timer.setInterval(20000L,CheckMode);
   t1 = timer.setInterval(2000L,ChecktoAddID);
-  t2 = timer.setInterval(5000L,ChecktoDeleteID);  
+  t2 = timer.setInterval(10000L,ChecktoDeleteID);  
   CheckMode();
 
 }
@@ -87,7 +87,7 @@ void CheckMode(){
       Serial.println("Koneksi aktif");
       DeserializationError err = deserializeJson(doc,response);
       if (err) {
-        Serial.print(F("deserializeJson() failed with code "));
+        Serial.print(F("deserializeJson() failed with code1 "));
         Serial.println(err.f_str());
       }
       JsonObject obj = doc.as<JsonObject>();
@@ -136,8 +136,8 @@ void CheckMode(){
 
 //=============================================================================first of WIFI======================================================================
 void wifi(){
-  const char* ssid = "Lantai atas";       // Nama SSID AP/Hotspot
-  const char* password = "LaNtaIAtaSDuATiTikEmPaT";       // Password Wifi
+  const char* ssid = "hayo";       // Nama SSID AP/Hotspot
+  const char* password = "satuduatiga";       // Password WifiLaNtaIAtaSDuATiTikEmPaT
  
   Serial.begin(9600);
   delay(10);
@@ -401,17 +401,17 @@ void ChecktoAddID(){
     getData = "/getfingerid/get_id/1";
     Link = url + "/getfingerid/get_id/1";
     http.begin(client,Link);
-    Serial.println(http.getString());
-    Serial.print("kode nya adalah:");
-    Serial.println(httpcode);
     DynamicJsonDocument doc(2048);
     if(httpcode == HTTP_CODE_OK || httpcode == HTTP_CODE_MOVED_PERMANENTLY || httpcode == 200){
       Serial.println("Ready to enroll a fingerprint!");
+      Serial.println(http.getString());
+      Serial.print("kode nya adalah:");
+      Serial.println(httpcode);
       String payload = http.getString();
       DeserializationError err = deserializeJson(doc,payload);
       Serial.println("data addfinger:"+payload);
       if (err) {
-        Serial.print(F("deserializeJson() failed with code "));
+        Serial.print(F("deserializeJson() failed with code2 "));
         Serial.println(err.f_str());
       }
       JsonObject obj = doc.as<JsonObject>();
@@ -641,7 +641,7 @@ void confirmAdding(int id){
     if(httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){
       DeserializationError err = deserializeJson(doc,payload);
       if (err) {
-        Serial.print(F("deserializeJson() failed with code "));
+        Serial.print(F("deserializeJson() failed with code3 "));
         Serial.println(err.f_str());
       }
       JsonObject obj = doc.as<JsonObject>();
@@ -670,7 +670,7 @@ void ChecktoDeleteID(){
       Serial.println("check delete ID aktif");
       DeserializationError err = deserializeJson(doc,response);
       if (err) {
-        Serial.print(F("deserializeJson() failed with code "));
+        Serial.print(F("deserializeJson() failed with code4 "));
         Serial.println(err.f_str());
       }
       JsonObject obj = doc.as<JsonObject>();

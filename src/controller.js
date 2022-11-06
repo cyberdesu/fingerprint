@@ -31,7 +31,10 @@ const deletefingerprint = (req, res) => { //FOR ARDUINO
                         if (err) throw err
                         //console.log(data)
                         if(result.length === 0){
-                            res.status(404).send('tidak ada data fingerprint yang akan dihapus')
+                            res.send({
+                                message: 'kosong',
+                                data: result
+                            })
                         } else if (result.length > 0){
                             res1 = result[0].id
                             sql3 = "DELETE FROM siswa WHERE del_finger=1 LIMIT 1"
@@ -160,7 +163,7 @@ const DeviceMode = (req, res) => {
                     success:true,
                     data: {
                         Mode:result[0].Mode,
-                        status: "Mode Absen"
+                        status: "Presensi"
                     }
                 })
 
@@ -340,7 +343,7 @@ const getFingerID = (req,res) => {
         if(data != "0"){
             res.status(500).send({
                 status: false,
-                message: "device sedang dalam mode absen"
+                message: "device sedang dalam mode presensi"
             })
         } else {
             if(getfingerid == "get_id"){
