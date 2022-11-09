@@ -1,6 +1,6 @@
 const { daftarbot } = require('./bot-wa/bot');
 const { botabsen } = require('./bot-wa/bot-handler');
-const {home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas, getFingerID, tambahsiswa, confirmID, getDataAbsen, editsiswa, deleteid, detailsiswa, checkJadwal, editjadwal} = require('./controller');
+const {home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas, getFingerID, tambahsiswa, confirmID, getDataAbsen, editsiswa, deleteid, checkJadwal, editjadwal} = require('./controller');
 
 const router = require('express').Router();
 
@@ -19,7 +19,6 @@ router.get('/confirm/:id/:confirmid',confirmID)
 router.get('/absen/kelas/:kelas',getDataAbsen)
 router.put('/siswa/edit/:id',editsiswa)
 router.get('/absen/bot/check',botabsen)
-router.get('/siswa/:id',detailsiswa)
 router.get('/jadwal/kelas',checkJadwal)
 router.post('/jadwal/edit/:kelas',editjadwal)
 

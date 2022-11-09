@@ -519,17 +519,7 @@ const getDataAbsen = (req,res) => {
 
 }
 
-const detailsiswa =(req,res) =>{
-    id = req.params.id
-    sql = "SELECT * FROM siswa WHERE id=? LIMIT 1"
-    con.query(sql,id,function(err,result){
-        if(result.length > 0){
-            res.sendFile(__dirname + "/absensi/home/edit.html")
-            
 
-        }
-    })
-}
 const editsiswa = (req,res) => {
     const id = req.params.id
     let data = {
@@ -578,7 +568,6 @@ const editjadwal = (req,res) => {
         }
         
     })
-
 }
 
 const checkJadwal = (req,res) => {
@@ -593,9 +582,9 @@ const checkJadwal = (req,res) => {
     })
 }
 
-module.exports = {home,
+module.exports = {
+    home,
     editjadwal,
-    detailsiswa,
     deletefingerprint,
     getDatasiswa,
     DeviceMode,
