@@ -47,6 +47,8 @@ io.on('connection', (socket) => {
 
   bot.on('ready', () => {
     socket.emit('message', `${now} WhatsApp is ready!`);
+    console.log('ready boi')
+
   });
 
   bot.on('authenticated', (session) => {

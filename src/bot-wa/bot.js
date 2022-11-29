@@ -6,7 +6,7 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth,LegacySessionAuth } = require('whatsapp-web.js');
 const SESSION_FILE_PATH = './session.json';
 
 // Load the session data if it has been previously saved

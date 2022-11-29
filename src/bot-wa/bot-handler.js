@@ -16,7 +16,7 @@ const botabsen = async(req,res) => {
     const month = ["01","02","03","04","05","06","07","08","09","10","11","12"];
     const tanggal = addZero(waktu.getFullYear())+"-"+month[waktu.getMonth()]+"-"+addZero(waktu.getDate())
 
-    sql = "SELECT siswa.nama,absen.tanggal,absen.jam_masuk,absen.jam_pulang,absen.status,siswa.no_ortu,absen.bot_absen FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE absen.bot_absen=2 LIMIT 1"
+    sql = "SELECT siswa.nama,absen.tanggal,absen.jam_masuk,absen.jam_pulang,absen.status,siswa.no_ortu,absen.bot_absen FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE absen.bot_absen=3 LIMIT 1"
     con.query(sql,function(err,result){
         if (err) throw err
         if (result.length != 0){
@@ -30,15 +30,14 @@ const botabsen = async(req,res) => {
             console.log(result)
             
 
-            const sql2= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=0 WHERE absen.bot_absen=2 LIMIT 1" // UNTUK NO HP yg tidak ada
-            const sql3= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=1 WHERE absen.bot_absen=2 LIMIT 1"
+            const sql2= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=1 WHERE absen.bot_absen=3 LIMIT 1" // UNTUK NO HP yg tidak ada
+            const sql3= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=2 WHERE absen.bot_absen=3 LIMIT 1"
             if(!no_ortu){
                 con.query(sql2,function(err,result){
                     if(err) throw err
                     res.send('no hp gada,jadi gausah kirim notif ye:v')
                 })
-                
-            } else if(no_ortu.length != 13){
+            } else if(no_ortu.length < 10 && no_ortu.length >! 15){
                 con.query(sql2,function(err,result){
                     if(err) throw err
                     res.status(500)
@@ -67,7 +66,7 @@ const botabsen = async(req,res) => {
             }
         }else{
             console.log("eaa")
-            sql5 = "SELECT siswa.nama,absen.tanggal,absen.jam_masuk,absen.jam_pulang,absen.status,siswa.no_ortu,absen.bot_absen FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE absen.bot_absen=1 LIMIT 1"
+            sql5 = "SELECT siswa.nama,absen.tanggal,absen.jam_masuk,absen.jam_pulang,absen.status,siswa.no_ortu,absen.bot_absen FROM siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari WHERE absen.bot_absen=2 LIMIT 1"
             con.query(sql5,function(err,result){
                 if(err) throw err
                 if(result.length != 0){
@@ -81,11 +80,12 @@ const botabsen = async(req,res) => {
                     console.log(result)
                     const tgl_final = addZero(tgl.getFullYear())+"-"+month[tgl.getMonth()]+"-"+addZero(tgl.getDate())
                     const chatid = no_ortu + "@c.us"
-                    if(jam >= pulang && tanggal >= tgl_final){
-                        const sql4= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=0 WHERE absen.bot_absen=1 LIMIT 1"
+                    if(jam >= pulang || tanggal > tgl_final){
+                        const sql4= "UPDATE siswa INNER JOIN absen ON siswa.id=absen.id_sidikjari SET bot_absen=1 WHERE absen.bot_absen=2 LIMIT 1"
                         console.log(jam)
                         console.log(pulang)
-                        const pesan = `${nama} telah pulang sekolah pada jam ${pulang} tanggal ${tgl_final} ` 
+                        const tgl1 = addZero(tgl.getDate()+"-"+month[tgl.getMonth()]+"-"+tgl.getFullYear())
+                        const pesan = `${nama} telah pulang sekolah pada jam ${pulang} tanggal ${tgl1} ` 
                         bot.sendMessage(chatid,pesan).then(response => {
                             con.query(sql4,function(err,result){
                                 if(err) throw err
@@ -105,7 +105,7 @@ const botabsen = async(req,res) => {
                         res.send("blom jam pulang:v")
                     }
                     
-                } else{
+                } else {
                     res.status(404).send('gada data yang harus dikirim')
                 }
             })

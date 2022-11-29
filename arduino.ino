@@ -21,7 +21,7 @@ ESP8266WebServer server(81); //Menyatakan Webserver pada port 80
 int FingerID = 0, t1, t2;                           // The Fingerprint ID from the scanner 
 bool device_Mode = false;                           // Default Mode Enrollment
 bool firstConnect = false;
-String url = "http://192.168.137.1:4000";
+String url = "http://192.168.100.102:4000";
 String getData, Link;
 unsigned long previousMillis = 0;
 
@@ -107,7 +107,7 @@ void CheckMode(){
         lcd.setCursor(2,0);
         lcd.print("Device Mode:");                                                                                                                                    
         lcd.setCursor(4,1);
-        lcd.print("absensi");
+        lcd.print("presensi");
         delay(500);
 
       } 
@@ -136,8 +136,8 @@ void CheckMode(){
 
 //=============================================================================first of WIFI======================================================================
 void wifi(){
-  const char* ssid = "hayo";       // Nama SSID AP/Hotspot
-  const char* password = "satuduatiga";       // Password WifiLaNtaIAtaSDuATiTikEmPaT
+  const char* ssid = "alhasani";       // Nama SSID AP/Hotspot
+  const char* password = "alhasani01";       // Password WifiLaNtaIAtaSDuATiTikEmPaT
  
   Serial.begin(9600);
   delay(10);
