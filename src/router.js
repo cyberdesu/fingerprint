@@ -1,11 +1,23 @@
 const { daftarbot } = require('./bot-wa/bot');
 const { botabsen } = require('./bot-wa/bot-handler');
-const {home, deletefingerprint, getDatasiswa, DeviceMode, editMode, checkfingerID, getdatakelas, getFingerID, tambahsiswa, confirmID, getDataAbsen, editsiswa, deleteid, checkJadwal, editjadwal} = require('./controller');
+const { checkfingerID } = require('./controller/checkfinger');
+const { checkJadwal } = require('./controller/checkjadwal');
+const { confirmID } = require('./controller/ConfirmID');
+const {editMode,} = require('./controller/EditMode');
+const { getDataAbsen } = require('./controller/DataAbsen');
+const { getdatakelas } = require('./controller/DataKelas');
+const { getDatasiswa } = require('./controller/DataSiswa');
+const { deletefingerprint } = require('./controller/DeleteFinger');
+const { deleteid } = require('./controller/DeleteID');
+const { DeviceMode } = require('./controller/DeviceMode');
+const { editjadwal } = require('./controller/editjadwal');
+const { editsiswa } = require('./controller/editsiswa');
+const { getFingerID } = require('./controller/GetFingerID');
+const { tambahsiswa } = require('./controller/TambaSiswa');
 
 const router = require('express').Router();
 
 
-router.get('/',home)
 router.get('/deleteID/:deleteID/:Mode/',deletefingerprint)
 router.get('/siswa/delete/:id',deleteid)
 router.get('/siswa',getDatasiswa)

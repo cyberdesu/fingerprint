@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="jquery.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Daftar MI</title>
@@ -159,7 +160,7 @@
                     <h1 class="section--title" style="color: white;">Siswa</h1>
                 </div>
                 <div class="table" style="color: white;">
-                    <table>
+                    <table id="data-table">
                         <thead>
                             <tr>
                                 <th>Nama</th>
@@ -305,7 +306,9 @@
     </div>
     <br><br>
     </section>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+
     <script src="app.js"></script>
-    <script src="jquery.js"></script>
 </body>
 </html>
