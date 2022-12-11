@@ -6,6 +6,11 @@
     <title>Presensi MTS</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+</head>
 </head>
 <body>
     <section class="header" style="background: #111">
@@ -96,7 +101,7 @@
                     <h1 class="section--title" style="color: white;">Siswa MTS</h1>
                 </div>
                 <div class="table" style="color: white;">
-                    <table>
+                    <table id="tables-data">
                         <thead>
                             <tr>
                                 <th>Tanggal</th>
@@ -110,23 +115,29 @@
                     <script>
                         const url = "http://localhost:4000"
                         const daftarAbsen =(data)=>{
+                            console.log(data)
                             const table = document.querySelector('table')
                             hasil = data.data
-                            hasil.forEach((result) => {
-                                tgl = result.tanggal
-                                bulan = tgl.substr(0,10)
-                                final = bulan.substr(8,8) + bulan.substr(4,4)+bulan.substr(0,4)
-                                table.innerHTML += `
-                                <tr>
-                                    <td>${final}</td>
-                                    <td>${result.nama}</td>
-                                    <td>${result.jenis_kelamin}</td>
-                                    <td>${result.kelas}</td>
-                                    <td>${result.status}</td>
-                                    <td><span><a href=""><i class="ri-edit-line edit" id="edit-post-smp" style="color: yellow;"></i></a><a href=""><i class="ri-delete-bin-line delete" style="color: red;"></i></a></span></td>  
-                                </tr>
-                                `;
-                            })
+                            $('#tables-data').DataTable({
+                                data: hasil,
+                                destroy: true,
+                                columns: [
+                                    { 
+                                        data: 'tanggal',
+                                        render: function (data, type, row, meta){
+                                            return (
+                                                data.substring(8,10)+data.substring(4,8)+data.substring(0,4)
+                                        
+                                            )
+                                        }
+                                    },
+                                    { data: 'nama', className: 'nama-sd'  },
+                                    { data: 'jenis_kelamin', className: 'kelamin-sd'  },
+                                    { data: 'kelas', className: 'kelas-sd' },
+                                    { data: 'status', className: 'no-sd'  },
+                                ],
+                            });
+                            
                         }
                         fetch(url+"/absen/kelas/smp")
                             .then(response =>response.json())

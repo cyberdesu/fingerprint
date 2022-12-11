@@ -7,6 +7,11 @@
     <title>Daftar MI</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
     <section class="header" style="background: #111">
@@ -160,7 +165,7 @@
                     <h1 class="section--title" style="color: white;">Siswa</h1>
                 </div>
                 <div class="table" style="color: white;">
-                    <table id="data-table">
+                    <table id="tables">
                         <thead>
                             <tr>
                                 <th>Nama</th>
@@ -179,24 +184,30 @@
                             console.log(data)
                             const table = document.querySelector('table')
                             hasil = data.data
-                            hasil.forEach((result) => {
-                                table.innerHTML += `
-                                <tr>
-                                    <td class="nama-sd">${result.nama}</td>
-                                    <td class="kelamin-sd">${result.jenis_kelamin}</td>
-                                    <td class="kelas-sd">${result.kelas}</td>
-                                    <td class="no-sd">${result.no_ortu}</td>
-                                    <td>
-                                        <span>
-                                            <a data-id=${result.id}><i  id="edit-post-sd" class="ri-edit-line edit" style="color: yellow;"></i></a>
-                                            <a data-id=${result.id}><i id="delete-post-sd"class="ri-delete-bin-line delete" style="color: red;"></i></a>
-                                        </span>
-                                    </td>
-                                </tr>
-                        
-                                `;
-                                
-                            })
+
+
+                            $('#tables').DataTable({
+                                data: hasil,
+                                destroy: true,
+                                columns: [
+                                    { data: 'nama', className: 'nama-sd'  },
+                                    { data: 'jenis_kelamin', className: 'kelamin-sd'  },
+                                    { data: 'kelas', className: 'kelas-sd' },
+                                    { data: 'no_ortu', className: 'no-sd'  },
+                                    {
+                                        data: 'id',
+                                        render: function (data, type, row, meta){
+                                            return  `                                    
+                                            <td>
+                                                <span>
+                                                    <a data-id=`+data+`><i id="edit-post-sd" class="ri-edit-line edit" style="color: yellow;"></i></a>
+                                                    <a data-id=`+data+`><i id="delete-post-sd"class="ri-delete-bin-line delete" style="color: red;"></i></a>
+                                                </span>
+                                            </td>`
+                                        }
+                                    }
+                                ],
+                            });
                         }
                         fetch(url+"/siswa/kelas/sd")
                         .then(response =>response.json())
